@@ -1,0 +1,16 @@
+// $Id$
+
+Sky 7.x-1.2, 2011-01-09
+-------------------------
+by Jacine: Color module improvements, jQuery UI styles, and more tweaks.
+#1019334 by Jacine | wallbay1: Fixed logo not printing in page.tpl.php.
+by Jacine: Added documentation for using menus in the navigation region.
+by Jacine: Fixed feature listing in .info file.
+
+Sky 7.x-1.1, 2011-01-06
+-------------------------
+by Jacine: Fixed the format of the CVS tag and minor code style issues.
+
+Sky 7.x-1.0, 2011-01-05
+-------------------------
+by Jacine: Checked in a newly rewritten version for Drupal 7.

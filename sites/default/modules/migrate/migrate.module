@@ -1,0 +1,115 @@
+<?php
+
+/**
+ * Implements hook_menu().
+ */
+function migrate_menu() {
+	$items['test/create/node'] = array(
+		'page callback' => 'migrate_create',
+		'access callback' => TRUE,
+		'type' => MENU_CALLBACK
+	);
+	
+	return $items;
+}
+
+function migrate_create() {
+	
+	$voc = db_query('SELECT machine_name, vid FROM {taxonomy_vocabulary}')->fetchAllAssoc('machine_name');
+	
+	// VALUES
+	$body_text = 'BODY TEXT';
+	$body_format = 'filtered_html';
+	$title = 'tanto va la gatta è capitona [ciccizzu]';
+	$field_short = 'BODY SHORT';
+	$field_type = 'Attualità';
+	$field_location = 'Pompei';
+	$field_media_fid = 6;
+	$uid = 1;
+	// node->nid old
+	$alias_nid = 90000;
+	// END VALUES
+	
+	
+	// Create node object
+	$node->type = 'article';
+	$node->uid = $uid;
+	$node->language = LANGUAGE_NONE;
+	
+	node_object_prepare($node);
+	
+	$node->title = $title;
+	$node->body[$node->language][0]['value'] = $body_text;
+	$node->body[$node->language][0]['format'] = $body_format;
+	
+	// other fields:
+	
+	// field_short
+	$node->field_short[$node->language][0]['value'] = $field_short;
+	
+	// field_type ($voc['type'])
+	if ($field_type) {
+		$field_type_tid = db_query('SELECT tid FROM {taxonomy_term_data} WHERE name=:term_name AND vid=:voc_vid', 
+			array(
+				':term_name'=>$field_type,
+				':voc_vid'=>$voc['type']->vid)
+			)->fetchField();
+	
+		if ($field_type_tid) {
+			$node->field_type[$node->language][0]['tid'] = $field_type_tid;
+		}
+		else {
+			$new_term = array(
+				'name' => $field_type,
+				'description' => '',
+				'vid' => $voc['type']->vid,
+			);
+			$term = (object) $new_term;
+			taxonomy_term_save($term);
+			$node->field_type[$node->language][0]['tid'] = $term->tid;
+		}
+	}
+
+	// fields media
+	if ($field_media_fid)
+		$node->field_media[$node->language][0]['fid'] = $field_media_fid;
+	
+	// field_location ($voc['location'])
+	if ($field_location) {
+		$field_location_tid = db_query('SELECT tid FROM {taxonomy_term_data} WHERE name=:term_name AND vid=:voc_vid', 
+			array(
+				':term_name'=>$field_location,
+				':voc_vid'=>$voc['location']->vid)
+			)->fetchField();
+	
+		if ($field_location_tid) {
+			$node->field_location[$node->language][0]['tid'] = $field_location_tid;
+		}
+		else {
+			$new_term = array(
+				'name' => $field_location,
+				'description' => '',
+				'vid' => $voc['type']->vid,
+			);
+			$term = (object) $new_term;
+			taxonomy_term_save($term);
+			$node->field_location[$node->language][0]['tid'] = $term->tid;
+		}
+	}
+	
+	// $field_types = field_info_field_types();
+	
+	$alias = drupal_get_path_alias('taxonomy/term/'.$node->field_type[$node->language][0]['tid']);
+  $node->path = array('alias' => $alias . '/' . $alias_nid . '/' . $node->title);
+	
+	// save the node!
+	node_save($node);
+	
+	return 'DONE!';
+}
+
+function migrate_node_submit($node, $form, &$form_state) {
+	dsm($node);
+}
+
+

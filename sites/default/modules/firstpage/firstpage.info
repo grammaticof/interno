@@ -1,0 +1,5 @@
+name = Firstpage
+description = A Firstpage module blocks.
+package = Custom
+version = VERSION
+core = 7.x

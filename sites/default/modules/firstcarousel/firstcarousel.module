@@ -1,0 +1,165 @@
+<?php
+
+
+/**
+ * Implements hook_menu().
+ */
+/*
+function firstcarousel_menu() {
+	$items['home'] = array(
+		'page callback' => 'firstpage_home',
+		'access arguments' => array('access content'),
+		'type' => MENU_CALLBACK
+	);
+	
+	return $items;
+}
+*/
+
+/**
+* Implements hook_block_info().
+*/
+function firstcarousel_block_info() {
+	
+	$blocks = array();
+	
+	$blocks['carousel'] = array(
+		'info' => 'Firstpage Carousel',
+		'cache' => DRUPAL_NO_CACHE,
+	);
+	
+	return $blocks;
+}
+
+
+/**
+ * Implements hook_block_view().
+ */
+function firstcarousel_block_view($block_name = '') {
+	if ($block_name == 'carousel') {
+		$module_path = drupal_get_path('module', 'firstcarousel');
+		drupal_add_js(drupal_get_path('theme', 'intheme').'/js/jquery.tools.min.js');
+		drupal_add_js($module_path.'/firstcarousel.js');
+		drupal_add_css($module_path.'/firstcarousel.css');
+		
+		$limit = variable_get('firstcarousel_block_count', 4);
+		$nids = db_query_range('SELECT nid FROM {node} WHERE status=1 ', 0, $limit)->fetchCol();
+		
+		$block = array(
+			'subject' => '',
+			'content' => theme('firstcarousel_block_html', array('nids' => $nids)),
+		);
+		
+		return $block;
+	}
+}
+
+/**
+ * Implements hook_theme().
+ */
+function firstcarousel_theme($existing, $type, $theme, $path) {
+	return array(
+		'firstcarousel_block_html' => array(
+			'variables' => array(
+				'nids' => NULL,
+			),
+			'template' => 'firstcarousel-block-html',
+		),
+		'firstcarousel_block_item' => array(
+			'variables' => array(
+				'node' => NULL,
+			),
+			'template' => 'firstcarousel-block-item',
+		),
+	);
+}
+
+/**
+ * Implements hook_preprocess_theme()
+ */
+function firstcarousel_preprocess_firstcarousel_block_html(&$vars) {
+	
+	$tabs = array();
+	$items = '';
+	$nids = $vars['nids'];
+	
+	foreach ($nids as $nid) {
+		$node = node_load($nid);
+		
+		// dsm($node);
+		$tabs[] = truncate_utf8($node->title, '80', FALSE, TRUE, 1);		
+		$items .= theme('firstcarousel_block_item', array('node' => $node));
+	}
+	
+	$vars['tabs'] = theme('item_list', array('items' => $tabs, 'attributes' => array('class'=> 'slidetabs')));
+	$vars['items'] = $items;
+}
+
+function firstcarousel_preprocess_firstcarousel_block_item(&$vars) {
+	$node = $vars['node'];
+	$lang = $node->language;
+	//dsm($node);
+	// image
+	$image_render = '';
+	if (isset($node->field_media[$lang][0])) {
+		$fid = $node->field_media[$lang][0]['fid'];
+		$path = 'public://carousel';
+		
+		// load the image
+		$uri = file_load($fid)->uri;
+		
+		if (is_file($path.'/'.file_uri_target($uri))) { // file already exist
+			$image_render = theme('image', array('path' => $path.'/'.file_uri_target($uri)));
+		}
+		else {
+			// load the image.
+			$image = image_load($uri);
+			// scale and crop the image.
+			image_scale_and_crop($image, 470, 240);
+
+			// directory.
+			if (file_prepare_directory($path, FILE_MODIFY_PERMISSIONS | FILE_CREATE_DIRECTORY)) {
+				// save the image in the carousel directory.
+				image_save($image, $path . '/' . file_uri_target($uri));
+			}
+			$image_render = theme('image', array('path' => $path.'/'.file_uri_target($uri)));
+		}
+	}
+	else { // no image.
+		$image_path = drupal_get_path('theme', 'intheme').'/images/noimage.jpg';
+		$image_render = theme('image', array('path' => $image_path));
+	}
+	
+	$vars['image'] = $image_render;
+	$vars['title_url'] = l($node->title, 'node/'.$node->nid);
+	
+	$text = '';
+	if (isset($node->field_short[$lang][0]))
+		$text = $node->field_short[$lang][0]['safe_value'];
+	$vars['text'] = $text;
+}
+
+/**
+ * Implement hook_block_configure().
+ */ 
+function firstcarousel_block_configure($delta = '') {
+	$form = array();
+	
+	$form['firstcarousel_block_count'] = array(
+		'#type' => 'select', 
+		'#title' => t('Number of items to display'), 
+		'#default_value' => variable_get('firstcarousel_block_count', 4), 
+		'#options' => drupal_map_assoc(array(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15)),
+	);
+	
+	return $form;
+}
+
+/**
+ * Implement hook_block_save().
+ */
+function firstcarousel_block_save($delta = '', $edit = array()) {
+	variable_set('firstcarousel_block_count', $edit['firstcarousel_block_count']);
+} 
+
+

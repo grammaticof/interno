@@ -1,0 +1,13 @@
+; $Id: email_registration.info,v 1.1.2.2.2.1 2010/02/26 02:32:31 chrisherberte Exp $
+name = Email Registration
+description = For registration process without a username.
+files[] = email_registration.module
+files[] = email_registration.test
+core = 7.x
+
+; Information added by drupal.org packaging script on 2010-07-11
+version = "7.x-1.x-dev"
+core = "7.x"
+project = "email_registration"
+datestamp = "1278834107"
+

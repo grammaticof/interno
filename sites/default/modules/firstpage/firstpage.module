@@ -1,0 +1,164 @@
+<?php
+
+/**
+ * Implements hook_menu().
+ */
+function firstpage_menu() {
+	$items['home'] = array(
+		'page callback' => 'firstpage_home',
+		'access arguments' => array('access content'),
+		'type' => MENU_CALLBACK
+	);
+	
+	return $items;
+}
+
+function firstpage_home() {
+	drupal_set_title('');
+	return '';
+}
+
+
+/**
+ * Implements hook_block_info().
+ */
+function firstpage_block_info() {
+	
+	// create the blocks just for this terms
+	$cat_array = _firstpage_get_categories_array();
+
+	$blocks = array();
+	
+	foreach ($cat_array as $name => $descr) {
+		$blocks[$name] = array(
+			'info' => 'Firstpage ' . $descr,
+			'cache' => DRUPAL_NO_CACHE,
+		);
+	}	
+	
+	return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function firstpage_block_view($block_name = '') {
+	// retrieve the categories array
+	$cat_array = _firstpage_get_categories_array();
+	
+	if (array_key_exists($block_name, $cat_array)) {
+		$node_render = array();
+		
+		
+		drupal_add_css(drupal_get_path('module', 'firstpage').'/firstpage.css');
+		//
+		$limit = variable_get('node_article_'.$block_name.'_block_count', 5);
+		$term_name = $cat_array[$block_name];
+		
+		$terms = _taxonomy_get_terms_by_voc_name('Type', 'name');
+		if (!empty($terms[$term_name])) {
+			$nids = taxonomy_select_nodes($terms[$term_name]->tid, FALSE, $limit, array('t.created' => 'DESC'));
+		
+			$node_render = array();
+			foreach ($nids as $nid) {
+				$node = node_load($nid);
+				$node_render[] = drupal_render(node_view($node, 'firstpage'));
+			}
+		}
+		
+		$theme_args = array('items' => $node_render, 'type' => 'ul');
+		$block = array(
+			'subject' => $cat_array[$block_name],
+			'content' => theme('item_list', $theme_args),
+		);
+		
+		return $block;
+	}
+}
+
+/**
+ * Implement hook_block_configure().
+ */ 
+function firstpage_block_configure($delta = '') {
+	$form = array();
+	// retrieve the categories array
+	$cat_array = _firstpage_get_categories_array();
+	
+	if (array_key_exists($delta, $cat_array)) {
+		$form['node_article_block_count'] = array(
+			'#type' => 'select', 
+			'#title' => t('Number of items to display'), 
+			'#default_value' => variable_get('node_article_'.$delta.'_block_count', 5), 
+			'#options' => drupal_map_assoc(array(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15)),
+		);
+	}
+	
+	return $form;
+
+}
+
+/**
+ * Implement hook_block_save().
+ */
+function firstpage_block_save($delta = '', $edit = array()) {
+	variable_set('node_article_'.$delta.'_block_count', $edit['node_article_block_count']);
+} 
+
+/**
+ * Implements hook_entity_info_alter().
+ */
+function firstpage_entity_info_alter(&$info) {
+	$info['node']['view modes']['firstpage'] = array(
+		'label' => t('Firstpage'),
+		'custom settings' => TRUE,
+	);
+}
+
+/**
+* Implements hook_preprocess_node().
+*/
+function firstpage_preprocess_node(&$vars) {
+	$vars['theme_hook_suggestions'][] = 'node__' . $vars['type'] . '__' . $vars['view_mode'];
+	$vars['classes_array'][] = 'firstpage';
+}
+
+/**
+ * Helper function: return an array of selected terms.
+ */ 
+function _firstpage_get_categories_array() {
+	return array(
+		'attualita' => 'Attualità',
+		'politica' => 'Politica',
+		'sport' => 'Sport',
+		'cronaca' => 'Cronaca',
+		'culturaspettacolo' => 'Cultura&Spettacolo',
+		'Rubriche' => 'Rubriche',
+	);
+}
+
+/**
+ * Helper function: return an array of terms as objects.
+ */
+function _taxonomy_get_terms_by_voc_name($voc_name = '', $key = 'tid', $reset = FALSE) {
+	static $terms = array();
+	
+	if (empty($terms[$voc_name]) || $reset) {
+		$terms[$voc_name] = db_query('SELECT td.tid, td.name, td.description FROM {taxonomy_term_data} td INNER JOIN {taxonomy_vocabulary} tv ON tv.vid = td.vid WHERE tv.name = :voc_name', array(':voc_name' => $voc_name))->fetchAllAssoc($key);
+	}
+	
+	return $terms[$voc_name];
+}
+
+function _taxonomy_get_voc_vid_by_name($voc_name = '', $reset = FALSE) {
+	static $vids = array();
+	
+	if (empty($vids[$voc_name]) || $reset) {
+		$vids[$voc_name] = db_query('SELECT vid FROM {taxonomy_vocabulary} WHERE name = :voc_name', array(':voc_name' => $voc_name))->fetchField();
+	}
+	
+	return $vids[$voc_name];
+}
+
+
+
+

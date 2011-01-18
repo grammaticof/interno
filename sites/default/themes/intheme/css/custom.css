@@ -1,0 +1,129 @@
+/** MENU **/
+
+#site-menu {
+	text-align: left;
+	border-bottom: 3px solid #000000;
+}
+
+#site-menu ul.main-menu {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+#site-menu ul.main-menu li {
+	float: left;
+	margin-left: 10px;
+	padding: 0 10px;
+	line-height: 20px;
+	background-color: #DDDDDD;
+	-webkit-border-top-left-radius: 5px;
+	-webkit-border-top-right-radius: 5px;
+	-moz-border-radius-topleft: 5px;
+	-moz-border-radius-topright: 5px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
+
+#site-menu ul.main-menu li.active {
+	background-color: #000000;
+	-webkit-border-top-left-radius: 5px;
+	-webkit-border-top-right-radius: 5px;
+	-moz-border-radius-topleft: 5px;
+	-moz-border-radius-topright: 5px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
+
+
+#site-menu ul.main-menu li a {
+	font-size: 12px;
+	line-height: 12px;
+	/* font-weight: bold; */
+	text-decoration: none;
+	font-family: Deliciuos, Arial;
+	font-weight: bold;
+	color: #000000;
+}
+
+#site-menu ul.main-menu li.active a {
+	font-size: 14px;
+	line-height: 14px;
+	color: #FFFFFF;
+}
+
+#site-menu ul.main-menu li.active a:hover {
+	color: #DDDDDD;
+}
+
+
+/** END: MENU **/
+
+/** CONTEXTUAL LINKS **/
+
+div.contextual-links-active {
+	z-index: 9999;
+}
+
+/** END: CONTEXTUAL LINKS **/
+
+/** GENERAL STYLE **/
+
+a:link, a:visited {
+	color: #0062A0;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+body {
+	font-family: Verdana, Arial;
+	font-size: 15px;
+}
+
+h1 {
+	font-size: 32px;
+	line-height: 36px;
+	margin-bottom: 15px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: Verdana, Arial;
+	letter-spacing: 0em;
+}
+
+/** END: GENERAL STYLE **/
+
+/** NODE ARTICLES FULL **/
+
+.article.full-view .field-name-body {
+	font-size: 15px;
+}
+
+.article.full-view .field-name-field-short {
+	font-size: 16px;
+	font-style: italic;
+	font-weight: bold;
+	color: #666666;
+  margin-bottom: 15px;
+}
+
+.article.full-view .field-name-field-media {
+	float: right;
+}
+
+/** END: NODE ARTICLES FULL **/
+
+/** BLOCKS **/
+
+.block {
+	margin-top: 10px;
+}
+
+/** END: BLOCKS **/
+
+.content {
+	word-wrap: break-word;
+}

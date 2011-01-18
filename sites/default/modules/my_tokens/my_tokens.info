@@ -1,0 +1,7 @@
+name = Customized tokens
+description = Enables other tokens.
+package = Custom
+version = VERSION
+core = 7.x
+dependencies[] = token
+

@@ -1,0 +1,14 @@
+; $Id: render_example.info,v 1.2 2010/12/26 18:11:09 rfay Exp $
+name = Render example
+description = Demonstrates drupal_render's capabilities and altering render arrays
+core = 7.x
+stylesheets[all][] = render_example.css
+files[] = render_example.test
+dependencies[] = devel
+
+; Information added by drupal.org packaging script on 2010-12-27
+version = "7.x-1.x-dev"
+core = "7.x"
+project = "examples"
+datestamp = "1293408703"
+

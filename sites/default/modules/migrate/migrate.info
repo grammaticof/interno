@@ -1,0 +1,5 @@
+name = Migrate
+description = A Migration module.
+package = Custom
+version = VERSION
+core = 7.x

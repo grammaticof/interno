@@ -1,0 +1,5 @@
+name = Articles
+description = Node type articles manipulation.
+package = Custom
+version = VERSION
+core = 7.x

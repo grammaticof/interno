@@ -1,0 +1,72 @@
+#block-firstcarousel-carousel {
+	margin: 10px 0;
+}
+
+#block-firstcarousel-carousel .carousel {
+	/* border:1px solid #ccc; */
+	position:relative;	
+	height:250px;
+	width:100%;
+	float:left;	
+	cursor:pointer;
+	
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	-moz-box-shadow:0 0 5px #666;
+	-webkit-box-shadow:0 0 5px #666;
+	overflow: hidden;
+}
+
+/* single slide */
+#block-firstcarousel-carousel div.images {
+	position:absolute;
+	top: 0;
+	left: 150px;		
+	border: 5px solid #DDDDDD;
+	height: 240px;
+	width: 470px;
+	font-size: 14px;
+	background-color: #DDDDDD;
+
+}
+
+#block-firstcarousel-carousel .images div {
+	display:none;
+}
+
+#block-firstcarousel-carousel .images span {
+	position: absolute;
+	bottom: 0;
+	left:0;
+	width: 100%;
+	min-height: 50px;
+	background: rgba(255, 255, 255, 0.7);
+}
+
+#block-firstcarousel-carousel .images h3 {
+	font-size: 17px;
+	line-height: 20px;
+	margin: 0;
+}
+
+#block-firstcarousel-carousel ul.slidetabs {
+	width: 150px;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+#block-firstcarousel-carousel ul.slidetabs li {
+	border-bottom: 1px solid #DDDDDD;
+	font-size: 11px;
+	padding: 3px;
+	margin: 0;
+}
+
+#block-firstcarousel-carousel ul.slidetabs li.current{
+	background-color: #DDDDDD;
+	
+}
+
+
+
