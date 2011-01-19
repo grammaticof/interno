@@ -128,7 +128,7 @@
     <?php endif; ?>
   </div><!-- /#main-content-container -->
 
-  <?php if ($page['postscript_first'] || $page['postscript_second'] || $page['postscript_third'] || $page['postscript_fourth']): ?>
+  <?php if ($page['postscript_first'] || $page['postscript_second']):?>
   <div id="postscript-wrapper" class="container-<?php print $postscript_container_width; ?> clearfix">
     <?php if ($page['postscript_first']): ?>
       <div id="postscript-one" class="postscript <?php print $postscript_first_classes; ?>">

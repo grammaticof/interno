@@ -4,112 +4,86 @@
  * Implements hook_menu().
  */
 function migrate_menu() {
-	$items['test/create/node'] = array(
-		'page callback' => 'migrate_create',
+	$items['admin/migrate/page'] = array(
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('migrate_page_form'),
 		'access callback' => TRUE,
-		'type' => MENU_CALLBACK
+		'type' => MENU_CALLBACK		
 	);
 	
 	return $items;
 }
 
-function migrate_create() {
-	
-	$voc = db_query('SELECT machine_name, vid FROM {taxonomy_vocabulary}')->fetchAllAssoc('machine_name');
-	
-	// VALUES
-	$body_text = 'BODY TEXT';
-	$body_format = 'filtered_html';
-	$title = 'tanto va la gatta è capitona [ciccizzu]';
-	$field_short = 'BODY SHORT';
-	$field_type = 'Attualità';
-	$field_location = 'Pompei';
-	$field_media_fid = 6;
-	$uid = 1;
-	// node->nid old
-	$alias_nid = 90000;
-	// END VALUES
-	
-	
-	// Create node object
-	$node->type = 'article';
-	$node->uid = $uid;
-	$node->language = LANGUAGE_NONE;
-	
-	node_object_prepare($node);
-	
-	$node->title = $title;
-	$node->body[$node->language][0]['value'] = $body_text;
-	$node->body[$node->language][0]['format'] = $body_format;
-	
-	// other fields:
-	
-	// field_short
-	$node->field_short[$node->language][0]['value'] = $field_short;
-	
-	// field_type ($voc['type'])
-	if ($field_type) {
-		$field_type_tid = db_query('SELECT tid FROM {taxonomy_term_data} WHERE name=:term_name AND vid=:voc_vid', 
-			array(
-				':term_name'=>$field_type,
-				':voc_vid'=>$voc['type']->vid)
-			)->fetchField();
-	
-		if ($field_type_tid) {
-			$node->field_type[$node->language][0]['tid'] = $field_type_tid;
-		}
-		else {
-			$new_term = array(
-				'name' => $field_type,
-				'description' => '',
-				'vid' => $voc['type']->vid,
-			);
-			$term = (object) $new_term;
-			taxonomy_term_save($term);
-			$node->field_type[$node->language][0]['tid'] = $term->tid;
-		}
-	}
+/**
+ * Form builder function to allow choice of which batch to run.
+ */
+function migrate_page_form() {
 
-	// fields media
-	if ($field_media_fid)
-		$node->field_media[$node->language][0]['fid'] = $field_media_fid;
-	
-	// field_location ($voc['location'])
-	if ($field_location) {
-		$field_location_tid = db_query('SELECT tid FROM {taxonomy_term_data} WHERE name=:term_name AND vid=:voc_vid', 
-			array(
-				':term_name'=>$field_location,
-				':voc_vid'=>$voc['location']->vid)
-			)->fetchField();
-	
-		if ($field_location_tid) {
-			$node->field_location[$node->language][0]['tid'] = $field_location_tid;
-		}
-		else {
-			$new_term = array(
-				'name' => $field_location,
-				'description' => '',
-				'vid' => $voc['type']->vid,
-			);
-			$term = (object) $new_term;
-			taxonomy_term_save($term);
-			$node->field_location[$node->language][0]['tid'] = $term->tid;
-		}
+	$form['batch'] = array(
+		'#type' => 'select',
+		'#title' => 'Choose batch',
+		'#options' => array(
+			'batch_nodes' => 'Batch NODES - improt nodes',
+			'batch_users' => 'Batch USERS - import users',
+		),
+	);
+	$form['submit'] = array(
+		'#type' => 'submit',
+		'#value' => 'Go',
+	);
+
+	// If no node prevent submission.
+	db_set_active('old');
+	$test = db_query("SELECT nid FROM {node} LIMIT 1")->fetchField();
+	db_set_active('default');
+
+	if (!$test) {
+		drupal_set_message('OLD db not configured!','error');
+		$form['submit']['#disabled'] = TRUE;
 	}
-	
-	// $field_types = field_info_field_types();
-	
-	$alias = drupal_get_path_alias('taxonomy/term/'.$node->field_type[$node->language][0]['tid']);
-  $node->path = array('alias' => $alias . '/' . $alias_nid . '/' . $node->title);
-	
-	// save the node!
-	node_save($node);
-	
-	return 'DONE!';
+	return $form;
 }
 
-function migrate_node_submit($node, $form, &$form_state) {
-	dsm($node);
+function migrate_page_form_submit($form, &$form_state) {
+	$function = 'migrate_' . $form_state['values']['batch'];
+
+	// Execute the function named batch_example_1 or batch_example_2.
+	$batch = $function();
+	batch_set($batch);
+}
+
+function migrate_batch_users() {
+
+	$batch = array(
+		'operations' => array(
+			array('migrate_batch_users_op', array())
+		),
+		'title' => 'Import users',
+		'finished' => 'migrate_batch_users_finished',
+		'init_message' => 'Users import is starting.',
+		'progress_message' => t('Processed @current out of @total.'),
+		'error_message' => t('Example Batch has encountered an error.'),
+		'file' => drupal_get_path('module', 'migrate') . '/migrate.batch.users.inc',
+	);
+	
+	return $batch;
+}
+
+function migrate_batch_nodes() {
+
+	$batch = array(
+		'operations' => array(
+			array('migrate_batch_nodes_op', array())
+		),
+		'title' => 'Import nodes',
+		'finished' => 'migrate_batch_nodes_finished',
+		'init_message' => 'Nodes import is starting.',
+		'progress_message' => t('Processed @current out of @total.'),
+		'error_message' => t('Example Batch has encountered an error.'),
+		'file' => drupal_get_path('module', 'migrate') . '/migrate.batch.nodes.inc',
+	);
+
+	return $batch;
 }
 
 
