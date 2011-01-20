@@ -1,5 +1,5 @@
 <?php
-// $Id: file_styles.theme.inc,v 1.1.2.2 2011/01/11 18:37:34 aaron Exp $
+// $Id: file_styles.theme.inc,v 1.1.2.3 2011/01/14 20:39:54 aaron Exp $
 
 /**
  * @file file_styles/includes/themes/file_styles.theme.inc
@@ -25,8 +25,12 @@ function theme_file_styles_image($variables) {
  * Preview image for Styles UI.
  */
 function theme_file_styles_image_preview($variables) {
-  // Media requires a file object, so we can't style without saving first.
-  $sample_image = variable_get('image_style_preview_image', drupal_get_path('module', 'image') . '/sample.png');
+  // Media requires a file object.
+  // Also, image_style_url() crashes if you send it a file from a module.
+  // Thus, we need to copy it to the public:// directory first, for styles
+  // that need to use an image style.
+  // @see http://drupal.org/node/987846#comment-3949112
+  $sample_image = file_styles_preview_image();
   $variables['object'] = file_uri_to_object($sample_image);
   $variables['field_type'] = 'file';
   return theme('styles', $variables);

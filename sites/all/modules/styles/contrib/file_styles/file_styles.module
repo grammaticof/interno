@@ -1,10 +1,13 @@
 <?php
-// $Id: file_styles.module,v 1.1.2.8.2.10 2011/01/11 19:32:39 aaron Exp $
+// $Id: file_styles.module,v 1.1.2.8.2.11 2011/01/14 20:39:54 aaron Exp $
 
 /**
  *  @file styles/contrib/file_styles/file_styles.module
  *  File widget formatter definitions.
  */
+
+// A registry of variable_get defaults.
+include_once('includes/file_styles.variables.inc');
 
 /**
  * Implementation of Styles module hook_styles_register().
@@ -63,6 +66,34 @@ function file_styles_strstr($haystack, $needle, $before_needle = FALSE){
   return strstr($haystack, $needle);
 }
 
+/**
+ * Return the path to the image for previews in Styles UI.
+ *
+ * If it doesn't yet exist, then copy the source to the files directory.
+ *
+ * @param boolean $replace
+ *  If TRUE, then replace the file.
+ *
+ * @return mixed
+ *  The path to the image preview file, or FALSE if unable to copy.
+ */
+function file_styles_preview_image($replace = FALSE) {
+  $path = file_styles_variable_get('preview_image');
+  if (!$path || $replace) {
+    $dir = file_default_scheme() . '://' . file_styles_variable_get('preview_image_directory');
+    if (file_prepare_directory($dir, FILE_CREATE_DIRECTORY)) {
+      $source = file_styles_variable_get('image_style_preview_image');
+      if ($path = file_unmanaged_copy($source, $dir . '/' . basename($source), FILE_EXISTS_REPLACE)) {
+        file_styles_variable_set('preview_image', $path);
+      }
+    }
+  }
+  return $path;
+}
+
+/**
+ * Implementation of hook_theme().
+ */
 function file_styles_theme($existing, $type, $theme, $path) {
   return array(
     'file_styles_image' => array(

@@ -49,9 +49,8 @@ function firstpage_block_view($block_name = '') {
 	if (array_key_exists($block_name, $cat_array)) {
 		$node_render = array();
 		
-		
 		drupal_add_css(drupal_get_path('module', 'firstpage').'/firstpage.css');
-		//
+
 		$limit = variable_get('node_article_'.$block_name.'_block_count', 5);
 		$term_name = $cat_array[$block_name];
 		
@@ -159,6 +158,40 @@ function _taxonomy_get_voc_vid_by_name($voc_name = '', $reset = FALSE) {
 	return $vids[$voc_name];
 }
 
+/**
+ * Implements hook_image_default_styles().
+ */
+function firstpage_image_default_styles() {
 
+  $styles = array();
+
+  $styles['thumbnail_firstpage'] = array(
+  	'effects' => array(
+		  array(
+		    'name' => 'image_scale_and_crop',
+
+		    'data' => array(
+		      'width' => 60,
+		      'height' => 60,
+		      'upscale' => 1,
+		    ),
+
+		    'weight' => 0,
+		  ),
+		),
+  );
+  
+  return $styles;
+}
+
+/**
+ * Implements hook_image_style_flush().
+ *
+ */
+function firstpage_style_flush($style) {
+  // The $style parameter is an image style array.
+
+  cache_clear_all('*', 'firstpage', TRUE);
+}
 
 

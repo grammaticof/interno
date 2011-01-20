@@ -9,9 +9,9 @@ files[] = taxonomy_menu.batch.inc
 files[] = taxonomy_menu.database.inc
 files[] = taxonomy_menu.module
 files[] = taxonomy_menu.installs
-; Information added by drupal.org packaging script on 2011-01-05
-version = "7.x-1.0"
+; Information added by drupal.org packaging script on 2011-01-15
+version = "7.x-1.1"
 core = "7.x"
 project = "taxonomy_menu"
-datestamp = "1294199466"
+datestamp = "1295050660"
 

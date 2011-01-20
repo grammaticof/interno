@@ -1,5 +1,5 @@
 <?php
-// $Id: styles_ui.admin.inc,v 1.1.2.8.2.17 2011/01/12 22:01:54 aaron Exp $
+// $Id: styles_ui.admin.inc,v 1.1.2.8.2.18 2011/01/18 22:50:33 aaron Exp $
 
 /**
  *  @file
@@ -281,11 +281,19 @@ function styles_ui_style_edit_form_submit(&$form, &$form_state) {
   styles_style_save($style);
 
   // Get the containers for this field type.
-  $styles_containers = styles_default_containers();
-  $field_containers = $styles_containers[$field_type];
+  $styles = styles_default_presets($field_type);
+  $containers = styles_default_containers($field_type);
+
+  foreach ($form_state['values']['containers'] as $container_name => $container) {
+    if (is_array($container)) {
+      $default_preset = isset($styles['containers'][$container_name]['styles'][$style_name]['default preset']) ? $styles['containers'][$container_name]['styles'][$style_name]['default preset'] : $styles['containers'][$container_name]['default preset'];
+      $delete_only = ($default_preset == $container['preset']);
+      styles_style_save_preset($field_type, $container_name, $style_name, $container['preset'], $delete_only);
+    }
+  }
 
   // Redirect to this style's edit page.
-  $form_state['redirect'] = $field_containers['admin']['path'] . '/edit/' . $style_name;
+  $form_state['redirect'] = $containers['admin']['path'] . '/edit/' . $style_name;
 }
 
 function styles_ui_preview_ajax($field_type, $container_name, $preset_name) {

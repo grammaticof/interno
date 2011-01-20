@@ -1,5 +1,5 @@
-  <?php
-// $Id: taxonomy_menu.module,v 1.23.2.2 2010/12/23 15:40:54 dstol Exp $
+<?php
+// $Id: taxonomy_menu.module,v 1.23.2.5 2011/01/15 00:11:21 dstol Exp $
 
 /**
  * @file
@@ -41,7 +41,7 @@ function taxonomy_menu_form_alter(&$form, &$form_state, $form_id) {
 
     array_unshift($menu_items, '= DISABLED =');
 
-    // The vid isn't set when a new vocabolary is being created.
+    // The vid isn't set when a new vocabulary is being created.
     if (isset($form['vid']['#value'])) {
       $default = variable_get('taxonomy_menu_vocab_menu_' . $form['vid']['#value'], NULL) . ':' .
                  variable_get('taxonomy_menu_vocab_parent_' . $form['vid']['#value'], NULL);
@@ -108,6 +108,11 @@ function taxonomy_menu_vocab_submit($form, &$form_state) {
 
   // Split the menu location into menu name and menu item id.
   list($vocab_parent['vocab_menu'], $vocab_parent['vocab_parent']) = explode(':', $form_state['values']['taxonomy_menu']['vocab_parent']);
+
+  // Init flag variables to avoid notices if changes haven't happened
+  $changed_menu = FALSE;
+  $change_vocab_item = FALSE;
+  $changed_path = FALSE;
 
   // Set the menu name and check for changes
   $variable_name = _taxonomy_menu_build_variable('vocab_menu', $vid);
@@ -541,7 +546,6 @@ function _taxonomy_menu_save($item) {
   $insert = TRUE;
   //create the path.
   $path = taxonomy_menu_create_path($item['vid'], $item['tid']);
-
   // get the parent mlid: this is either:
   // - the parent tid's mlid
   // - the vocab menu item's mlid

@@ -195,7 +195,8 @@ function nodequeue_node_delete($node) {
 /**
  * Implements hook_node_view().
  */
-function nodequeue_node_view($node, $view_mode, $langcode) {
+
+function nodequeue_node_view(&$node, $view_mode) {
   $links = array();
   if (variable_get('nodequeue_links', FALSE) &&
       user_access('manipulate queues')) {
@@ -575,6 +576,7 @@ function nodequeue_node_tab($node) {
  * Display a list of queues and their status for the administrator.
  */
 function nodequeue_view_queues() {
+  // TODO Please change this theme call to use an associative array for the $variables parameter.
   // TODO Please change this theme call to use an associative array for the $variables parameter.
   $output = theme('advanced_help_topic', 'nodequeue', 'about', 'icon') . '&nbsp;' . theme('advanced_help_topic', 'nodequeue', 'about', t('Click here for information about this module'));
 
@@ -1776,7 +1778,6 @@ function subqueue_load($sqid) {
   if (!$sqid) {
     return NULL;
   }
-  
   $queues = nodequeue_load_subqueues(array($sqid));
   return !empty($queues) ? array_shift($queues) : array();
 }
