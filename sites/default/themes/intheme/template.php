@@ -71,19 +71,6 @@ function intheme_preprocess_page(&$vars, $hook) {
  */
 /* -- Delete this line if you want to use this function */
 function intheme_preprocess_node(&$vars, $hook) {
-	// case firstpage
-	if (in_array('node__article__firstpage', $vars['theme_hook_suggestions'])) {
-		/*
-		dsm($vars['classes_array']);
-		if ($kk = array_search('full-view', $vars['classes_array']))
-			$vars['classes_array'][$kk] = 'firstpage';
-		*/
-		$today = strtotime('today');
-		
-		// add the time for todays articles.
-		if ($vars['created'] > $today && !empty($vars['content']['field_short']))
-			$vars['content']['field_short'][0]['#markup'] = '<span class="time">' . format_date($vars['created'], 'custom', 'H:i') . '</span> ' . $vars['content']['field_short'][0]['#markup'];
-	}
 }
 // */
 
