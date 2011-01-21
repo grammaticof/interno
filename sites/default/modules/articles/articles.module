@@ -28,11 +28,9 @@ function articles_node_view_alter(&$build) {
 			if ($build['field_location'][0]['#type'] == 'link')
 				$build['field_short'][0]['#markup'] = l($build['field_location'][0]['#title'], $build['field_location'][0]['#href'], array('attributes'=>array('class'=>'field-location'))).$build['field_short'][0]['#markup'];
 		}
-		//*/
-  }
-  //*/
-  // Add a #post_render callback to act on the rendered HTML of the node.
-}
+		
 
+	}
+}
 
 

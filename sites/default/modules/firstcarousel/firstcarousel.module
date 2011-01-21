@@ -98,39 +98,20 @@ function firstcarousel_preprocess_firstcarousel_block_html(&$vars) {
 function firstcarousel_preprocess_firstcarousel_block_item(&$vars) {
 	$node = $vars['node'];
 	$lang = $node->language;
-	//dsm($node);
-	// image
-	$image_render = '';
+
+	$image = '';
 	if (isset($node->field_media[$lang][0])) {
 		$fid = $node->field_media[$lang][0]['fid'];
-		$path = 'public://carousel';
-		
-		// load the image
-		$uri = file_load($fid)->uri;
-		
-		if (is_file($path.'/'.file_uri_target($uri))) { // file already exist
-			$image_render = theme('image', array('path' => $path.'/'.file_uri_target($uri)));
-		}
-		else {
-			// load the image.
-			$image = image_load($uri);
-			// scale and crop the image.
-			image_scale_and_crop($image, 470, 240);
-
-			// directory.
-			if (file_prepare_directory($path, FILE_MODIFY_PERMISSIONS | FILE_CREATE_DIRECTORY)) {
-				// save the image in the carousel directory.
-				image_save($image, $path . '/' . file_uri_target($uri));
-			}
-			$image_render = theme('image', array('path' => $path.'/'.file_uri_target($uri)));
-		}
-	}
-	else { // no image.
-		$image_path = drupal_get_path('theme', 'intheme').'/images/noimage.jpg';
-		$image_render = theme('image', array('path' => $image_path));
+		$style_vars = array(
+			'path' => file_load($fid)->uri,
+			'style_name' => variable_get('firstcarousel_image_style', 'carousel'),
+		);
+		$image = theme('image_style', $style_vars);
 	}
 	
-	$vars['image'] = $image_render;
+	// print_r($style_vars);
+	
+	$vars['image'] = $image;
 	$vars['title_url'] = l($node->title, 'node/'.$node->nid);
 	
 	$text = '';
@@ -162,4 +143,39 @@ function firstcarousel_block_save($delta = '', $edit = array()) {
 	variable_set('firstcarousel_block_count', $edit['firstcarousel_block_count']);
 } 
 
+/**
+ * Implements hook_image_default_styles().
+ */
+function firstcarousel_image_default_styles() {
+
+  $styles = array();
+
+  $styles['carousel'] = array(
+  	'effects' => array(
+		  array(
+		    'name' => 'image_scale_and_crop',
+
+		    'data' => array(
+		      'width' => 470,
+		      'height' => 240,
+		      'upscale' => 0,
+		    ),
+
+		    'weight' => 0,
+		  ),
+		),
+  );
+  
+  return $styles;
+}
+
+/**
+ * Implements hook_image_style_flush().
+ *
+ */
+function firstcarousel_style_flush($style) {
+  // The $style parameter is an image style array.
+
+  cache_clear_all('*', 'carousel', TRUE);
+}
 
