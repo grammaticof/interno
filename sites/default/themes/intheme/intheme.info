@@ -5,6 +5,8 @@ screenshot = screenshot.png
 core       = 7.x
 base theme = omega
 
+regions[menu] = menu
+
 regions[sidebar_first] = sidebar first
 regions[sidebar_second] = sidebar second
 
@@ -117,4 +119,6 @@ datestamp = "1294274791"
 ; Declare default stylesheets
 stylesheets[all][] = css/custom.css
 stylesheets[all][] = css/fonts.css
+stylesheets[all][] = css/form.css
+stylesheets[all][] = css/superfish-intheme.css
 

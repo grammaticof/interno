@@ -78,7 +78,6 @@
  */
 ?>
 <div<?php print $attributes; ?>>
-
   <div class="content clearfix"<?php print $content_attributes; ?>>
     <?php
       // We hide the comments and links now so that we can render them later.
@@ -90,7 +89,6 @@
       <div class="submitted"><?php print $date; ?></div>
     <?php endif; ?>
   </div>
-  
   <div class="clearfix">
     <?php if (!empty($content['links'])): ?>
       <div class="links"><?php print render($content['links']); ?></div>

@@ -4,32 +4,36 @@
  * Implements hook_node_view_alter().
  */
 function articles_node_view_alter(&$build) {
-  // full view_mode
-  /*
-	if ($build['#view_mode'] == 'full') {
-    dsm($build);
-    // Change its weight.
-    // $build['an_additional_field']['#weight'] = -10;
-  }
-	//*/
-  if ($build['#view_mode'] == 'firstpage') {
-		$today = strtotime('today');
+	
+	switch($build['#view_mode']) {
+		case 'firstpage': // firstpage view
+			$today = strtotime('today');
 		
-		// add the time for todays articles.
-		if ($build['#node']->created > $today && !empty($build['field_location'])) {
-			$build['field_short'][0]['#markup'] = '<span class="time">'.
-				format_date($build['#node']->created, 'custom', 'H:i').'</span> '.
-				$build['field_short'][0]['#markup'];
-		}
+			// add the time for todays articles.
+			if ($build['#node']->created > $today && !empty($build['field_location'])) {
+				$build['field_short'][0]['#markup'] = '<span class="time">'.
+					format_date($build['#node']->created, 'custom', 'H:i').'</span> '.
+					$build['field_short'][0]['#markup'];
+			}
 		
-		if (!empty($build['field_location'])) {
-			hide($build['field_location']);
+			if (!empty($build['field_location'])) {
+				hide($build['field_location']);
 						
-			if ($build['field_location'][0]['#type'] == 'link')
-				$build['field_short'][0]['#markup'] = l($build['field_location'][0]['#title'], $build['field_location'][0]['#href'], array('attributes'=>array('class'=>'field-location'))).$build['field_short'][0]['#markup'];
-		}
+				if ($build['field_location'][0]['#type'] == 'link')
+					$build['field_short'][0]['#markup'] = l($build['field_location'][0]['#title'], $build['field_location'][0]['#href'], array('attributes'=>array('class'=>'field-location'))).$build['field_short'][0]['#markup'];
+			}
 		
-
+		break;
+		
+		case 'full': // full page view
+			if (!empty($build['field_location'])) {
+				hide($build['field_location']);
+						
+				if ($build['field_location'][0]['#type'] == 'link')
+					$build['body'][0]['#markup'] = l($build['field_location'][0]['#title'].' - ', $build['field_location'][0]['#href'], array('attributes'=>array('class'=>'field-location'))).$build['body'][0]['#markup'];
+			}
+		
+		break;
 	}
 }
 

@@ -21,18 +21,15 @@
         <?php endif; ?>
       <?php endif; ?>
     </div><!-- /#branding -->
-    <?php if ($primary_nav || $secondary_nav): ?>
-      <div id="site-menu" class="grid-<?php print $header_menu_width; ?>">
-
-      <?php if ($primary_nav): ?>
-        <div><?php print $primary_nav; ?></div>
-      <?php endif; ?>
-      <?php if ($secondary_nav): ?>
-        <div><?php print $secondary_nav; ?></div>
-      <?php endif; ?>
-      </div><!-- /#site-menu -->
+    <?php if ($page['menu']): ?>
+      <div id="site-menu" class="grid-24">
+        <?php print render($page['menu']); ?>
+      </div>
     <?php endif; ?>
+
   </div><!-- /#site-header -->
+
+
   
   <?php if ($messages): ?>
   <div class="container-<?php print $default_container_width; ?> clearfix">
