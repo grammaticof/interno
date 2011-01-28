@@ -10,7 +10,7 @@ function articles_node_view_alter(&$build) {
 			$today = strtotime('today');
 		
 			// add the time for todays articles.
-			if ($build['#node']->created > $today && !empty($build['field_location'])) {
+			if ($build['#node']->created > $today) {
 				$build['field_short'][0]['#markup'] = '<span class="time">'.
 					format_date($build['#node']->created, 'custom', 'H:i').'</span> '.
 					$build['field_short'][0]['#markup'];
@@ -26,6 +26,12 @@ function articles_node_view_alter(&$build) {
 		break;
 		
 		case 'full': // full page view
+
+			if (!empty($build['field_short'])) {
+				$date = format_date($build['#node']->created, 'medium');
+				$build['field_short'][0]['#markup'] .= '<div class="submitted">'.$date.'</div>';
+			}
+		
 			if (!empty($build['field_location'])) {
 				hide($build['field_location']);
 						

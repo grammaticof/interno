@@ -1,5 +1,5 @@
-name = Banner
-description = Custom banner
+name = Author
+description = Author block.
 package = Custom
 version = VERSION
 core = 7.x

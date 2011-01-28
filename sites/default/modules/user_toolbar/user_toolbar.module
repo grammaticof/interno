@@ -1,0 +1,50 @@
+<?php
+
+/**
+ * Implements hook_form_alter().
+ */
+function user_toolbar_form_alter(&$form, &$form_state, $form_id) {
+
+	switch ($form_id) {
+		case 'user_login':
+		case 'user_register_form':
+		case 'user_pass':
+			drupal_set_title('');
+		break;
+	}
+}
+
+/**
+ * Implements hook_theme().
+ */
+function user_toolbar_theme() {
+	return array(
+		'user_toolbar' => array(
+			'variables' => array(),
+			'template' => 'user-toolbar',
+		),
+		'user_toolbar_login' => array(
+			'variables' => array('form' => NULL),
+			'template' => 'user-toolbar-login',
+		),		
+	);
+}
+
+/**
+ * theme: user_toolbar preprocess
+ */
+function template_preprocess_user_toolbar(&$vars) {
+	global $user;
+	
+	$items = array();
+	if ($user->uid > 0) { // logged user
+		$items[] = l('logout', 'user/logout');
+	}
+	else { // anonymous
+		// drupal_add_js(drupal_get_path('module', 'user_toolbar').'/user_toolbar.js');
+		$items[] = l('login', 'user', array('attributes' => array('class' => array('login-link'))));
+		$items[] = l('register', 'user/register', array('attributes' => array('class' => array('register-link'))));
+	}
+	
+	$vars['toolbar_links'] = theme('item_list', array('items' => $items));
+}

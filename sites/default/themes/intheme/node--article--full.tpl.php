@@ -85,9 +85,6 @@
       hide($content['links']);
       print render($content);
     ?>
-    <?php if ($display_submitted):?>
-      <div class="submitted"><?php print $date; ?></div>
-    <?php endif; ?>
   </div>
   <div class="clearfix">
     <?php if (!empty($content['links'])): ?>

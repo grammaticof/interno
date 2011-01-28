@@ -1,24 +1,8 @@
 <?php
 
-
 /**
- * Implements hook_menu().
+ * Implements hook_block_info().
  */
-/*
-function firstcarousel_menu() {
-	$items['home'] = array(
-		'page callback' => 'firstpage_home',
-		'access arguments' => array('access content'),
-		'type' => MENU_CALLBACK
-	);
-	
-	return $items;
-}
-*/
-
-/**
-* Implements hook_block_info().
-*/
 function firstcarousel_block_info() {
 	
 	$blocks = array();

@@ -1,5 +1,5 @@
-name = Banner
-description = Custom banner
+name = Toolbar
+description = User toolbar.
 package = Custom
 version = VERSION
 core = 7.x

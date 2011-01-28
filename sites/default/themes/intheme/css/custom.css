@@ -1,5 +1,9 @@
 /** REGION MENU **/
 
+#site-header {
+	margin-bottom: 25px;
+}
+
 #site-menu a{
 	text-decoration: none;
 	font-family: Delicious, Arial, Verdana;
@@ -29,21 +33,20 @@ a:hover {
 }
 
 div#page {
-	font-family: Verdana, Arial;
+	font-family: Arial, Verdana;
 	font-size: 15px;
 	background: url(../images/body-gray.png);
 	background-position:50% 50%;
 }
 
-h1 {
-	font-size: 32px;
-	line-height: 36px;
-	margin-bottom: 15px;
+h1, h2, h3, h4, h5, h6 {
+	font-family: Arial, Verdana;
+	letter-spacing: 1px;
 }
 
-h1, h2, h3, h4, h5, h6 {
-	font-family: Verdana, Arial;
-	letter-spacing: 0em;
+h1 {
+	font-size: 32px;
+	line-height: 35px;
 }
 
 /** END: GENERAL STYLE **/
@@ -62,6 +65,13 @@ h1, h2, h3, h4, h5, h6 {
 	font-weight: bold;
 	color: #666666;
   margin-bottom: 15px;
+}
+
+.article.full-view .submitted {
+	text-align: right;
+	font-size: 11px;
+	font-weight: normal;
+	font-style: normal;
 }
 
 .article.full-view .field-name-field-media {
@@ -98,6 +108,8 @@ h1, h2, h3, h4, h5, h6 {
 	text-decoration: none;
 }
 
+
+
 /** END: NODE ARTICLES FULL **/
 
 /** BLOCKS **/
@@ -110,31 +122,96 @@ h1, h2, h3, h4, h5, h6 {
 
 /** TABS **/
 #content-tabs {
-
+	background: #F2F2F2;
+	border: 1px solid #DDDDDD;
+	display: block;
+	font-family: Deliciuos, Verdana, Arial;
+	margin: 0 0 10px 0;
+	padding: 5px;
+	text-align: center;
+	width:500px;
+	margin: auto;
 }
-
 
 #content-tabs ul.primary li a:link,
 #content-tabs ul.primary li a:hover,
 #content-tabs ul.primary li a:visited,
 #content-tabs ul.secondary li a:link,
 #content-tabs ul.secondary li a:visited  {
+	color: #555555;
+	font-weight: bold;
+	font-size: 12px;
 	text-decoration: none;
 }
 
 #content-tabs ul.primary li a.active:link,
 #content-tabs ul.primary li a.active:visited {
-	color: #000000;
-	padding: 5px;
-	background-color: #DDDDDD;
-	font-weight: bold;
-	border: 0;
-	-webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
-	border-radius: 10px;
-	font-size: 14px;
+	font-size: 12px;
 }
 
 /** END: TABS **/
+
+/** USER TOOLBAR **/
+
+#user-toolbar {
+	height: 25px;
+	background: #000000;
+	color:#FFFFFF;
+	font-size: 12px;
+}
+
+#user-toolbar ul {
+	margin: 0;
+}
+
+#user-toolbar ul li {
+	color: #FFFFFF;
+	line-height: 25px;
+	height: 25px;
+	float: right;
+	display: inline-block;
+	position: relative;
+}
+
+#user-toolbar ul li a {
+	color: #FFFFFF;
+	font-weight: bold;
+}
+
+#user-toolbar-login {
+	width: 200px;
+	z-index: 9999;
+	background: #000000;
+	overflow: hidden;
+	position: absolute;
+	padding: 10px;
+	right: -10px;
+	-webkit-border-bottom-right-radius: 5px;
+	-webkit-border-bottom-left-radius: 5px;
+	-moz-border-radius-bottomright: 5px;
+	-moz-border-radius-bottomleft: 5px;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+	display: none;
+}
+
+#user-toolbar-login .form-item input {
+	width: 190px;
+}
+
+#user-toolbar-login .form-actions {
+	text-align: center;
+}
+
+#user-toolbar-login .form-actions input {
+	cursor: pointer;
+	color: #FFFFFF;
+	line-height: 25px;
+}
+
+/* edit-actions */
+
+
+/** END: USER TOOLBAR **/
 
 

@@ -5,10 +5,12 @@
 }
 .sf-navbar.sf-style-default a {
   border: 0;
+  padding: 5px 10px;
 }
 .sf-menu.sf-style-default li,
 .sf-navbar.sf-style-default {
   background: #f9f9f9;
+  height: auto;
 }
 .sf-menu.sf-style-default li li {
   background: #f7f7f7;
@@ -41,5 +43,15 @@
 
 .sf-navbar.sf-style-default .menuparent ul {
   font-size: 13px;
+}
+
+ul.sf-menu {
+  border-bottom: 3px solid #e9e9e9;
+  padding: 0 !important;
+}
+
+.sf-menu.sf-style-default li:hover ul,
+.sf-menu.sf-style-default li.sfHover ul {
+  top: 25px;
 }
 
