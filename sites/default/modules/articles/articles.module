@@ -26,7 +26,10 @@ function articles_node_view_alter(&$build) {
 		break;
 		
 		case 'full': // full page view
-
+			
+			$theme_path = drupal_get_path('theme', 'intheme');
+			drupal_add_css($theme_path.'/css/disqus.css');
+			
 			if (!empty($build['field_short'])) {
 				$date = format_date($build['#node']->created, 'medium');
 				$build['field_short'][0]['#markup'] .= '<div class="submitted">'.$date.'</div>';

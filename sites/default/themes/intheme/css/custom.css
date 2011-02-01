@@ -53,6 +53,10 @@ h1 {
 
 /** NODE ARTICLES FULL **/
 
+.article.full-view.node {
+	border-bottom: 0;
+}
+
 .article.full-view a.field-location,
 .article.full-view .field-name-body {
 	font-size: 15px;
@@ -83,7 +87,8 @@ h1 {
 }
 
 .article.full-view .field-name-field-tags .field-items .field-item {
-	float: left;
+	/* float: left;*/
+	display: inline;
 	margin: 0 5px 0 0;
 }
 
@@ -107,8 +112,6 @@ h1 {
 .article.full-view a.field-location:hover {
 	text-decoration: none;
 }
-
-
 
 /** END: NODE ARTICLES FULL **/
 

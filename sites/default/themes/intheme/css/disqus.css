@@ -1,0 +1,77 @@
+/* Everything Disqus on your page is contained within this. */
+#disqus_thread {
+	background-color: #FFFFFF;
+	border-style: solid;
+	border-color: #DDDDDD;
+	padding: 5px;
+}
+
+/*The comments.*/
+.dsq-comment-message {
+	font-size: 13px;
+}
+
+/*The box where a post is typed into.*/
+#disqus_thread textarea {
+	background-image: none;
+	background-repeat: repeat;
+	border: #DDDDDD 1px solid; /* light blue border */
+}
+
+/*"Add New Comment" and "# Comments" are enclosed in h3 tags.*/
+#disqus_thread h3 {
+	font-family: Delicious, Verdana, Arial;
+}
+
+#dsq-like-tooltip h3,
+#dsq-content h3 {
+	font-size: 16px;
+}
+
+/*The entire comment thread list.*/
+#dsq-content .dsq-moderator .dsq-comment-header {
+	background-color:#CEE3F6 !important;
+	background-image:none !important;
+	border:1px solid #58ACFA;
+}
+
+/*A single comment in the thread.*/
+#disqus_thread .dsq-comment {
+	background-color: #ffffff;
+}
+
+/* The form elements (Name, Email, Website). */
+#disqus_thread input.form-text {
+	font-size: 100%; 
+}
+
+#disqus_thread .dsq-reply {
+	background-color: #EEEEEE;
+	border: 1px solid rgba(0, 0, 0, 0.148438);
+	border-bottom-left-radius: 3px 3px;
+	border-bottom-right-radius: 3px 3px;
+	border-top-left-radius: 3px 3px;
+	border-top-right-radius: 3px 3px;
+	font-size: 13px;
+	line-height: 14px;
+	padding: 10px;
+	position: relative;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	margin-bottom: 10px;
+}
+
+#dsq-content .dsq-comment-meta,
+#dsq-content ul.dsq-comment-actions li {
+	font-size: 11px;
+}
+
+#dsq-like-tooltip label {
+	display: inline;
+}
+
+#dsq-account-dropdown,
+#dsq-subscribe {
+	display: none;
+}
+
