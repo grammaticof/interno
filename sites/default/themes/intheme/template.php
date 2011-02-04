@@ -88,16 +88,6 @@ function intheme_preprocess_comment(&$vars, $hook) {
 }
 // */
 
-/**
- * Override or insert variables into the block templates.
- *
- * @param $vars
- *   An array of variables to pass to the theme template.
- * @param $hook
- *   The name of the template being rendered ("block" in this case.)
- */
-// Delete this line if you want to use this function
-function intheme_preprocess_block(&$vars, $hook) {
 
-}
-// */
+
+

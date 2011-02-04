@@ -53,11 +53,29 @@ function firstpage_block_view($block_name = '') {
 
 		$limit = variable_get('node_article_'.$block_name.'_block_count', 5);
 		$term_name = $cat_array[$block_name];
-		
+
+		// get the terms
 		$terms = _taxonomy_get_terms_by_voc_name('Type', 'name');
+
 		if (!empty($terms[$term_name])) {
-			$nids = taxonomy_select_nodes($terms[$term_name]->tid, FALSE, $limit, array('t.created' => 'DESC'));
-		
+
+			// get the vid
+			$vid = _taxonomy_get_voc_vid_by_name('Type');
+			// retrieve the tree of terms
+			$tree = taxonomy_get_tree($vid, $terms[$term_name]->tid);
+
+			// array of the descendant's tids + the actual
+			$descendant_tids = array_merge(array($terms[$term_name]->tid), array_map('_taxonomy_get_tid_from_term', $tree));
+			
+			// select all the nodes associated to the tids.
+			$query = db_select('taxonomy_index', 't');
+			$query->fields('t', array('nid'));
+			$query->condition('t.tid', $descendant_tids, 'IN');
+			$query->orderBy('t.created', 'DESC');
+			$query->range(0, $limit);
+			
+			$nids = $query->execute()->fetchCol();
+			
 			$node_render = array();
 			foreach ($nids as $nid) {
 				$node = node_load($nid);

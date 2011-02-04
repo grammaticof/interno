@@ -40,12 +40,17 @@
 	left:0;
 	width: 100%;
 	min-height: 50px;
-	background: rgba(255, 255, 255, 0.7);
+	background-color: #000000;
+	filter:alpha(opacity=40);
+	-moz-opacity:0.4;
+	-khtml-opacity: 0.4;
+	opacity: 0.4;
 }
 
 #block-firstcarousel-carousel .images h3 {
 	font-size: 17px;
 	line-height: 20px;
+	color: #FFFFFF;
 	margin: 0;
 }
 

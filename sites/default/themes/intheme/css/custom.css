@@ -86,6 +86,11 @@ h1 {
 	margin-top: 20px;
 }
 
+.article.full-view .field-name-field-tags span {
+	font-size: 22px;
+	color: #696969;
+}
+
 .article.full-view .field-name-field-tags .field-items .field-item {
 	/* float: left;*/
 	display: inline;
@@ -157,7 +162,7 @@ h1 {
 /** USER TOOLBAR **/
 
 #user-toolbar {
-	height: 25px;
+	height: 20px;
 	background: #000000;
 	color:#FFFFFF;
 	font-size: 12px;
@@ -169,11 +174,11 @@ h1 {
 
 #user-toolbar ul li {
 	color: #FFFFFF;
-	line-height: 25px;
-	height: 25px;
 	float: right;
 	display: inline-block;
 	position: relative;
+	padding: 2px 0;
+	margin: 0;
 }
 
 #user-toolbar ul li a {
@@ -212,9 +217,65 @@ h1 {
 	line-height: 25px;
 }
 
-/* edit-actions */
-
-
 /** END: USER TOOLBAR **/
 
+/** PAGE TITLE **/
+	
+.page-contact h1.title {
+	font-family: Delicious, Verdana, Arial;
+	text-align: center;
+}
+
+/** END: PAGE TITLE **/
+
+/** RECAPTCHA **/
+
+
+
+/** END: RECAPTCHA **/
+
+/** ICONS **/
+
+#main-content ul.links li.disqus_comments_num a,
+.disqus_comments_num a {
+	color: #AAACAF;
+	font-size: 11px;
+	font-weight: bold;
+	padding-left: 15px;
+	background: url('../images/iconic/gray_light/comment_stroke_12x11.png') no-repeat center left;
+	text-decoration: none;
+}
+
+#main-content ul.links li.disqus_comments_num a:hover,
+.disqus_comments_num a:hover {
+	background: url('../images/iconic/gray_light/comment_fill_12x11.png') no-repeat center left;	
+}
+
+#user-toolbar ul li a.logout-link,
+#user-toolbar ul li a.login-link {
+	display: block;
+	text-indent: -9999px;
+}
+
+#user-toolbar ul li a.logout-link {
+	height: 16px;
+	width: 16px;
+	background: url('../images/iconic/gray_light/x_alt_12x12.png') no-repeat;
+}
+
+#user-toolbar ul li a.logout-link:hover {
+	background: url('../images/iconic/red/x_alt_12x12.png') no-repeat;
+}
+
+#user-toolbar ul li a.login-link {
+	height: 16px;
+	width: 16px;
+	background: url('../images/iconic/gray_light/user_12x16.png') no-repeat;
+}
+
+#user-toolbar ul li a.login-link:hover {
+	background: url('../images/iconic/green/user_12x16.png') no-repeat;
+}
+
+/** END: ICONS **/
 

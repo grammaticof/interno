@@ -25,7 +25,6 @@ function migrate_batch_nodes_op(&$context) {
 	$query->condition('n.type', $old_type);
 	$query->orderBy('n.nid');
 	$query->range(0, $limit);
-	$query->execute();
 
 	$result = $query->execute();
 	db_set_active('default');

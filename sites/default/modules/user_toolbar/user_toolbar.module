@@ -23,10 +23,6 @@ function user_toolbar_theme() {
 			'variables' => array(),
 			'template' => 'user-toolbar',
 		),
-		'user_toolbar_login' => array(
-			'variables' => array('form' => NULL),
-			'template' => 'user-toolbar-login',
-		),		
 	);
 }
 
@@ -38,12 +34,10 @@ function template_preprocess_user_toolbar(&$vars) {
 	
 	$items = array();
 	if ($user->uid > 0) { // logged user
-		$items[] = l('logout', 'user/logout');
+		$items[] = l('logout', 'user/logout', array('attributes' => array('class' => array('logout-link'))));
 	}
 	else { // anonymous
-		// drupal_add_js(drupal_get_path('module', 'user_toolbar').'/user_toolbar.js');
 		$items[] = l('login', 'user', array('attributes' => array('class' => array('login-link'))));
-		$items[] = l('register', 'user/register', array('attributes' => array('class' => array('register-link'))));
 	}
 	
 	$vars['toolbar_links'] = theme('item_list', array('items' => $items));

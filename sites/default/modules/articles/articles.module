@@ -9,13 +9,6 @@ function articles_node_view_alter(&$build) {
 		case 'firstpage': // firstpage view
 			$today = strtotime('today');
 		
-			// add the time for todays articles.
-			if ($build['#node']->created > $today) {
-				$build['field_short'][0]['#markup'] = '<span class="time">'.
-					format_date($build['#node']->created, 'custom', 'H:i').'</span> '.
-					$build['field_short'][0]['#markup'];
-			}
-		
 			if (!empty($build['field_location'])) {
 				hide($build['field_location']);
 						
@@ -23,6 +16,49 @@ function articles_node_view_alter(&$build) {
 					$build['field_short'][0]['#markup'] = l($build['field_location'][0]['#title'], $build['field_location'][0]['#href'], array('attributes'=>array('class'=>'field-location'))).$build['field_short'][0]['#markup'];
 			}
 		
+			// add the time for todays articles.
+			if ($build['#node']->created > $today) {
+				$build['field_short'][0]['#markup'] = '<span class="time">'.
+					format_date($build['#node']->created, 'custom', 'H:i').'</span> '.
+					$build['field_short'][0]['#markup'];
+			}
+		
+
+			
+			// Display the Disqus link.
+			$links['disqus_comments_num'] = array(
+				'title' => '0',
+				'href' => 'node/' . $build['#node']->nid,
+				'fragment' => 'disqus_thread',
+				'html' => TRUE,
+				'attributes' => array(
+					// Identify the node for Disqus with the unique identifier:
+					// http://docs.disqus.com/developers/universal/#comment-count
+					'data-disqus-identifier' => 'node/' . $build['#node']->nid,
+					'class' => array('iconic', 'comment'),
+				),
+			);
+			
+			$build['links']['disqus'] = array(
+				'#theme' => 'links',
+				'#links' => $links,
+				'#attributes' => array(
+					'class' => array('links', 'inline'),
+				),
+			);
+
+			// Attach disqus.js to load the Disqus comment count JavaScript.
+			$build['links']['#attached']['js'][] = drupal_get_path('module', 'disqus') . '/disqus.js';
+			
+			// Add the disqusComments setting.
+			static $added = FALSE;
+			if ($added == FALSE) {
+				drupal_add_js(array(
+					'disqusComments' => $build['#node']->disqus['domain'],
+				), 'setting');
+				$added = TRUE;
+			}
+			
 		break;
 		
 		case 'full': // full page view
@@ -41,9 +77,27 @@ function articles_node_view_alter(&$build) {
 				if ($build['field_location'][0]['#type'] == 'link')
 					$build['body'][0]['#markup'] = l($build['field_location'][0]['#title'].' - ', $build['field_location'][0]['#href'], array('attributes'=>array('class'=>'field-location'))).$build['body'][0]['#markup'];
 			}
-		
 		break;
 	}
 }
 
-
+/**
+ * Override or insert variables into the field templates.
+ *
+ * @param $vars
+ *   An array of variables to pass to the theme template.
+ * @param $hook
+ *   The name of the template being rendered.
+ */
+/*
+function articles_preprocess_field(&$vars, $hook) {
+	switch ($vars['element']['#field_name']) {
+		case 'field_tags':
+			$vars['prefix'] = 'test';
+			$vars['classes_array'][] = 'iconic';
+			$vars['classes_array'][] = 'tags';
+			dsm($vars);
+		break;
+	}
+}
+//*/
