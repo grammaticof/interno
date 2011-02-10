@@ -1,6 +1,17 @@
 <?php
 
 /**
+ * Implements hook_menu_alter().
+ */
+function articles_menu_alter(&$items) {
+	if (!empty($items['taxonomy/term/%taxonomy_term'])) {
+		$items['taxonomy/term/%taxonomy_term']['page callback'] = 'articles_term_page';
+		$items['taxonomy/term/%taxonomy_term']['file path'] = drupal_get_path('module', 'articles');
+		$items['taxonomy/term/%taxonomy_term']['file'] = 'articles.pages.inc';
+	}
+}
+
+/**
  * Implements hook_node_view_alter().
  */
 function articles_node_view_alter(&$build) {
@@ -22,8 +33,6 @@ function articles_node_view_alter(&$build) {
 					format_date($build['#node']->created, 'custom', 'H:i').'</span> '.
 					$build['field_short'][0]['#markup'];
 			}
-		
-
 			
 			// Display the Disqus link.
 			$links['disqus_comments_num'] = array(
@@ -78,26 +87,79 @@ function articles_node_view_alter(&$build) {
 					$build['body'][0]['#markup'] = l($build['field_location'][0]['#title'].' - ', $build['field_location'][0]['#href'], array('attributes'=>array('class'=>'field-location'))).$build['body'][0]['#markup'];
 			}
 		break;
+		
+		case 'teaser': // teaser view
+			// hide the read more button.
+			hide($build['links']['node']);
+		break;
+		
 	}
 }
 
 /**
- * Override or insert variables into the field templates.
+ * Return nodes attached to a term and the descendant across all field instances.
  *
- * @param $vars
- *   An array of variables to pass to the theme template.
- * @param $hook
- *   The name of the template being rendered.
+ * This function requires taxonomy module to be maintaining its own tables,
+ * and will return an empty array if it is not. If using other field storage
+ * methods alternatives methods for listing terms will need to be used.
+ *
+ * @param $tid
+ *	 The term ID.
+ * @param $pager
+ *	 Boolean to indicate whether a pager should be used.
+ * @param $limit
+ *	 Integer. The maximum number of nodes to find.
+ *	 Set to FALSE for no limit.
+ * @param $max_depth
+ *	 The number of levels of the tree to return. Leave NULL to return all levels.
+ * @order
+ *	 An array of fields and directions.
+ *
+ * @return
+ *	 An array of nids matching the query.
  */
-/*
-function articles_preprocess_field(&$vars, $hook) {
-	switch ($vars['element']['#field_name']) {
-		case 'field_tags':
-			$vars['prefix'] = 'test';
-			$vars['classes_array'][] = 'iconic';
-			$vars['classes_array'][] = 'tags';
-			dsm($vars);
-		break;
+function taxonomy_select_all_nodes($tid, $pager = TRUE, $limit = FALSE, $max_depth = NULL, $order = array('t.sticky' => 'DESC', 't.created' => 'DESC')) {
+
+	if (!variable_get('taxonomy_maintain_index_table', TRUE)) {
+		return array();
 	}
+	
+	$term = taxonomy_term_load($tid);
+	
+	// retrieve the tree of terms
+	$tree = taxonomy_get_tree($term->vid, $term->tid);
+	
+	// array of the descendant's tids + the actual
+	$descendant_tids = array_merge(array($term->tid), array_map('_taxonomy_get_tid_from_term', $tree));	
+	
+	$query = db_select('taxonomy_index', 't');
+	$query->addTag('node_access');
+	$query->condition('t.tid', $descendant_tids, 'IN');
+	if ($pager) {
+		$count_query = clone $query;
+		$count_query->addExpression('COUNT(t.nid)');
+
+		$query = $query->extend('PagerDefault');
+		if ($limit !== FALSE) {
+			$query = $query->limit($limit);
+		}
+		$query->setCountQuery($count_query);
+	}
+	else {
+		if ($limit !== FALSE) {
+			$query->range(0, $limit);
+		}
+	}
+	$query->addField('t', 'nid');
+	$query->addField('t', 'tid');
+	foreach ($order as $field => $direction) {
+		$query->orderBy($field, $direction);
+		// ORDER BY fields need to be loaded too, assume they are in the form
+		// table_alias.name
+		list($table_alias, $name) = explode('.', $field);
+		$query->addField($table_alias, $name);
+	}
+	return $query->execute()->fetchCol();
+
 }
-//*/
+

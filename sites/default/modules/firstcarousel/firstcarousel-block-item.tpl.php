@@ -1,9 +1,10 @@
-<div>
-	<!-- image -->
-	<?php print $image; ?>
+<div class="item">
+	<a href="<?php print $link; ?>">
+		<?php print $image; ?>
 
-	<span>
-		<h3><?php print $title_url; ?></h3>
-		<p><?php print $text; ?></p>
-	</span>
+		<span class="alpha60">
+			<h3><?php print $title; ?></h3>
+			<p><?php print $text; ?></p>
+		</span>
+	</a>
 </div>

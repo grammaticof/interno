@@ -1,6 +1,58 @@
 <?php
 
 /**
+ * Implements hook_menu().
+ */
+function firstcarousel_menu() {
+	$items = array();
+	
+	$items['node/autocomplete'] = array(
+		'title' => 'Node autocomplete',
+		'page callback' => 'node_autocomplete',
+		'access arguments' => array('access administration pages'),
+		'type' => MENU_CALLBACK,
+		'file' => 'node.carousel.inc',
+	);
+	
+	$items['node/%node/carousel'] = array(
+		'title' => 'Carousel',
+		'page callback' => 'node_page_carousel',
+		'page arguments' => array(1),
+		'access callback' => 'node_access',
+		'access arguments' => array('update', 1),
+		'weight' => 5,
+		'type' => MENU_LOCAL_TASK,
+		'context' => MENU_CONTEXT_PAGE,
+		'file' => 'node.carousel.inc',
+	);
+	
+	$items['ajax_carousel_delete/%'] = array(
+		'page callback' => 'node_page_carousel',
+		'page arguments' => array(1),
+		'access callback' => 'node_access',
+		'access arguments' => array('update', 1),
+		'type' => MENU_CALLBACK,
+		'file' => 'node.carousel.inc',
+	);
+	
+	return $items;
+}
+
+
+/**
+ * Implements hook_admin_paths().
+ */
+function firstcarousel_admin_paths() {
+	if (variable_get('node_admin_theme')) {
+		$paths = array(
+			'node/*/carousel' => TRUE,
+		);
+		return $paths;
+	}
+}
+
+
+/**
  * Implements hook_block_info().
  */
 function firstcarousel_block_info() {
@@ -55,6 +107,9 @@ function firstcarousel_theme($existing, $type, $theme, $path) {
 			),
 			'template' => 'firstcarousel-block-item',
 		),
+		'firstcarousel_order' => array(
+			'render element' => 'form',
+		),
 	);
 }
 
@@ -96,7 +151,8 @@ function firstcarousel_preprocess_firstcarousel_block_item(&$vars) {
 	// print_r($style_vars);
 	
 	$vars['image'] = $image;
-	$vars['title_url'] = l($node->title, 'node/'.$node->nid);
+	$vars['title'] = $node->title;
+	$vars['link'] = url('node/'.$node->nid);
 	
 	$text = '';
 	if (isset($node->field_short[$lang][0]))
@@ -132,25 +188,25 @@ function firstcarousel_block_save($delta = '', $edit = array()) {
  */
 function firstcarousel_image_default_styles() {
 
-  $styles = array();
+	$styles = array();
 
-  $styles['carousel'] = array(
-  	'effects' => array(
-		  array(
-		    'name' => 'image_scale_and_crop',
+	$styles['carousel'] = array(
+		'effects' => array(
+			array(
+				'name' => 'image_scale_and_crop',
 
-		    'data' => array(
-		      'width' => 470,
-		      'height' => 240,
-		      'upscale' => 0,
-		    ),
+				'data' => array(
+					'width' => 470,
+					'height' => 240,
+					'upscale' => 0,
+				),
 
-		    'weight' => 0,
-		  ),
+				'weight' => 0,
+			),
 		),
-  );
-  
-  return $styles;
+	);
+	
+	return $styles;
 }
 
 /**
@@ -158,8 +214,8 @@ function firstcarousel_image_default_styles() {
  *
  */
 function firstcarousel_style_flush($style) {
-  // The $style parameter is an image style array.
+	// The $style parameter is an image style array.
 
-  cache_clear_all('*', 'carousel', TRUE);
+	cache_clear_all('*', 'carousel', TRUE);
 }
 

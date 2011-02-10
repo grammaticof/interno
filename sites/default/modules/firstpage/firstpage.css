@@ -1,25 +1,15 @@
 /** FIRSTPAGE BLOCKS **/
 
-.block-firstpage ul li {
-	list-style: none;
-	margin: 0 0 5px 0;
-	padding: 0;
-}
-
 .block-firstpage .node {
-	margin: 0 10px;
+	margin: 10px;
 	border: 0;
-	font-size: 13px;
-	line-height: 14px;
+	font-size: 14px;
+	line-height: 16px;
 	border-bottom : 1px solid #DDDDDD;
 	padding: 0;
 }
 
-.block-firstpage .last .node {
-	border-bottom : 0;
-}
-
-.block-firstpage ul li .content {
+.block-firstpage .content {
 	padding-bottom : 5px;
 }
 
@@ -31,14 +21,14 @@
 	border-bottom : 0;
 }
 
-.block-firstpage ul li .time {
+.block-firstpage .time {
 	color: red;
 }
 
-.block-firstpage ul li .node h2 {
-	font-size: 15px;
+.block-firstpage .node h2 {
+	font-size: 16px;
 	margin-bottom: 5px;
-	line-height: 15px;
+	line-height: 16px;
 }
 
 .block-firstpage {
@@ -56,7 +46,7 @@
 	padding: 0 5px;
 }
 
-.block-firstpage ul li .node img {
+.block-firstpage .node img {
 	float: left;
 	margin-right: 3px;
 	border: 2px solid #DDDDDD;

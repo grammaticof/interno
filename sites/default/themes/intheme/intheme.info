@@ -122,4 +122,6 @@ stylesheets[all][] = css/fonts.css
 stylesheets[all][] = css/form.css
 stylesheets[all][] = css/superfish-intheme.css
 
+; Declare default scripts
+; scripts[] = 'js/jquery.cookie.js'
 

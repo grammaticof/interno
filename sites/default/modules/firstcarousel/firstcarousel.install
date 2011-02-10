@@ -1,0 +1,50 @@
+<?php
+
+/**
+ * @file
+ * Provides any required installation or upgrade path requirements.
+ */
+
+/**
+ * Implementation of hook_schema().
+ */
+function firstcarousel_schema() {
+  $schema = array();
+  $schema['node_weight'] = array(
+    'fields' => array(
+      'nid' => array(
+        'description' => 'The node->nid.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'tag' => array(
+        'description' => 'A specific tag.',
+        'type' => 'varchar',
+        'length' => 32,
+      ),
+      'weight' => array(
+        'description' => 'The weight for the specific tag.',
+        'type' => 'int',
+        'unsigned' => FALSE,
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'indexes' => array(
+      'nid' => array('nid'),
+      'tag' => array('tag'),
+    ),
+  );
+  return $schema;
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function firstcarousel_uninstall() {
+  // Remove all Disqus-related variables.
+  db_delete('variable')->condition('name', 'firstcarousel_%', 'LIKE')->execute();
+}
+

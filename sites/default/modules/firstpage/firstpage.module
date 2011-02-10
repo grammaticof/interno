@@ -47,7 +47,7 @@ function firstpage_block_view($block_name = '') {
 	$cat_array = _firstpage_get_categories_array();
 	
 	if (array_key_exists($block_name, $cat_array)) {
-		$node_render = array();
+		$build=array();
 		
 		drupal_add_css(drupal_get_path('module', 'firstpage').'/firstpage.css');
 
@@ -56,37 +56,27 @@ function firstpage_block_view($block_name = '') {
 
 		// get the terms
 		$terms = _taxonomy_get_terms_by_voc_name('Type', 'name');
-
+		
 		if (!empty($terms[$term_name])) {
 
-			// get the vid
-			$vid = _taxonomy_get_voc_vid_by_name('Type');
-			// retrieve the tree of terms
-			$tree = taxonomy_get_tree($vid, $terms[$term_name]->tid);
-
-			// array of the descendant's tids + the actual
-			$descendant_tids = array_merge(array($terms[$term_name]->tid), array_map('_taxonomy_get_tid_from_term', $tree));
+			$nids = taxonomy_select_all_nodes($terms[$term_name]->tid, FALSE, $limit);
 			
-			// select all the nodes associated to the tids.
-			$query = db_select('taxonomy_index', 't');
-			$query->fields('t', array('nid'));
-			$query->condition('t.tid', $descendant_tids, 'IN');
-			$query->orderBy('t.created', 'DESC');
-			$query->range(0, $limit);
-			
-			$nids = $query->execute()->fetchCol();
-			
-			$node_render = array();
-			foreach ($nids as $nid) {
-				$node = node_load($nid);
-				$node_render[] = drupal_render(node_view($node, 'firstpage'));
+			if ($nids) {
+				$nodes = node_load_multiple($nids);
+				$build += node_view_multiple($nodes, 'firstpage');
+			}
+			else {
+				$build['no_content'] = array(
+					'#prefix' => '<p>',
+					'#markup' => t('There is currently no content classified with this term.'),
+					'#suffix' => '</p>',
+				);
 			}
 		}
 		
-		$theme_args = array('items' => $node_render, 'type' => 'ul');
 		$block = array(
 			'subject' => $cat_array[$block_name],
-			'content' => theme('item_list', $theme_args),
+			'content' => $build,
 		);
 		
 		return $block;
