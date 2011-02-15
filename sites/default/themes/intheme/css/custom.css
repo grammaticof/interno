@@ -146,6 +146,7 @@ h1 {
 /** END: BLOCKS **/
 
 /** TABS **/
+/*
 #content-tabs {
 	background: #F2F2F2;
 	border: 1px solid #DDDDDD;
@@ -173,7 +174,7 @@ h1 {
 #content-tabs ul.primary li a.active:visited {
 	font-size: 12px;
 }
-
+*/
 /** END: TABS **/
 
 /** USER TOOLBAR **/
@@ -254,17 +255,18 @@ h1 {
 /** ICONS **/
 
 #main-content ul.links li.disqus_comments_num a,
-.disqus_comments_num a {
+ul.links li.disqus_comments_num a {
 	color: #AAACAF;
 	font-size: 11px;
 	font-weight: bold;
-	padding-left: 15px;
+	padding: 0 0 0 15px;
 	background: url('../images/iconic/gray_light/comment_stroke_12x11.png') no-repeat center left;
 	text-decoration: none;
+	border: 0;
 }
 
 #main-content ul.links li.disqus_comments_num a:hover,
-.disqus_comments_num a:hover {
+ul.links li.disqus_comments_num a:hover {
 	background: url('../images/iconic/gray_light/comment_fill_12x11.png') no-repeat center left;	
 }
 

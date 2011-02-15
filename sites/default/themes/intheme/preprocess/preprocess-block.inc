@@ -1,4 +1,4 @@
 <?php
 
-$vars['title_attributes_array']['class'][] = 'block-title';
+// $vars['title_attributes_array']['class'][] = 'block-title';
 

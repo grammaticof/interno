@@ -25,16 +25,7 @@ function firstcarousel_menu() {
 		'context' => MENU_CONTEXT_PAGE,
 		'file' => 'node.carousel.inc',
 	);
-	
-	$items['ajax_carousel_delete/%'] = array(
-		'page callback' => 'node_page_carousel',
-		'page arguments' => array(1),
-		'access callback' => 'node_access',
-		'access arguments' => array('update', 1),
-		'type' => MENU_CALLBACK,
-		'file' => 'node.carousel.inc',
-	);
-	
+
 	return $items;
 }
 
@@ -79,7 +70,17 @@ function firstcarousel_block_view($block_name = '') {
 		drupal_add_css($module_path.'/firstcarousel.css');
 		
 		$limit = variable_get('firstcarousel_block_count', 4);
-		$nids = db_query_range('SELECT nid FROM {node} WHERE status=1 ', 0, $limit)->fetchCol();
+		
+		$query = db_select('node', 'n');
+		$query->innerJoin('node_weight', 'nw', 'n.nid = nw.nid');
+		$query->fields('n', array('nid'));
+		$query->condition('n.status', 1);
+		$query->condition('n.type', 'article');
+		$query->range(0, $limit);
+		$query->orderBy('weight', 'ASC');
+		$query->orderBy('created', 'DESC');
+	
+		$nids = $query->execute()->fetchCol();
 		
 		$block = array(
 			'subject' => '',
@@ -125,7 +126,6 @@ function firstcarousel_preprocess_firstcarousel_block_html(&$vars) {
 	foreach ($nids as $nid) {
 		$node = node_load($nid);
 		
-		// dsm($node);
 		$tabs[] = truncate_utf8($node->title, '80', FALSE, TRUE, 1);		
 		$items .= theme('firstcarousel_block_item', array('node' => $node));
 	}
@@ -140,7 +140,9 @@ function firstcarousel_preprocess_firstcarousel_block_item(&$vars) {
 
 	$image = '';
 	if (isset($node->field_media[$lang][0])) {
-		$fid = $node->field_media[$lang][0]['fid'];
+		$file = (object) $node->field_media[$lang][0];
+		$fid = $file->fid;
+		
 		$style_vars = array(
 			'path' => file_load($fid)->uri,
 			'style_name' => variable_get('firstcarousel_image_style', 'carousel'),

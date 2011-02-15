@@ -1,7 +1,12 @@
 <?php
-// $Id: process-page.inc,v 1.1.2.3 2010/08/03 14:19:52 himerus Exp $
 
-/**
- * @file
- * Contents of omega_process_page().
- */
+// fix messages 
+// this should NOT be an empty string if it's freaking empty
+if (isset($vars['messages']) && strlen($vars['messages']) == 0) {
+  unset($vars['messages']);
+}
+
+// unset the action links array if it's empty
+if (isset($vars['action_links']) && count($vars['action_links']) == 0) {
+  unset($vars['action_links']);
+}

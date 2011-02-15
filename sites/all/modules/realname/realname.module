@@ -38,6 +38,12 @@ function realname_menu() {
     'file' => 'realname.admin.inc',
   );
 
+  $items['realname/autocomplete'] = array(
+    'page callback' => 'realname_autocomplete',
+    'access arguments' => array('access user profiles'),
+    'type' => MENU_CALLBACK,
+  );
+
   return $items;
 }
 
@@ -67,12 +73,11 @@ function realname_username_alter(&$name, $account) {
     $in_username_alter = TRUE;
 
     // If $account->realname was undefined, then the user account object was
-    // likely not properly loaded.
-    $realname_account = user_load($account->uid);
-
-    if ($realname = realname_load($realname_account)) {
-      $name = $realname;
+    // not properly loaded. We must enforce calling user_load().
+    if ($realname_account = user_load($account->uid)) {
+      realname_username_alter($name, $realname_account);
     }
+
     $in_username_alter = FALSE;
   }
 }
@@ -244,3 +249,27 @@ function realname_delete_all() {
 /**
  * @} End of "addtogroup realname".
  */
+
+/**
+ * Menu callback; Retrieve a JSON object containing autocomplete suggestions
+ * for existing users based on their generated real names.
+ */
+function realname_autocomplete($string = '') {
+  $matches = array();
+
+  if ($string) {
+    $query = db_select('users', 'u');
+    $query->leftJoin('realname', 'rn', 'u.uid = rn.uid');
+    $query->fields('u', array('uid'));
+    $query->condition('rn.realname', db_like($string) . '%', 'LIKE');
+    $query->range(0, 10);
+    $uids = $query->execute()->fetchCol();
+    $accounts = user_load_multiple($uids);
+
+    foreach ($accounts as $account) {
+      $matches[$account->name] = format_username($account);
+    }
+  }
+
+  drupal_json_output($matches);
+}

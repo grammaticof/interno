@@ -1,21 +1,20 @@
-/* $Id: debug.css,v 1.1.2.2 2010/06/07 23:46:33 himerus Exp $ */
 #omega-debug {
-	position: fixed;
-	bottom: 0;
-	left: 0;
-	background: #000;
-	color: #FFF;
-	padding: 5px 10px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background: #000;
+  color: #FFF;
+  padding: 5px 10px;
 }
 #omega-debug hr {
-	height: 1px;
-	border-top: 1px dashed #FFF;
-	background: none;
+  height: 1px;
+  border-top: 1px dashed #FFF;
+  background: none;
 }
 #omega-debug a {
-	display: block;
-	text-decoration: none;
-	color: #FFF;
+  display: block;
+  text-decoration: none;
+  color: #FFF;
 }
 body.show-grid .container-16 {
   background-image: url(../i/debug/16_col.png);
@@ -25,6 +24,9 @@ body.show-grid .container-12 {
 }
 body.show-grid .container-24 {
   background-image: url(../i/debug/24_col.png);
+}
+body.show-grid .container-32 {
+  background-image: url(../i/debug/32_col.png);
 }
 
 body.grid-hover .grid-1:hover,
@@ -50,7 +52,15 @@ body.grid-hover .grid-20:hover,
 body.grid-hover .grid-21:hover,
 body.grid-hover .grid-22:hover,
 body.grid-hover .grid-23:hover,
-body.grid-hover .grid-24:hover {
+body.grid-hover .grid-24:hover
+body.grid-hover .grid-25:hover,
+body.grid-hover .grid-26:hover,
+body.grid-hover .grid-27:hover,
+body.grid-hover .grid-28:hover,
+body.grid-hover .grid-29:hover,
+body.grid-hover .grid-30:hover,
+body.grid-hover .grid-31:hover,
+body.grid-hover .grid-32:hover {
   background-color: rgba(0, 115, 186, .2);
   outline: 1px dashed #0073ba;
 }

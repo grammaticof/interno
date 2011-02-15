@@ -19,7 +19,6 @@ function articles_node_view_alter(&$build) {
 	switch($build['#view_mode']) {
 		case 'firstpage': // firstpage view
 			$today = strtotime('today');
-		
 			if (!empty($build['field_location'])) {
 				hide($build['field_location']);
 						

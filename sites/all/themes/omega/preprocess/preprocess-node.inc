@@ -1,5 +1,4 @@
 <?php
-// $Id: preprocess-node.inc,v 1.4.2.3 2010/08/03 14:19:52 himerus Exp $
 
 /**
  * @file
@@ -20,8 +19,7 @@ $vars['classes_array'][] = $vars['sticky'] ? 'sticky' : 'not-sticky';
 
 // Add a class to allow styling based on if a node is showing a teaser or the
 // whole thing.
-if ($vars['view_mode'])
-  $vars['classes_array'][] = $vars['view_mode'].'-view';
+$vars['classes_array'][] = $vars['teaser'] ? 'teaser' : 'full-view';
 
 // Add a class to allow styling of nodes being viewed by the author of the
 // node in question.
@@ -49,3 +47,5 @@ foreach ($vars['classes_array'] as $key => $value) {
 // Prepare the arrays to handle the classes and ids for the node container.
 $vars['node_attributes']['id'] = drupal_html_id('node-' . $vars['type'] . '-' . $vars['nid']);
 $vars['node_attributes']['class'] = $vars['classes_array'];
+// adding a class to the title attributes
+$vars['title_attributes_array']['class'] = 'node-title';

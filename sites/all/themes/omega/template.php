@@ -1,6 +1,15 @@
 <?php
-// $Id: template.php,v 1.9.2.19 2010/10/11 00:11:42 himerus Exp $
-// Report all PHP errors (see changelog)
+
+/*
+##########################################################################################
+      _                _                                  _                     _
+   __| | _____   _____| | ___  _ __  _ __ ___   ___ _ __ | |_    __ _  ___  ___| | _____
+  / _` |/ _ \ \ / / _ \ |/ _ \| '_ \| '_ ` _ \ / _ \ '_ \| __|  / _` |/ _ \/ _ \ |/ / __|
+ | (_| |  __/\ V /  __/ | (_) | |_) | | | | | |  __/ | | | |_  | (_| |  __/  __/   <\__ \
+  \__,_|\___| \_/ \___|_|\___/| .__/|_| |_| |_|\___|_| |_|\__|  \__, |\___|\___|_|\_\___/
+                              |_|                               |___/
+##########################################################################################
+*/
 
 /**
  * @file
@@ -8,6 +17,10 @@
  * functions for the Omega theme.
  */
 
+// include general functions required both in template.php AND theme-settings.php
+require_once(drupal_get_path('theme', 'omega') . '/inc/theme-functions.inc');
+// include general theme override functions
+require_once(drupal_get_path('theme', 'omega') . '/inc/theme.inc');
 
 /**
   * Implements hook_preprocess().
@@ -27,6 +40,10 @@ function omega_preprocess(&$vars, $hook) {
   // Collect all information for the active theme.
   $themes_active = array();
   global $theme_info;
+  
+  if (substr($hook, 0, 4) == 'zone') {
+    $hook = 'zone';
+  }
   // If there is a base theme, collect the names of all themes that may have
   // preprocess files to load.
   if (isset($theme_info->base_theme)) {
@@ -64,7 +81,9 @@ function omega_process(&$vars, $hook) {
 // Collect all information for the active theme.
   $themes_active = array();
   global $theme_info;
-  //krumo($theme_info);
+  if (substr($hook, 0, 4) == 'zone') {
+    $hook = 'zone';
+  }
   // If there is a base theme, collect the names of all themes that may have 
   // preprocess files to load.
   if (isset($theme_info->base_theme)) {
@@ -124,148 +143,15 @@ function omega_process_node(&$vars) {
   $vars['attributes'] .= drupal_attributes($vars['node_attributes']);
 }
 
-/**
- * NINESIXTY - Contextually adds 960 Grid System classes.
- *
- * The first parameter passed is the *default class*. All other parameters must
- * be set in pairs like so: "$variable, 3". The variable can be anything
- * available within a template file and the integer is the width set for the
- * adjacent box containing that variable.
- *
- *  class="<?php print ns('grid-16', $var_a, 6); ?>"
- *
- * If $var_a contains data, the next parameter (integer) will be subtracted from
- * the default class. See the README.txt file.
- */
-function ns() {
-  $args = func_get_args();
-  $default = array_shift($args);
-  // Get the type of class, i.e., 'grid', 'pull', 'push', etc.
-  // Also get the default unit for the type to be procesed and returned.
-  list($type, $return_unit) = explode('-', $default);
 
-  // Process the conditions.
-  $flip_states = array('var' => 'int', 'int' => 'var');
-  $state = 'var';
-  foreach ($args as $arg) {
-    if ($state == 'var') {
-      $var_state = !empty($arg);
-    }
-    elseif ($var_state) {
-      $return_unit = $return_unit - $arg;
-    }
-    $state = $flip_states[$state];
-  }
-
-  $output = '';
-  // Anything below a value of 1 is not needed.
-  if ($return_unit > 0) {
-    $output = $type . '-' . $return_unit;
-  }
-  return $output;
+function omega_preprocess_zone(&$vars) {
+  
 }
 
-/**
- * The region_builder function will create the variables needed to create
- * a dynamic group of regions. This function is simply a quick pass-thru
- * that will create either inline or stacked regions. This function will
- * not do any advanced functionality, but simply assing the appropriate
- * classes based on the settings for the theme.
- *
- * For a more advanced set of regions, dynamic_region_builder() will be used.
- */
-function static_region_builder($region_data, $container_width, $vars) {
-  // let's cycle the region data, and determine what we have
-  foreach ($region_data AS $region => $info) {
-    // if we do have content for this region, let's create it.
-    if ($info['data']) {
-      $vars[$region . '_classes'] = ns('grid-' . $info['width']);
-    }
-    if (isset($info['spacing'])) {
-      foreach ($info['spacing'] AS $attribute => $value) {
-        if ($value) {
-          $vars[$region . '_classes'] .= ' ' . $attribute . '-' . $value;
-        } 
-      }
-    }
-  }
-  return $vars;
+function omega_process_zone(&$vars) {
+  
 }
 
-/*
-function _omega_dynamic_zones($width, $conditions, $vars) {
-  foreach ($conditions AS $variable => $reaction) {
-    if (($reaction['type'] && isset($vars['page'][$variable])) || (!$reaction['type'] && !isset($vars['page'][$variable]))) {
-      $width = $width - $reaction['value'];
-    }
-  }
-  return $width;
-}
-*/
-
-function _omega_dynamic_zones($width, $conditions, $vars) {
-  foreach ($conditions AS $variable => $reaction) {
-    if (($reaction['type'] && is_array($vars['page'][$variable]) && count($vars['page'][$variable]) > 0 ) || (!$reaction['type'] && (!is_array($vars['page'][$variable]) || count($vars['page'][$variable]) == 0)  )) {
-      $width = $width - $reaction['value'];
-    }
-  }
-  return $width;
-} 
-
-
-function _omega_dynamic_widths($width, $conditions, $vars) {
-  foreach ($conditions AS $variable => $zone) {
-    if ((isset($vars['page'][$variable])) && count($vars['page'][$variable]) > 0) {
-      $width = $width - $zone['width'];
-    }
-  }
-  return $width;
-}
-
-/**
- * The dynamic_region_builder function will be used to pass important zones
- * like the content regions where the regions sent to the function MUST appear
- * inline, and advanced calculations need to be done in order to display the as such
- *
- * Stacked regions are not possible using this function, and should be passed through
- * static_region_builder() instead.
- */
-function dynamic_region_builder($region_data, $container_width, $vars) {
-  // let's cycle the region data, and determine what we have
-  foreach ($region_data AS $region => $info) {
-    // if we do have content for this region, let's create it.
-    if (isset($info['data'])) {
-      if (isset($info['primary'])) {
-        $width = $container_width;
-        $vars[$region . '_classes'] = ns('grid-' . _omega_dynamic_widths($width, $info['related'], $vars));
-      }
-      else {
-        $width = $info['width'];
-        $vars[$region . '_classes'] = ns('grid-' . $info['width']);
-      }
-      // we know we have stuff to put here, so we can check for push & pull options
-      if ($info['pull']) {
-        // looks like we do wanna pull, or this value would have been false, so let's boogie
-        $vars[$region . '_classes'] .= ' ' . ns('pull-' . _omega_dynamic_zones($info['pull']['width'], $info['pull']['conditions'], $vars));
-      }
-      if ($info['push']) {
-        // looks like a push
-        $vars[$region . '_classes'] .= ' ' . ns('push-' . _omega_dynamic_zones($info['push']['width'], $info['push']['conditions'], $vars));
-      }
-    }
-    // currently ignored becuase we have not given prefix/suffix class options
-    // to the primary content zones... this will become active again later
-    if (isset($info['spacing'])) {
-      foreach ($info['spacing'] AS $attribute => $value) {
-        if ($value) {
-          $vars[$region . '_classes'] .= ' ' . $attribute . '-' . $value;
-        }
-      }
-    }
-    // \unused prefix/suffix stuffs
-  }
-  return $vars;
-}
 
 /**
  * The rfilter function takes one argument, an array of values for the regions
@@ -274,61 +160,6 @@ function dynamic_region_builder($region_data, $container_width, $vars) {
  */
 function rfilter($vars) {
   return count(array_filter($vars));
-}
-
-/**
- * ZEN - Returns HTML for a breadcrumb trail.
- *
- * @param $variables
- *   An associative array containing:
- *   - breadcrumb: An array containing the breadcrumb links.
- */
-function omega_breadcrumb($variables) {
-  $breadcrumb = $variables['breadcrumb'];
-  // Determine if we are to display the breadcrumb.
-  $show_breadcrumb = theme_get_setting('omega_breadcrumb');
-  if ($show_breadcrumb == 'yes' || $show_breadcrumb == 'admin' && arg(0) == 'admin') {
-
-    // Optionally get rid of the homepage link.
-    $show_breadcrumb_home = theme_get_setting('omega_breadcrumb_home');
-    if (!$show_breadcrumb_home) {
-      array_shift($breadcrumb);
-    }
-
-    // Return the breadcrumb with separators.
-    if (!empty($breadcrumb)) {
-      // Provide a navigational heading to give context for breadcrumb links to
-      // screen-reader users. Make the heading invisible with .element-invisible.
-      $output = '<h2 class="element-invisible">' . t('You are here') . '</h2>';
-
-      $breadcrumb_separator = theme_get_setting('omega_breadcrumb_separator');
-      $trailing_separator = $title = '';
-      if (theme_get_setting('omega_breadcrumb_title')) {
-        $trailing_separator = $breadcrumb_separator;
-        $title = drupal_get_title();
-      }
-      elseif (theme_get_setting('omega_breadcrumb_trailing')) {
-        $trailing_separator = $breadcrumb_separator;
-      }
-      $output .= '<div class="breadcrumb">' . implode($breadcrumb_separator, $breadcrumb) . "$trailing_separator$title</div>";
-      return $output;
-    }
-  }
-  // Otherwise, return an empty string.
-  return '';
-}
-
-/**
- * Implements hook_theme().
- *
- * @todo Either remove this entirely, or clean up and document.
- */
-function omega_theme(&$existing, $type, $theme, $path) {
-  //include_once './' . drupal_get_path('theme', 'omega') . '/theme-functions.inc';
-  // Since we are rebuilding the theme registry and the theme settings' default
-  // values may have changed, make sure they are saved in the database properly.
-  //omega_theme_get_default_settings($theme);
-  return array();
 }
 
 
@@ -347,4 +178,80 @@ function omega_css_alter(&$css) {
       $css[$css_960]['data'] = drupal_get_path('theme', 'omega') . '/css/960-fluid.css';
     }
   }
+}
+
+/**
+ * Implements hook_theme().
+ *
+ * @todo figure out WTF with template suggestions
+ * 
+ * @see delta_theme()
+ * @see http://api.drupal.org/api/function/hook_theme/7
+ * - There was cause to create a module here to implement a proper theme 
+ *   function. There was major issue with attempting to get the zone elements 
+ *   to work properly. zone.tpl.php was being used when declared here in 
+ *   omega_theme(), however, suggestions for more specific templates was NOT.
+ *   
+ * - The need here was to have the priority order be:
+ *   - zone-ZONEID.tpl.php (the actual zone itself has a custom override)
+ *     each have their own custom template to use for more generic implementations
+ *   - zone.tpl.php (default)
+ */
+function omega_theme($existing, $type, $theme, $path) {
+  $hooks = array();
+  $preprocess_functions = array(
+    'template_preprocess', 
+    'template_preprocess_zone',
+    'omega_preprocess',
+    'omega_preprocess_zone',
+  );
+  $process_functions = array(
+    'template_process', 
+    'template_process_zone',
+    'omega_process',
+    'omega_process_zone'
+  );
+  $hooks['zone'] = array(
+    'template' => 'zone',
+    'path' => $path . '/templates',
+    'render element' => 'zone',
+    'pattern' => 'zone__',
+    'preprocess functions' => $preprocess_functions,
+    'process functions' => $process_functions,
+  );
+  return $hooks;
+}
+
+
+/**
+ * Implements hook_page_alter
+ */
+function omega_page_alter($page) {
+
+}
+
+function omega_form_alter(&$form, &$form_state, $form_id) {
+  switch ($form_id) {
+    // add a login link to the horizontal login bar block
+    case 'user_login_block':
+      if(omega_theme_get_setting('user_login_form')) {
+        $form['links']['#markup'] = "";
+        
+        $items = array();
+        $items[] = l(t('Login'), 'user/login', array('attributes' => array('title' => t('Log in.'), 'class' => 'login-submit-link')));
+        if (variable_get('user_register', USER_REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL)) {
+          $items[] = l(t('Register'), 'user/register', array('attributes' => array('title' => t('Create a new user account.'))));
+        }
+        $items[] = l(t('Password'), 'user/password', array('attributes' => array('title' => t('Request new password via e-mail.'))));
+        $form['links']['#markup'] = theme('item_list', array('items' => $items));
+      }
+      break;
+  }
+}
+
+// hook_html_head_alter().
+function omega_html_head_alter(&$head_elements) {
+  $head_elements['system_meta_content_type']['#attributes'] = array(
+    'charset' => 'utf-8',
+  );
 }

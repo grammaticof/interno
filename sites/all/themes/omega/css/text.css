@@ -1,29 +1,19 @@
-/* $Id: text.css,v 1.8.2.1 2010/08/03 14:19:52 himerus Exp $ */
-/**
- * Omega, for Drupal 6.x
- * Jake Strawn - http://himerus.com
- * Project Page - http://drupal.org/project/omega
- * 
- * The text.css file should not contain any styles other than basic
- * font manipulation. 
- */
- 
 /** ################# Custom CSS Styles ####################### */
 body {
   font: 13px/1.5 Verdana,Helvetica,Arial,sans-serif;
 }
 
 a:link, a:visited {
-  color: #202124;
+  color: #0062A0;
   text-decoration: underline;
 }
 
 a:hover {
-  color: #0062A0;
+  color: #202124;
   text-decoration: none;
 }
 
-a:active, a.active {
+a:active {
   color: #202124;
   text-decoration: none;
   color: #000;
@@ -55,7 +45,9 @@ h2 {
   font-size: 18px;
   margin: 0;	
 }
-
+h2.node-title {
+	font-size: 28px;
+}
 h3 {
   font-size: 21px;
 }
@@ -77,9 +69,16 @@ ol {
 }
 
 ul {
-  list-style: square;
+  list-style: disc;
 }
-
+ul ul,
+ol ol {
+	padding-top: 0.5em;
+}
+.node ol,
+.node ul {
+	padding-left: 1.2em;
+}
 p,
 dl,
 hr,

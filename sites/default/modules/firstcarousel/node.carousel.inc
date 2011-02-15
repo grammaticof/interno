@@ -14,12 +14,11 @@ function node_page_carousel($node) {
 	$query->condition('n.status', 1);
 	$query->condition('n.type', 'article');
 	$query->range(0, $limit + 1); // add 1 for the out of range node
-	$query->distinct();
 	$query->orderBy('weight', 'ASC');
 	$query->orderBy('created', 'DESC');
 	
 	$queue = $query->execute()->fetchAllAssoc('nid');
-
+	
 	drupal_add_js(array('firstcarousel' => array('limit' => $limit)), 'setting');
 	
 	return drupal_get_form('node_page_carousel_form', $node, $queue);
@@ -124,7 +123,8 @@ function node_page_carousel_form_submit($form, &$form_state) {
 		
 		$query->execute();
 	}
-	$form_state['redirect'] = 'node/'.$form_state['current_nid'].'/carousel';
+	
+	drupal_set_message(t('Queue updated.'));
 }
 
 function node_page_carousel_form_add_validate($form, &$form_state) {
@@ -156,6 +156,7 @@ function node_page_carousel_form_add_submit($form, &$form_state) {
 		db_query('DELETE FROM {node_weight} WHERE tag = :tag ORDER BY weight DESC LIMIT 1', array(':tag' => $tag));
 	
 	db_insert('node_weight')->fields(array('nid','weight','tag'))->values($values)->execute();
+	drupal_set_message(t('Articles %title added to the queue.', array('%title'=> $form_state['values']['add']['title'])));
 }
 
 
@@ -183,11 +184,7 @@ function theme_firstcarousel_order($variables) {
 			$row[] = drupal_render($form[$key]['remove']);
 			$row[] = drupal_render($form[$key]['position']);
 		}
-
-		$rows[] = array(
-			'data' => $row,
-			'class' => array('draggable'),
-		);
+		$rows[] = array('data' => $row, 'class' => array('draggable'));
 	}
 	
 	$header = array(
