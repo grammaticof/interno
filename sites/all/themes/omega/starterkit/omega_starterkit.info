@@ -7,19 +7,19 @@
 ;                              |_|                               |___/
 ;##########################################################################################
 
-; NOTE - you do not need to enable or modify this theme - instead use
-; the Omega Starterkit as a starting point for building your own theme. 
-; By default, this theme is hidden on the Appearance page.
-
-name = Omega
-description = <a href="http://himer.us/omega960"><strong>Omega</strong></a> is the core base theme for all <a href="http://drupal.org/project/omega"><strong>Omega</strong></a> subthemes. This theme should not be used, instead start from the Omega Starterkit.
-core = 7.x
-engine = phptemplate
+name        = Omega Starter Kit
+description = Starterkit for <a href="http://himer.us/omega960"><strong>Omega</strong></a>. Make a copy of this subtheme to get started building your own <strong>Omega</strong> theme. For help see our <a href="http://himer.us/omega960"><strong>documentation</strong></a> and <a href="http://himerus.com"><strong>video</strong></a> tutorials. If you have a problem and need additional support please use the <a href="http://drupal.org/project/issues/omega"><strong>issue queue</strong></a>. Don't forget also to download and enable the <a href="http://himer.us/delta-module"><strong>Delta</strong></a> module for contextual layouts.
 screenshot = screenshot.png
+core       = 7.x
+base theme = omega
 
-stylesheets[all][] = css/960.css
+; ------- Declare default stylesheets
+;stylesheets[all][] = css/your_css_file.css
 
-scripts[] = js/omega.js
+; ------- Declare default JavaScript includes
+;scripts[] = js/your_js_file.js
+
+
 ; Do NOT remove the following commented lines. They will be used for 
 ; automated generation of the .info settings when rewritten.
 
@@ -264,16 +264,15 @@ settings[omega_breadcrumb_home] = '1'
 settings[omega_breadcrumb_trailing] = '1'
 settings[omega_breadcrumb_title] = '1'
 settings[omega_menu_depth] = '5'
-settings[debug_block_toggle] = '0'
+settings[debug_block_toggle] = '1'
 settings[debug_grid_toggle] = ''
 settings[debug_grid_toggle_state] = ''
 settings[debug_grid_roles][3] = '3'
 settings[debug_grid_roles][2] = '0'
 settings[omega_general__active_tab] = 'edit-optional-css'
-
-; Information added by drupal.org packaging script on January 1, 1970 - 00:00
-version = "7.x-2.0-beta1"
+; Information added by drupal.org packaging script on 2011-02-15
+version = "7.x-2.0-beta2"
 core = "7.x"
 project = "omega"
-datestamp = "1297625211"
+datestamp = "1297780926"
 

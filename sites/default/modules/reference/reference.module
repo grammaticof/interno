@@ -1,0 +1,28 @@
+<?php
+
+/**
+ * @file
+ * A reference node(s) field using the Field API.
+ *
+ */
+
+
+/**
+ * Implements hook_field_info().
+ *
+ * Provides the description of the field.
+ */
+function reference_field_info() {
+	return array(
+		'reference' => array(
+			'label' => t('Linked node'),
+			'description' => t('Select the article you want to link.'),
+			'default_widget' => 'reference_widget',
+			'default_formatter' => 'reference_formatter',
+		),
+	);
+}
+
+
+
+
