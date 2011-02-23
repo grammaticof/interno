@@ -1,5 +1,6 @@
 /** REGION MENU **/
 
+/*
 #site-header {
 	margin-bottom: 25px;
 }
@@ -10,6 +11,59 @@
 	font-weight: bold;
 	
 }
+//*/
+
+
+#region-menu ul.main-menu {
+	background: none;
+	border: 0;
+	padding: 0;
+	margin-bottom: 1.5em;
+	font-size: 0.9em;
+}
+
+#region-menu ul.main-menu li {
+	padding: 0 5px;
+	border-bottom: 3px solid #EFEFEF;
+}
+
+#region-menu ul.main-menu li.active {
+	font-weight: bold;
+	border-bottom: 3px solid #000000;
+}
+
+#region-menu ul.main-menu li a {
+	border:0;
+	color: #000000;
+	background: none;
+}
+
+#region-menu ul.main-menu li a:hover {
+	color: #AAACAF;
+}
+
+#region-menu ul.main-menu li.has-subitems {
+	background-image: url('../images/iconic/gray_light/play_6x8.png');
+	background-repeat:no-repeat;
+	background-position:center right;
+}
+
+#region-menu ul.secondary-items {
+	background-color: #FFFFFF;
+	border: 3px solid #EFEFEF;
+	-webkit-border-bottom-right-radius: 5px;
+	-webkit-border-bottom-left-radius: 5px;
+	-moz-border-radius-bottomright: 5px;
+	-moz-border-radius-bottomleft: 5px;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+
+#region-menu ul.secondary-items li {
+	border: 0;
+
+}
+
 
 /** END: REGION MENU **/
 
@@ -19,11 +73,18 @@ div.contextual-links-active {
 	z-index: 9999;
 }
 
+a.contextual-links-trigger:link,
+a.contextual-links-trigger:visited {
+	color: #FFFFFF;
+}
+
 /** END: CONTEXTUAL LINKS **/
 
 /** GENERAL STYLE **/
 body {
-	font: 14px Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+	text-transform: normal;
 	word-wrap: break-word;
 }
 
@@ -36,13 +97,18 @@ a:hover {
 	text-decoration: underline;
 }
 
+p {
+	display:block;
+	margin: 10px 0;
+}
+
 div#page {
 	background: url(../images/body-gray.png);
 	background-position:50% 50%;
 }
 
 h1 {
-	color: #2F5EB1;
+	color: #4A7389;
 	font-family: 'Georgia',serif;
 	font-size: 36px;
 	font-style: normal;
@@ -57,6 +123,18 @@ h1 {
 	margin: 0;
 	padding: 0;
 }
+
+blockquote {
+	font-style: italic;
+	font-weight: bold;
+	margin: 0;
+	padding-left: 50px;
+	min-height: 50px;
+	background: url('../images/blockquote.jpg') top left no-repeat;
+	color: #797979;
+	padding-top: 15px;
+} 
+
 
 /** END: GENERAL STYLE **/
 
@@ -181,9 +259,7 @@ h1 {
 
 #user-toolbar {
 	height: 20px;
-	background: #000000;
-	color:#FFFFFF;
-	font-size: 12px;
+	font-size: 0.8em;
 }
 
 #user-toolbar ul {
@@ -254,6 +330,22 @@ h1 {
 
 /** ICONS **/
 
+#message-container .close,
+#console .close {
+	position: absolute;
+	height: 11px;
+	width: 11px;
+	top: 5px;
+	right: 5px;
+	background: url('../images/iconic/gray_light/x_11x11.png') no-repeat center left;
+	cursor: pointer;
+}
+
+#message-container .close.hover,
+#console .close.hover {
+	background: url('../images/iconic/gray_dark/x_11x11.png') no-repeat center left;
+}
+
 #main-content ul.links li.disqus_comments_num a,
 ul.links li.disqus_comments_num a {
 	color: #AAACAF;
@@ -312,5 +404,13 @@ ul.links li.disqus_comments_num a:hover {
 }
 
 /** END: EFFECTS **/
+
+div.status {
+	background-color: #BBEE77;
+}
+
+div.messages {
+	margin: 0;
+}
 
 

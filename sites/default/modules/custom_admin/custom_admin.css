@@ -1,0 +1,8 @@
+div.form-status {
+	background-image: url('../../../../misc/message-24-ok.png');
+	border-color: #BBEE77;
+}
+
+div.vertical-tabs ul li.vertical-tab-button {
+	overflow: hidden;
+}

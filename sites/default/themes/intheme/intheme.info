@@ -20,8 +20,7 @@ stylesheets[all][] = css/form.css
 stylesheets[all][] = css/superfish-intheme.css
 
 ; ------- Declare default JavaScript includes
-;scripts[] = js/your_js_file.js
-
+scripts[] = js/messages.js
 
 ; Do NOT remove the following commented lines. They will be used for 
 ; automated generation of the .info settings when rewritten.
@@ -37,6 +36,8 @@ regions[content] = Content
 ; END REQUIRED CORE REGIONS
 
 ; OPTIONAL CONTENT REGIONS
+
+regions[user_toolbar] = User Toolbar
 
 regions[user_bar_first] = User Bar First
 regions[user_bar_second] = User Bar Second

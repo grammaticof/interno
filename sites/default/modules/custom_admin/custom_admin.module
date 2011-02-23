@@ -1,0 +1,10 @@
+<?php
+
+/**
+ * implements hook_init().
+ */
+function custom_admin_init() {
+	drupal_add_css(drupal_get_path('module', 'custom_admin') . '/custom_admin.css');
+	drupal_add_js(drupal_get_path('module', 'custom_admin') . '/custom_admin.js');
+}
+

@@ -7,17 +7,25 @@
 
 ?>
 <div id="page" class="clearfix">
+  <?php if (isset($messages)): ?>
+  <div id="message-container" class="container-<?php print $default_container_width; ?> clearfix">
+    <div class="grid-<?php print $default_container_width; ?>">
+      <?php print $messages; ?>
+    </div>
+  </div><!-- /.container-xx -->
+  <?php endif; ?>
+  <?php if (isset($user_toolbar)): ?>
+  <div id="user-toolbar" class="container-<?php print $default_container_width; ?> clearfix">
+    <div class="grid-<?php print $default_container_width; ?>">
+      <?php print $user_toolbar; ?>
+    </div>
+  </div><!-- /.container-xx -->
+  <?php endif; ?>
   <?php if (isset($page['zones_above'])): ?>
   <header id="zones-above" class="clearfix"><?php print render($page['zones_above']); ?></header>
   <?php endif; ?>
   <section id="zones-content" class="clearfix">
-    <?php if (isset($messages)): ?>
-    <div id="message-container" class="container-<?php print $default_container_width; ?> clearfix">
-      <div class="grid-<?php print $default_container_width; ?>">
-        <?php print $messages; ?>
-      </div>
-    </div><!-- /.container-xx -->
-    <?php endif; ?>
+
     <?php if (isset($action_links)): ?>
       <div id="actions-container" class="container-<?php print $default_container_width; ?> clearfix">
         <div class="grid-<?php print $default_container_width; ?>">

@@ -124,7 +124,7 @@ function node_page_carousel_form_submit($form, &$form_state) {
 		$query->execute();
 	}
 	
-	drupal_set_message(t('Queue updated.'));
+	drupal_set_message(t('Queue updated.'), 'form-status');
 }
 
 function node_page_carousel_form_add_validate($form, &$form_state) {
@@ -150,13 +150,18 @@ function node_page_carousel_form_add_submit($form, &$form_state) {
 		'tag' => $tag,
 		'weight' => 0,
 	);
+
+	$limit = variable_get('firstcarousel_block_count', 4);
+	$check_max = (db_query('SELECT COUNT(nid) FROM {node_weight} WHERE tag = :tag', array(':tag'=>$tag))->fetchField() > $limit);
 	
-	$check_max = (db_query('SELECT COUNT(nid) FROM {node_weight} WHERE tag = :tag', array(':tag'=>$tag))->fetchField() == 6);
 	if ($check_max)
 		db_query('DELETE FROM {node_weight} WHERE tag = :tag ORDER BY weight DESC LIMIT 1', array(':tag' => $tag));
 	
 	db_insert('node_weight')->fields(array('nid','weight','tag'))->values($values)->execute();
-	drupal_set_message(t('Articles %title added to the queue.', array('%title'=> $form_state['values']['add']['title'])));
+	
+	// clear the queue of messages.
+	drupal_get_messages('form-status', TRUE);
+	drupal_set_message(t('Articles %title added to the queue.', array('%title'=> $form_state['values']['add']['title'])), 'form-status');
 }
 
 

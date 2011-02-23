@@ -59,6 +59,7 @@
 /* position and dimensions of the navigator */
 #block-firstcarousel-carousel .navi {
 	text-align: center;
+	height: 17px;
 }
 
 /* items inside navigator */

@@ -1,5 +1,0 @@
-name = Reference
-description = Reference node(s) field.
-package = Custom
-version = VERSION
-core = 7.x

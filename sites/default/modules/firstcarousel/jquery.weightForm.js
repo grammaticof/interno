@@ -9,10 +9,6 @@
 			if ($('#firstcarousel-order tr.draggable').size() > Drupal.settings.firstcarousel.limit) {
 				$('#firstcarousel-order tr.draggable').removeClass('last').last().addClass('last').find('td:last').html('out');
 			}
-
-			// error delete TODO
-			$('#console .messages.status').delay(5000).slideUp('slow');
-			
 		}
 	};
 })(jQuery);
