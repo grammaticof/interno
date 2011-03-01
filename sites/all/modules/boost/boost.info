@@ -1,0 +1,15 @@
+; $Id: boost.info,v 1.2.2.2 2011/02/13 09:45:07 mikeytown2 Exp $
+name = Boost
+description = Caches generated output as a static file to be served directly from the webserver.
+package = Performance and scalability
+core = 7.x
+files[] = boost.module
+files[] = boost.admin.inc
+configure = admin/config/system/boost
+
+; Information added by drupal.org packaging script on 2011-02-24
+version = "7.x-1.x-dev"
+core = "7.x"
+project = "boost"
+datestamp = "1298506335"
+

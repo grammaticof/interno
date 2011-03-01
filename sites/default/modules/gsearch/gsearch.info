@@ -1,0 +1,5 @@
+name = Google custom search
+description = A google custom search blocks.
+package = Custom
+version = VERSION
+core = 7.x

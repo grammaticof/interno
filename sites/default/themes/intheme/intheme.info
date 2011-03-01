@@ -17,10 +17,10 @@ base theme = omega
 stylesheets[all][] = css/custom.css
 stylesheets[all][] = css/fonts.css
 stylesheets[all][] = css/form.css
-stylesheets[all][] = css/superfish-intheme.css
+; stylesheets[all][] = css/superfish-intheme.css
 
 ; ------- Declare default JavaScript includes
-scripts[] = js/messages.js
+; scripts[] = js/messages.js
 
 ; Do NOT remove the following commented lines. They will be used for 
 ; automated generation of the .info settings when rewritten.

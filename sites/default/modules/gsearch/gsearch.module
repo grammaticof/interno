@@ -1,0 +1,36 @@
+<?php
+
+/**
+ * Implements hook_menu().
+ */
+function gsearch_menu() {
+	$items['gsearch/result'] = array(
+		'page callback' => 'gsearch_page',
+		'access callback' => TRUE,
+		'type' => MENU_CALLBACK
+	);
+	
+	return $items;
+}
+
+/**
+* Implements hook_theme().
+*/
+function gsearch_theme($existing, $type, $theme, $path) {
+	return array(
+		'gsearch_form' => array(
+			'template' => 'gsearch-form',
+		),
+		'gsearch_result' => array(
+			'template' => 'gsearch-result',
+		),
+	);
+}
+
+/**
+ * menu callback
+ */
+function gsearch_page() {
+	drupal_set_title(t('Search for "@search"', array('@search' => $_GET['as_q'])));
+	return theme('gsearch_result');
+}

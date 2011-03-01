@@ -13,13 +13,21 @@
 }
 //*/
 
+#region-menu .primary-navigation {
+	float : left;
+}
+
+#google-search {
+	float: right;
+}
 
 #region-menu ul.main-menu {
 	background: none;
 	border: 0;
 	padding: 0;
 	margin-bottom: 1.5em;
-	font-size: 0.9em;
+	font-size: 1em;
+	font-family: "Futura Book", "Futura Light", "Futura", "Futura Medium", "FuturaMedium", "Gill Sans", "Helvetica", "Arial", sans-serif;
 }
 
 #region-menu ul.main-menu li {
@@ -110,12 +118,11 @@ div#page {
 h1 {
 	color: #4A7389;
 	font-family: 'Georgia',serif;
-	font-size: 36px;
+	font-size: 2.571em; /* 36px */
 	font-style: normal;
 	font-variant: normal;
 	font-weight: 400;
 	letter-spacing: 0;
-	line-height: 40px;
 	text-align: left;
 	text-decoration: none;
 	text-indent: 0;
@@ -150,7 +157,7 @@ blockquote {
 
 .article.full-view a.field-location,
 .article.full-view .field-name-body {
-	font-size: 15px;
+	font-size: 1.071em; /* 15px */
 	line-height: 24px;
 }
 
@@ -388,6 +395,10 @@ ul.links li.disqus_comments_num a:hover {
 	background: url('../images/iconic/green/user_12x16.png') no-repeat;
 }
 
+.field-type-node-reference .field-item {
+	background: url('../images/iconic/red/info_4x8.png') no-repeat center left;
+}
+
 /** END: ICONS **/
 
 /** EFFECTS **/
@@ -412,5 +423,15 @@ div.status {
 div.messages {
 	margin: 0;
 }
+
+/** START: FIELDS **/
+
+.field-type-node-reference .field-item {
+	padding-left: 10px;
+	font-size: 0.857em;
+}
+
+
+/** END: FIELDS **/
 
 

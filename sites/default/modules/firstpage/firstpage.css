@@ -26,9 +26,9 @@
 }
 
 .block-firstpage .node h2 {
-	font-size: 16px;
+	font-size: 1.143em;
 	margin-bottom: 5px;
-	line-height: 16px;
+	line-height: 1.143em;
 }
 
 .block-firstpage {
@@ -39,8 +39,8 @@
 }
 
 .block-firstpage h2.block-title{
-	font-family: Delicious, Verdana, Arial;
-	font-size: 15px;
+	font-family: "Futura Book", "Futura Light", "Futura", "Futura Medium", "FuturaMedium", "Gill Sans", "Helvetica", "Arial", sans-serif;
+	font-size: 1.071em;
 	text-align: right;
 	font-variant: small-caps;
 	padding: 0 5px;
@@ -67,5 +67,15 @@
 .block-firstpage a.field-location:hover {
 
 }
+
+.block-firstpage .field-type-node-reference {
+	margin-top: 5px;
+}
+
+.block-firstpage .field-type-node-reference .field-item {
+	padding-left: 10px;
+	font-size: 0.857em;
+}
+
 
 /** END: FIELDS **/

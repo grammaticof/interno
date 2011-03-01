@@ -7,8 +7,8 @@
 ;                              |_|                               |___/
 ;##########################################################################################
 
-name        = Omega Starter Kit
-description = Starterkit for <a href="http://himer.us/omega960"><strong>Omega</strong></a>. Make a copy of this subtheme to get started building your own <strong>Omega</strong> theme. For help see our <a href="http://himer.us/omega960"><strong>documentation</strong></a> and <a href="http://himerus.com"><strong>video</strong></a> tutorials. If you have a problem and need additional support please use the <a href="http://drupal.org/project/issues/omega"><strong>issue queue</strong></a>. Don't forget also to download and enable the <a href="http://himer.us/delta-module"><strong>Delta</strong></a> module for contextual layouts.
+name        = Omega HTML5 Starter Kit
+description = HTML5 Starterkit for <a href="http://himer.us/omega960"><strong>Omega</strong></a>. Make a copy of this subtheme to get started building your own <strong>Omega</strong> theme. For help see our <a href="http://himer.us/omega960"><strong>documentation</strong></a> and <a href="http://himerus.com"><strong>video</strong></a> tutorials. If you have a problem and need additional support please use the <a href="http://drupal.org/project/issues/omega"><strong>issue queue</strong></a>. Don't forget also to download and enable the <a href="http://himer.us/delta-module"><strong>Delta</strong></a> module for contextual layouts.
 screenshot = screenshot.png
 core       = 7.x
 base theme = omega
@@ -37,6 +37,9 @@ regions[content] = Content
 
 regions[user_bar_first] = User Bar First
 regions[user_bar_second] = User Bar Second
+
+regions[branding] = Branding
+regions[menu] = Menu
 
 regions[sidebar_first] = Sidebar First
 regions[sidebar_second] = Sidebar Second
@@ -240,7 +243,7 @@ settings[omega_footer_footer_second_region_width] = '12'
 settings[omega_footer_footer_second_region_suffix] = ''
 settings[omega_footer_footer_second_region_order] = '2'
 settings[omega_footer_footer_second_region_extra_classes] = 'footer-second-region'
-settings[omega_grid__active_tab] = 'edit-footer'
+settings[omega_grid__active_tab] = 'edit-defaults'
 settings[reset_css] = '1'
 settings[text_css] = '1'
 settings[table_css] = '1'
@@ -252,6 +255,8 @@ settings[regions_css] = '1'
 settings[defaults_css] = '1'
 settings[custom_css] = '1'
 settings[user_login_form] = '1'
+settings[user_login_name_placeholder] = 'Username'
+settings[user_login_pass_placeholder] = 'Password'
 settings[omega_search_default_text] = 'Search...'
 settings[configurable_separator] = ' | '
 settings[front_page_title_display] = 'title_slogan'
@@ -263,16 +268,18 @@ settings[omega_breadcrumb_separator] = ' / '
 settings[omega_breadcrumb_home] = '1'
 settings[omega_breadcrumb_trailing] = '1'
 settings[omega_breadcrumb_title] = '1'
+settings[omega_menu_type] = 'drupal'
 settings[omega_menu_depth] = '5'
 settings[debug_block_toggle] = '1'
 settings[debug_grid_toggle] = ''
 settings[debug_grid_toggle_state] = ''
 settings[debug_grid_roles][3] = '3'
 settings[debug_grid_roles][2] = '0'
-settings[omega_general__active_tab] = 'edit-optional-css'
-; Information added by drupal.org packaging script on 2011-02-16
-version = "7.x-2.0-beta3"
+settings[omega_general__active_tab] = 'omega-menu'
+
+; Information added by drupal.org packaging script on 2011-02-26
+version = "7.x-2.0"
 core = "7.x"
 project = "omega"
-datestamp = "1297892230"
+datestamp = "1298760970"
 
