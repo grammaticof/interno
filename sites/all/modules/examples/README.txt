@@ -1,4 +1,3 @@
-# $Id: README.txt,v 1.4 2010/08/11 23:16:26 rfay Exp $
 
 Examples modules
 

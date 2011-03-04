@@ -1,5 +1,4 @@
 <?php
-// $Id: render_example.module,v 1.1 2010/09/26 12:04:28 rfay Exp $
 /**
  * @file render_example.module
  * Demonstrate how render arrays are arranged and how they can be altered.

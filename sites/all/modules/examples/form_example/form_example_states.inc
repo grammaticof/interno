@@ -1,5 +1,4 @@
 <?php
-// $Id: form_example_states.inc,v 1.8 2010/12/12 07:10:49 rfay Exp $
 
 /**
  * @file

@@ -1,5 +1,4 @@
 <?php
-// $Id: form_example_wizard.inc,v 1.1 2010/10/14 19:11:55 rfay Exp $
 
 /**
  * @file

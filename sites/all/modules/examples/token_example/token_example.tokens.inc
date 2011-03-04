@@ -1,5 +1,4 @@
 <?php
-// $Id: token_example.tokens.inc,v 1.1 2010/03/16 23:57:26 davereid Exp $
 
 /**
  * @file

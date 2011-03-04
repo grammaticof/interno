@@ -1,5 +1,4 @@
 <?php
-// $Id: ajax_example_misc.inc,v 1.6 2011/02/21 06:10:40 katbailey Exp $
 
 /**
  * @file

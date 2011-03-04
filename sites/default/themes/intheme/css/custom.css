@@ -1,3 +1,18 @@
+/*
+HOME #d61d00
+SPORT #008000
+RUBRICHE #0061a6
+CRONACA #d1008b
+ATTUALITA #3246ab
+POLITICA #8f1ab6
+CULTURASPETTACOLO #ad532f
+
+OTHERS #066ec9 #4a7801 #333
+*/
+
+
+
+
 /** REGION MENU **/
 
 /*
@@ -35,9 +50,52 @@
 	border-bottom: 3px solid #EFEFEF;
 }
 
-#region-menu ul.main-menu li.active {
-	font-weight: bold;
-	border-bottom: 3px solid #000000;
+#region-menu ul.main-menu li.home.active,
+#region-menu ul.main-menu li.home a {
+	color: #d61d00;
+	border-color: #d61d00;
+}
+
+#block-firstpage-sport .block-title,
+#region-menu ul.main-menu li.sport.active,
+#region-menu ul.main-menu li.sport a {
+	color: #008000;
+	border-color: #008000;
+}
+
+#block-firstpage-rubriche .block-title,
+#region-menu ul.main-menu li.rubriche.active,
+#region-menu ul.main-menu li.rubriche a {
+	color: #0061a6;
+	border-color: #0061a6;
+}
+
+#block-firstpage-cronaca .block-title,
+#region-menu ul.main-menu li.cronaca.active,
+#region-menu ul.main-menu li.cronaca a {
+	color: #d1008b;
+	border-color: #d1008b;
+}
+
+#block-firstpage-attualita .block-title,
+#region-menu ul.main-menu li.attualita.active,
+#region-menu ul.main-menu li.attualita a {
+	color: #3246ab;
+	border-color: #3246ab;
+}
+
+#block-firstpage-politica .block-title,
+#region-menu ul.main-menu li.politica.active,
+#region-menu ul.main-menu li.politica a {
+	color: #8f1ab6;
+	border-color: #8f1ab6;
+}
+
+#block-firstpage-culturaspettacolo .block-title,
+#region-menu ul.main-menu li.culturaspettacolo.active,
+#region-menu ul.main-menu li.culturaspettacolo a {
+	color: #ad532f;
+	border-color: #ad532f;
 }
 
 #region-menu ul.main-menu li a {
@@ -69,7 +127,6 @@
 
 #region-menu ul.secondary-items li {
 	border: 0;
-
 }
 
 

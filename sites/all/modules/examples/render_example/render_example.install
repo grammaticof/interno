@@ -1,5 +1,4 @@
 <?php
-// $Id: render_example.install,v 1.1 2010/09/26 12:04:28 rfay Exp $
 /**
  * @file render_example.install
  * Install/uninstall routines for render example.

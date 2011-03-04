@@ -1,5 +1,4 @@
 <?php
-// $Id: form_example_tutorial.inc,v 1.10 2010/12/26 21:45:54 ilo Exp $
 
 /**
  * @file

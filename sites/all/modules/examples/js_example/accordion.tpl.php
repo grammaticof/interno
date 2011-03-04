@@ -1,5 +1,4 @@
 <?php
-// $Id: accordion.tpl.php,v 1.2 2010/08/11 23:16:27 rfay Exp $
 ?>
 <div class="demo">
 <h2><?php print $title; ?></h2>

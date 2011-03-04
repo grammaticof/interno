@@ -1,5 +1,4 @@
 <?php
-// $Id: ajax_example_graceful_degradation.inc,v 1.10 2010/12/13 20:28:52 rfay Exp $
 
 /**
  * @file

@@ -1,5 +1,4 @@
 <?php
-// $Id: image_example.pages.inc,v 1.2 2010/12/14 15:11:19 rfay Exp $
 
 /**
  * @file

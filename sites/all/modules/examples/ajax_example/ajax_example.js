@@ -1,4 +1,3 @@
-// $Id: ajax_example.js,v 1.2 2010/12/13 20:28:52 rfay Exp $
 
 /*
  * @file ajax_example.js

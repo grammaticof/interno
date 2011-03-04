@@ -1,4 +1,3 @@
-// $Id: field_example.js,v 1.1 2010/06/22 01:15:30 rfay Exp $
 
 /**
  * @file

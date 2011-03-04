@@ -1,5 +1,4 @@
 <?php
-// $Id: examples.index.php,v 1.6 2010/12/13 19:05:32 rfay Exp $
 
 /**
  * @file

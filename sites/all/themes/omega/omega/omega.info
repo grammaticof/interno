@@ -278,9 +278,9 @@ settings[debug_grid_roles][3] = '3'
 settings[debug_grid_roles][2] = '0'
 settings[omega_general__active_tab] = 'edit-form-settings'
 
-; Information added by drupal.org packaging script on 2011-02-26
-version = "7.x-2.0"
+; Information added by drupal.org packaging script on 2011-03-01
+version = "7.x-2.1"
 core = "7.x"
 project = "omega"
-datestamp = "1298760970"
+datestamp = "1299009669"
 

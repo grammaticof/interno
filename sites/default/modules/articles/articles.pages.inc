@@ -42,10 +42,13 @@ function articles_term_page($term) {
 	if ($nids) {
 		$nodes = node_load_multiple($nids);
 		$build += node_view_multiple($nodes);
+		
+		/* pager
 		$build['pager'] = array(
 			'#theme' => 'pager',
 			'#weight' => 5,
 		);
+		*/
 	}
 	else {
 		$build['no_content'] = array(

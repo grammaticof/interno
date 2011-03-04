@@ -1,5 +1,4 @@
 <?php
-// $Id: file_example_session_streams.inc,v 1.3 2010/12/15 22:16:19 rfay Exp $
 
 /**
  * @file file_example_session_streams.inc
