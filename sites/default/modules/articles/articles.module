@@ -15,83 +15,61 @@ function articles_menu_alter(&$items) {
  * Implements hook_node_view_alter().
  */
 function articles_node_view_alter(&$build) {
-	
-	switch($build['#view_mode']) {
-		case 'firstpage': // firstpage view
-			$today = strtotime('today');
-			if (!empty($build['field_location'])) {
-				hide($build['field_location']);
+	if ($build['#node']->type == 'article') {
+		switch($build['#view_mode']) {
+			case 'firstpage': // firstpage view
+				$today = strtotime('today');
+				if (!empty($build['field_location'])) {
+					hide($build['field_location']);
 						
-				if ($build['field_location'][0]['#type'] == 'link')
-					$build['field_short'][0]['#markup'] = l($build['field_location'][0]['#title'], $build['field_location'][0]['#href'], array('attributes'=>array('class'=>'field-location'))).$build['field_short'][0]['#markup'];
-			}
+					if ($build['field_location'][0]['#type'] == 'link')
+						$build['field_short'][0]['#markup'] = l($build['field_location'][0]['#title'], $build['field_location'][0]['#href'], array('attributes'=>array('class'=>'field-location'))).$build['field_short'][0]['#markup'];
+				}
 		
-			// add the time for todays articles.
-			if ($build['#node']->created > $today) {
-				$build['field_short'][0]['#markup'] = '<span class="time">'.
-					format_date($build['#node']->created, 'custom', 'H:i').'</span> '.
-					$build['field_short'][0]['#markup'];
-			}
+				// add the time for todays articles.
+				if ($build['#node']->created > $today) {
+					$build['field_short'][0]['#markup'] = '<span class="time">'.
+						format_date($build['#node']->created, 'custom', 'H:i').'</span> '.
+						$build['field_short'][0]['#markup'];
+				}
 			
-			// Display the Disqus link.
-			$links['disqus_comments_num'] = array(
-				'title' => '0',
-				'href' => 'node/' . $build['#node']->nid,
-				'fragment' => 'disqus_thread',
-				'html' => TRUE,
-				'attributes' => array(
-					// Identify the node for Disqus with the unique identifier:
-					// http://docs.disqus.com/developers/universal/#comment-count
-					'data-disqus-identifier' => 'node/' . $build['#node']->nid,
-					'class' => array('iconic', 'comment'),
-				),
-			);
-			
-			$build['links']['disqus'] = array(
-				'#theme' => 'links',
-				'#links' => $links,
-				'#attributes' => array(
-					'class' => array('links', 'inline'),
-				),
-			);
-
-			// Attach disqus.js to load the Disqus comment count JavaScript.
-			$build['links']['#attached']['js'][] = drupal_get_path('module', 'disqus') . '/disqus.js';
-			
-			// Add the disqusComments setting.
-			static $added = FALSE;
-			if ($added == FALSE) {
-				drupal_add_js(array(
-					'disqusComments' => $build['#node']->disqus['domain'],
-				), 'setting');
-				$added = TRUE;
-			}
-			
-		break;
+			break;
 		
-		case 'full': // full page view
-			
-			$theme_path = drupal_get_path('theme', 'intheme');
-			drupal_add_css($theme_path.'/css/disqus.css');
-			
-			if (!empty($build['field_short'])) {
+			case 'full': // full page view
+				
 				$date = format_date($build['#node']->created, 'medium');
-				$build['field_short'][0]['#markup'] .= '<div class="submitted">'.$date.'</div>';
-			}
-		
-			if (!empty($build['field_location'])) {
-				hide($build['field_location']);
+				$name = theme('username', array('account' => $build['#node']));
+				$build['submitted']['#markup'] = '<div class="submitted">'.$name.' - '.$date.'</div>';
+				$build['submitted']['#weight'] = -10;
+				
+				$build['field_short']['#weight'] = -20;
+				
+				if (!empty($build['field_location'])) {
+					hide($build['field_location']);
 						
-				if ($build['field_location'][0]['#type'] == 'link')
-					$build['body'][0]['#markup'] = l($build['field_location'][0]['#title'].' - ', $build['field_location'][0]['#href'], array('attributes'=>array('class'=>'field-location'))).$build['body'][0]['#markup'];
-			}
-		break;
+					if ($build['field_location'][0]['#type'] == 'link')
+						$build['body'][0]['#markup'] = l($build['field_location'][0]['#title'].' - ', $build['field_location'][0]['#href'], array('attributes'=>array('class'=>'field-location'))).$build['body'][0]['#markup'];
+				}
+			break;
 		
-		case 'teaser': // teaser view
-			// hide the read more button.
-			hide($build['links']['node']);
-		break;
+			case 'teaser': // teaser view
+			
+				if (!empty($build['field_location'])) {
+					hide($build['field_location']);
+						
+					if ($build['field_location'][0]['#type'] == 'link')
+						$build['field_short'][0]['#markup'] = l($build['field_location'][0]['#title'], $build['field_location'][0]['#href'], array('attributes'=>array('class'=>'field-location'))).' '.$build['field_short'][0]['#markup'];
+				}
+			
+				$date = format_date($build['#node']->created, 'medium');
+				$name = theme('username', array('account' => $build['#node']));
+				$build['submitted']['#markup'] = '<div class="submitted">'.$name.' - '.$date.'</div>';
+			
+				// hide the read more button.
+				hide($build['links']['node']);
+			break;
 		
+		}
 	}
 }
 
@@ -161,4 +139,6 @@ function taxonomy_select_all_nodes($tid, $pager = TRUE, $limit = FALSE, $max_dep
 	return $query->execute()->fetchCol();
 
 }
+
+
 

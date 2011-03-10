@@ -1,4 +1,3 @@
-// $Id: media-admin.js,v 1.17 2010/11/29 20:03:11 JacobSingh Exp $
 
 /**
  * @file
@@ -123,11 +122,11 @@ Drupal.behaviors.mediaTypesAdmin = {
       return;
     }
     // Toggle the 'other' text field on Match type.
-    if ($('.form-item-match-type input:checked').val() != 'other') {
+    if ($('.form-item-match-type input:checked').val() != '0') {
       $('.form-item-match-type-other').hide();
     }
     $('.form-item-match-type input').change(function () {
-      if ($(this).val() == 'other') {
+      if ($(this).val() == '0') {
         $('.form-item-match-type-other').slideDown('fast');
       }
       else {

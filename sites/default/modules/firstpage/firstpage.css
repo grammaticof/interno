@@ -64,10 +64,6 @@
 	margin-right: 3px;
 }
 
-.block-firstpage a.field-location:hover {
-
-}
-
 .block-firstpage .field-type-node-reference {
 	margin-top: 5px;
 }
@@ -76,6 +72,5 @@
 	padding-left: 10px;
 	font-size: 0.857em;
 }
-
 
 /** END: FIELDS **/

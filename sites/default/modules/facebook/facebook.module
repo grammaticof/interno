@@ -1,0 +1,196 @@
+<?php
+define('FACEBOOK_APP_ID', '197326193616186');
+
+/**
+ * Implements hook_permission().
+ */
+function facebook_permission() {
+  $permissions['administer facebook'] = array(
+    'title' => t('Administer Facebook configuration.'),
+  );
+  return $permissions;
+}
+
+/**
+* Implement hook_menu().
+*/
+function facebook_menu() {
+$items = array();
+	$items['admin/config/services/facebook'] = array(
+		'title' => 'Facebook',
+		'description' => 'Configuration for the Facebook module.',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('facebook_config_form'),
+		'access arguments' => array('administer facebook'),
+		'type' => MENU_NORMAL_ITEM,
+	);
+return $items;
+}
+
+/**
+ * Form builder; Create and display the Facebook configuration settings form.
+ */
+function facebook_config_form($form, &$form_state) {
+	// Text field for the e-mail subject.
+	$form['facebook_AppId'] = array(
+		'#type' => 'textfield',
+		'#title' => t('Facebook AppId'),
+		'#size' => 15,
+		'#maxlength' => 15,
+		'#default_value' => variable_get('facebook_AppId',FACEBOOK_APP_ID),
+		'#required' => TRUE,
+	);
+	// Checkbox to indicate if admin should be sent a Bcc on e-mails.
+	$form['facebook_sdk_test'] = array(
+		'#type' => 'checkbox',
+		'#title' => t('Test SDK'),
+		'#default_value' => variable_get('facebook_sdk_test', FALSE),
+	);
+	// Submit button
+	$form['submit'] = array(
+		'#type' => 'submit',
+		'#value' => t('Save settings'),
+	);
+	return $form;
+}
+
+/**
+* Save configuration settings for User Warn module.
+*/
+function facebook_config_form_submit($form, &$form_state) {
+	variable_set('facebook_AppId', $form_state['values']['facebook_AppId']);
+	variable_set('facebook_sdk_test', $form_state['values']['facebook_sdk_test']);
+
+	drupal_set_message(t('The settings have been saved'));
+}
+
+
+/**
+ * Implements hook_page_alter()
+ */
+function facebook_page_alter(&$page) {
+	
+	$appId = variable_get('facebook_AppId',FACEBOOK_APP_ID);
+
+	$sdk = '//connect.facebook.net/it_IT/all.js';
+	if (variable_get('facebook_sdk_test', FALSE))
+		$sdk ='//static.ak.fbcdn.net/connect/en_US/core.debug.js';
+
+	$meta_description = array(
+		'#type' => 'html_tag',
+		'#tag' => 'meta',
+		'#attributes' => array(
+			'property' => 'fb:app_id',
+			'content' => $appId,
+		)
+	);
+	drupal_add_html_head($meta_description, 'meta_facebook_app_id');
+	
+	$script = "
+		window.fbAsyncInit = function() {
+		FB.init({appId: '$appId', status: true, cookie: true, xfbml: true});};
+		(function() {
+			var e = document.createElement('script'); e.async = true;
+			e.src = document.location.protocol + '$sdk';
+			document.getElementById('fb-root').appendChild(e);
+		}());
+	";
+	drupal_add_js($script, array('type' => 'inline', 'scope' => 'footer', 'weight' => 5));
+}
+
+/**
+ * Implements hook_rdf_namespaces
+ */
+function facebook_rdf_namespaces() {
+	return array("fb" => "http://www.facebook.com/2008/fbml");
+}
+
+/**
+ * Implements hook_node_view().
+ */
+function facebook_node_view($node, $view_mode, $langcode) {
+	
+	$absolute_url = url('node/'.$node->nid, array('absolute' => TRUE));
+	
+	switch($view_mode) {
+		case 'full': // full page view
+
+			// **** Facebook meta ****
+			$meta_description = array(
+				'#type' => 'html_tag',
+				'#tag' => 'meta',
+				'#attributes' => array(
+					'property' => 'og:title',
+					'content' => $node->title,
+				)
+			);
+			drupal_add_html_head($meta_description, 'meta_facebook_title');
+			
+			$meta_description = array(
+				'#type' => 'html_tag',
+				'#tag' => 'meta',
+				'#attributes' => array(
+					'property' => 'og:type',
+					'content' => $node->type,
+				)
+			);
+			drupal_add_html_head($meta_description, 'meta_facebook_type');
+			
+			/*
+			$meta_description = array(
+				'#type' => 'html_tag',
+				'#tag' => 'meta',
+				'#attributes' => array(
+					'property' => 'og:image',
+					'content' => $node->type,
+				)
+			);
+			drupal_add_html_head($meta_description, 'meta_facebook_image');
+			*/
+			// **** end: Facebook meta ****
+			
+			$node->content['social-box'] = array(
+				'#markup' => theme('social_box', array('node' => $node)),
+				'#weight' => -5,
+			);
+
+			$fb_comments_box = '<div class="fb-comments-title"><h3>'.t('Comments on Facebook').'</h3></div>';
+			$fb_comments_box .= '<fb:comments href="'.$absolute_url.'" num_posts="1" width="550"></fb:comments>';
+			$node->content['facebook_comments_box'] = array(
+				'#markup'=> $fb_comments_box,
+				'#weight' => 50,
+			);
+			
+		break;
+		
+		case 'firstpage':
+		
+		case 'teaser': // teaser view
+			$fb_comments_box ="<div class='fb-comments-count'><fb:comments-count href=$absolute_url/></fb:comments-count></div>";
+			$node->content['facebook_comments_box'] = array(
+				'#markup'=> $fb_comments_box,
+				'#weight' => 50,
+			);
+
+		break;
+	}
+}
+
+/**
+ * Implements hook_theme().
+ */
+function facebook_theme($existing, $type, $theme, $path) {
+	return array(
+		'social_box' => array(
+			'variables' => array(
+				'node' => NULL,
+			),
+			'template' => 'social-box',
+		),
+	);
+}
+
+function template_preprocess_social_box(&$vars) {
+	$vars['absolute_url'] = url('node/'.$vars['node']->nid, array('absolute' => TRUE));
+}
+

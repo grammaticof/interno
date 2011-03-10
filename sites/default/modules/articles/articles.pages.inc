@@ -43,6 +43,8 @@ function articles_term_page($term) {
 		$nodes = node_load_multiple($nids);
 		$build += node_view_multiple($nodes);
 		
+		
+		
 		/* pager
 		$build['pager'] = array(
 			'#theme' => 'pager',

@@ -47,6 +47,7 @@
   </div>
   <?php print $page_top; ?>
   <?php print $page; ?>
+  <div id="fb-root"></div>
   <?php print $page_bottom; ?>
 </body>
 </html>

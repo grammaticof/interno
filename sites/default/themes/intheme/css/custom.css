@@ -10,9 +10,6 @@ CULTURASPETTACOLO #ad532f
 OTHERS #066ec9 #4a7801 #333
 */
 
-
-
-
 /** REGION MENU **/
 
 /*
@@ -56,6 +53,14 @@ OTHERS #066ec9 #4a7801 #333
 	border-color: #d61d00;
 }
 
+body.page-taxonomy-type .content-zone h1 {
+	border-left: 3px solid #000000;
+	padding-left: 10px;
+	font-family: "Futura Book", "Futura Light", "Futura", "Futura Medium", "FuturaMedium", "Gill Sans", "Helvetica";
+	font-size: 1em;
+}
+
+body.page-taxonomy-type-sport .content-zone h1,
 #block-firstpage-sport .block-title,
 #region-menu ul.main-menu li.sport.active,
 #region-menu ul.main-menu li.sport a {
@@ -63,6 +68,7 @@ OTHERS #066ec9 #4a7801 #333
 	border-color: #008000;
 }
 
+body.page-taxonomy-type-rubriche .content-zone h1,
 #block-firstpage-rubriche .block-title,
 #region-menu ul.main-menu li.rubriche.active,
 #region-menu ul.main-menu li.rubriche a {
@@ -70,6 +76,7 @@ OTHERS #066ec9 #4a7801 #333
 	border-color: #0061a6;
 }
 
+body.page-taxonomy-type-cronaca .content-zone h1,
 #block-firstpage-cronaca .block-title,
 #region-menu ul.main-menu li.cronaca.active,
 #region-menu ul.main-menu li.cronaca a {
@@ -77,6 +84,7 @@ OTHERS #066ec9 #4a7801 #333
 	border-color: #d1008b;
 }
 
+body.page-taxonomy-type-attualità .content-zone h1,
 #block-firstpage-attualita .block-title,
 #region-menu ul.main-menu li.attualita.active,
 #region-menu ul.main-menu li.attualita a {
@@ -84,6 +92,7 @@ OTHERS #066ec9 #4a7801 #333
 	border-color: #3246ab;
 }
 
+body.page-taxonomy-type-politica .content-zone h1,
 #block-firstpage-politica .block-title,
 #region-menu ul.main-menu li.politica.active,
 #region-menu ul.main-menu li.politica a {
@@ -91,6 +100,7 @@ OTHERS #066ec9 #4a7801 #333
 	border-color: #8f1ab6;
 }
 
+body.page-taxonomy-type-culturaspettacolo .content-zone h1,
 #block-firstpage-culturaspettacolo .block-title,
 #region-menu ul.main-menu li.culturaspettacolo.active,
 #region-menu ul.main-menu li.culturaspettacolo a {
@@ -164,11 +174,11 @@ a:hover {
 
 p {
 	display:block;
-	margin: 10px 0;
+	margin: 0 0 10px 0;
 }
 
 div#page {
-	background: url(../images/body-gray.png);
+	background: #EFEFEF url(../images/body-gray.png) repeat-y;
 	background-position:50% 50%;
 }
 
@@ -202,6 +212,43 @@ blockquote {
 
 /** END: GENERAL STYLE **/
 
+/** TERMS SECTIONS **/
+
+body.page-taxonomy .node {
+	padding: 10px 0;
+}
+
+body.page-taxonomy .node.first,
+body.page-taxonomy .node.over {
+	border-bottom: 1px solid #DDDDDD;
+}
+
+body.page-taxonomy .node .field-name-field-short {
+	line-height: 1.429em;
+}
+
+body.page-taxonomy .node a.field-location {
+	text-transform: uppercase;
+	font-weight: bold;
+	color: #000000;
+}
+
+body.page-taxonomy .node h2.node-title {
+	font-size: 1.429em;
+	line-height: 1.25em;
+}
+
+body.page-taxonomy .node.first h2.node-title {
+	font-size: 1.5em;
+}
+
+body.page-taxonomy .node.first .field-type-media {
+	float: left;
+	padding-right: 10px;
+}
+
+/** END TERM SECTIONS **/
+
 /** NODE ARTICLES FULL **/
 
 .article.full-view.node {
@@ -226,45 +273,41 @@ blockquote {
 	font-style: italic;
 	line-height: 25px;
 	text-align: left;
-	margin: 0;
+	margin-bottom: 5px;
 	padding: 0;
 }
 
-.article.full-view .submitted {
+.submitted {
 	text-align: right;
+	color: #797979;
 	font-size: 11px;
 	font-weight: normal;
 	font-style: normal;
 }
 
 .article.full-view .field-name-field-media {
-	float: right;
+	float: left;
+	padding: 0 5px;
 }
 
 .article.full-view .field-name-field-tags {
-	margin-top: 20px;
+	font-size: 0.857em; /* 12px */
+	line-height: 0.857em;
+	padding: 5px 0 5px 15px;
+	background-color: #EFEFEF;
+	border-top : 1px dotted #DDDDDD;
+	border-bottom : 1px dotted #DDDDDD;
+	margin: 15px 0;
 }
 
 .article.full-view .field-name-field-tags span {
-	font-size: 22px;
 	color: #696969;
 }
 
 .article.full-view .field-name-field-tags .field-items .field-item {
 	/* float: left;*/
-	display: inline;
+	display: inline-block;
 	margin: 0 5px 0 0;
-}
-
-.article.full-view .field-name-field-tags .field-items .field-item a{
-	font-size: 12px;
-	padding: 5px 10px;
-	line-height: 25px;
-	background-color: #DDDDDD;
-	color: #696969;
-	-webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
-	border-radius: 10px;
 }
 
 .article.full-view a.field-location {
@@ -275,6 +318,19 @@ blockquote {
 
 .article.full-view a.field-location:hover {
 	text-decoration: none;
+}
+
+
+.article.full-view .fb-comments-title {
+	font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+	color: #3B5998;
+	font-size: 1.286em;
+	margin: 20px 0;
+}
+
+
+.article.full-view .field-type-node-reference .field-item {
+	line-height: 1.571em; /* 22px */
 }
 
 /** END: NODE ARTICLES FULL **/
@@ -288,35 +344,7 @@ blockquote {
 /** END: BLOCKS **/
 
 /** TABS **/
-/*
-#content-tabs {
-	background: #F2F2F2;
-	border: 1px solid #DDDDDD;
-	display: block;
-	font-family: Deliciuos, Verdana, Arial;
-	margin: 0 0 10px 0;
-	padding: 5px;
-	text-align: center;
-	width:500px;
-	margin: auto;
-}
 
-#content-tabs ul.primary li a:link,
-#content-tabs ul.primary li a:hover,
-#content-tabs ul.primary li a:visited,
-#content-tabs ul.secondary li a:link,
-#content-tabs ul.secondary li a:visited  {
-	color: #555555;
-	font-weight: bold;
-	font-size: 12px;
-	text-decoration: none;
-}
-
-#content-tabs ul.primary li a.active:link,
-#content-tabs ul.primary li a.active:visited {
-	font-size: 12px;
-}
-*/
 /** END: TABS **/
 
 /** USER TOOLBAR **/
@@ -452,7 +480,7 @@ ul.links li.disqus_comments_num a:hover {
 	background: url('../images/iconic/green/user_12x16.png') no-repeat;
 }
 
-.field-type-node-reference .field-item {
+.block-firstpage .field-type-node-reference .field-item {
 	background: url('../images/iconic/red/info_4x8.png') no-repeat center left;
 }
 
@@ -483,12 +511,29 @@ div.messages {
 
 /** START: FIELDS **/
 
-.field-type-node-reference .field-item {
+.block-firstpage .field-type-node-reference .field-item {
 	padding-left: 10px;
 	font-size: 0.857em;
 }
 
-
 /** END: FIELDS **/
 
+/** SOCIAL BOX **/
 
+.social-box {
+	height: 20px;
+	padding: 5px 0 5px 15px;
+	background-color: #EFEFEF;
+	margin-bottom: 10px;
+	border-top : 1px dotted #DDDDDD;
+	border-bottom : 1px dotted #DDDDDD;
+}
+
+.social-box .tw-share {
+	float: right;
+}
+.social-box .fb-like {
+	float: left;
+}
+
+/** END: SOCIAL BOX **/

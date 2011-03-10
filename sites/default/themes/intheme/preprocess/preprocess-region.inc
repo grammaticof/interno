@@ -1,8 +1,6 @@
 <?php
 
 
-dsm($vars['region']);
-
 switch ($vars['region']) {
 	case 'menu':
 		if (module_exists('gsearch'))
@@ -41,8 +39,6 @@ switch ($vars['region']) {
 			));
 			$vars['secondary_menu'] = FALSE;
 		}		
-		
-		
 	break;
 }
 
