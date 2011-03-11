@@ -2,6 +2,41 @@
 define('FACEBOOK_APP_ID', '197326193616186');
 
 /**
+ * Implements hook_init().
+ */
+function facebook_init() {
+	$appId = variable_get('facebook_AppId',FACEBOOK_APP_ID);
+
+	$sdk = '//connect.facebook.net/it_IT/all.js';
+	if (variable_get('facebook_sdk_test', FALSE))
+		$sdk ='//static.ak.fbcdn.net/connect/en_US/core.debug.js';
+
+	$meta_description = array(
+		'#type' => 'html_tag',
+		'#tag' => 'meta',
+		'#attributes' => array(
+			'property' => 'fb:app_id',
+			'content' => $appId,
+		)
+	);
+	drupal_add_html_head($meta_description, 'meta_facebook_app_id');
+	
+	$script = "
+		if (document.getElementById('fb-root')) {
+			window.fbAsyncInit = function() {
+			FB.init({appId: '$appId', status: true, cookie: true, xfbml: true});};
+			(function() {
+				var e = document.createElement('script'); e.async = true;
+				e.src = document.location.protocol + '$sdk';
+				document.getElementById('fb-root').appendChild(e);
+			}());
+		}
+	";
+	drupal_add_js($script, array('type' => 'inline', 'scope' => 'footer', 'weight' => 5));	
+}
+
+
+/**
  * Implements hook_permission().
  */
 function facebook_permission() {
@@ -62,40 +97,6 @@ function facebook_config_form_submit($form, &$form_state) {
 	variable_set('facebook_sdk_test', $form_state['values']['facebook_sdk_test']);
 
 	drupal_set_message(t('The settings have been saved'));
-}
-
-
-/**
- * Implements hook_page_alter()
- */
-function facebook_page_alter(&$page) {
-	
-	$appId = variable_get('facebook_AppId',FACEBOOK_APP_ID);
-
-	$sdk = '//connect.facebook.net/it_IT/all.js';
-	if (variable_get('facebook_sdk_test', FALSE))
-		$sdk ='//static.ak.fbcdn.net/connect/en_US/core.debug.js';
-
-	$meta_description = array(
-		'#type' => 'html_tag',
-		'#tag' => 'meta',
-		'#attributes' => array(
-			'property' => 'fb:app_id',
-			'content' => $appId,
-		)
-	);
-	drupal_add_html_head($meta_description, 'meta_facebook_app_id');
-	
-	$script = "
-		window.fbAsyncInit = function() {
-		FB.init({appId: '$appId', status: true, cookie: true, xfbml: true});};
-		(function() {
-			var e = document.createElement('script'); e.async = true;
-			e.src = document.location.protocol + '$sdk';
-			document.getElementById('fb-root').appendChild(e);
-		}());
-	";
-	drupal_add_js($script, array('type' => 'inline', 'scope' => 'footer', 'weight' => 5));
 }
 
 /**

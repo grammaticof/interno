@@ -47,8 +47,8 @@
 }
 
 .block-firstpage .node img {
-	float: left;
-	margin-right: 3px;
+	float: right;
+	margin-left: 3px;
 	border: 2px solid #DDDDDD;
 }
 

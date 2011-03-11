@@ -12,19 +12,6 @@ OTHERS #066ec9 #4a7801 #333
 
 /** REGION MENU **/
 
-/*
-#site-header {
-	margin-bottom: 25px;
-}
-
-#site-menu a{
-	text-decoration: none;
-	font-family: Delicious, Arial, Verdana;
-	font-weight: bold;
-	
-}
-//*/
-
 #region-menu .primary-navigation {
 	float : left;
 }
@@ -53,8 +40,8 @@ OTHERS #066ec9 #4a7801 #333
 	border-color: #d61d00;
 }
 
-body.page-taxonomy-type .content-zone h1 {
-	border-left: 3px solid #000000;
+body.page-taxonomy .content-zone h1 {
+	border-left: 3px solid #4A7389;
 	padding-left: 10px;
 	font-family: "Futura Book", "Futura Light", "Futura", "Futura Medium", "FuturaMedium", "Gill Sans", "Helvetica";
 	font-size: 1em;
@@ -223,6 +210,10 @@ body.page-taxonomy .node.over {
 	border-bottom: 1px solid #DDDDDD;
 }
 
+body.page-taxonomy .submitted {
+	text-align: right;
+}
+
 body.page-taxonomy .node .field-name-field-short {
 	line-height: 1.429em;
 }
@@ -234,17 +225,26 @@ body.page-taxonomy .node a.field-location {
 }
 
 body.page-taxonomy .node h2.node-title {
-	font-size: 1.429em;
-	line-height: 1.25em;
+	font-size: 1.143em;
+	line-height: 1.143em;
 }
 
 body.page-taxonomy .node.first h2.node-title {
 	font-size: 1.5em;
 }
 
+body.page-taxonomy .node .field-type-media {
+	float: right;
+}
+
+body.page-taxonomy .node .field-type-media img {
+	border: 2px solid #DDDDDD;
+	padding: 0;
+	margin: 5px;
+}
+
 body.page-taxonomy .node.first .field-type-media {
 	float: left;
-	padding-right: 10px;
 }
 
 /** END TERM SECTIONS **/
@@ -287,7 +287,7 @@ body.page-taxonomy .node.first .field-type-media {
 
 .article.full-view .field-name-field-media {
 	float: left;
-	padding: 0 5px;
+	padding: 0;
 }
 
 .article.full-view .field-name-field-tags {

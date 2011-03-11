@@ -10,6 +10,7 @@
  *	 The page content.
  */
 function articles_term_page($term) {
+
 	// Build breadcrumb based on the hierarchy of the term.
 	$current = (object) array(
 		'tid' => $term->tid,
@@ -37,20 +38,18 @@ function articles_term_page($term) {
 		);
 	}
 
-	$nids = taxonomy_select_all_nodes($term->tid);
-	
+	$nids = taxonomy_select_all_nodes($term->tid, FALSE, 15);
+
 	if ($nids) {
 		$nodes = node_load_multiple($nids);
 		$build += node_view_multiple($nodes);
-		
-		
-		
-		/* pager
+
+		/* PAGER
 		$build['pager'] = array(
 			'#theme' => 'pager',
 			'#weight' => 5,
 		);
-		*/
+		//*/
 	}
 	else {
 		$build['no_content'] = array(

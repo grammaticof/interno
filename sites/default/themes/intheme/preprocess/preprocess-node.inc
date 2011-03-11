@@ -19,7 +19,9 @@ if ($vars['node']->type == 'article') {
 	
 		// add 'first' 'second' 'third' class
 		case 'teaser':
-		
+			
+
+			
 			if (!$vars['is_front']) {
 				if (arg(0) == 'taxonomy' && arg(1) == 'term' && is_numeric(arg(2))) {
 					if ($vars['id'] == 1) {
@@ -29,13 +31,10 @@ if ($vars['node']->type == 'article') {
 						$vars['node_attributes']['class'][] = 'omega';
 					}
 					elseif ($vars['id'] == 2) {
-						$vars['node_attributes']['class'][] = 'second';
 						$vars['node_attributes']['class'][] = 'grid-7';
 						$vars['node_attributes']['class'][] = 'alpha';
-						// $vars['node_attributes']['class'][] = 'pull-7';
 					}
 					elseif ($vars['id'] == 3) {
-						$vars['node_attributes']['class'][] = 'third';
 						$vars['node_attributes']['class'][] = 'grid-7';
 						$vars['node_attributes']['class'][] = 'omega';
 					}
