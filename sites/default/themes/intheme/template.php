@@ -21,3 +21,25 @@ function intheme_theme(&$existing, $type, $theme, $path) {
   
   return $hooks;
 }
+
+
+/**
+ * Returns HTML for a list of recent content.
+ *
+ * @param $variables
+ *   An associative array containing:
+ *   - nodes: An array of recent node objects.
+ *
+ * @ingroup themeable
+ */
+function intheme_node_recent_block($vars) {
+  $rows = array();
+  $output = '';
+
+  foreach ($vars['nodes'] as $node)
+    $rows[$node->nid] = l($node->title, 'node/'.$node->nid);
+  
+  $output = theme('item_list', array('items'=>$rows));
+  
+  return $output;
+}

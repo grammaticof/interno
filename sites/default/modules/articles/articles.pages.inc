@@ -11,23 +11,16 @@
  */
 function articles_term_page($term) {
 
-	// Build breadcrumb based on the hierarchy of the term.
-	$current = (object) array(
-		'tid' => $term->tid,
-	);
-	
-	// @todo This overrides any other possible breadcrumb and is a pure hard-coded
-	//	 presumption. Make this behavior configurable per vocabulary or term.
+	// breadcrumb
 	$breadcrumb = array();
-	while ($parents = taxonomy_get_parents($current->tid)) {
-		$current = array_shift($parents);
-		$breadcrumb[] = l($current->name, 'taxonomy/term/' . $current->tid);
-	}
+	$tid_parents = array_reverse(taxonomy_get_parents_all($term->tid));
+	foreach ($tid_parents as $i => $term_data)
+		$breadcrumb[] = l($term_data->name, 'taxonomy/term/' . $term_data->tid);
 	$breadcrumb[] = l(t('Home'), NULL);
 	$breadcrumb = array_reverse($breadcrumb);
 	drupal_set_breadcrumb($breadcrumb);
 	drupal_add_feed('taxonomy/term/' . $term->tid . '/feed', 'RSS - ' . $term->name);
-
+	
 	$build = array();
 	// Add term heading if the term has a description
 	if (!empty($term->description)) {

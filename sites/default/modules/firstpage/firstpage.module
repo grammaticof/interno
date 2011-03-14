@@ -66,7 +66,7 @@ function firstpage_block_view($block_name = '') {
 				$build += node_view_multiple($nodes, 'firstpage');
 				$build['link_section'] = array(
 					'#prefix' => '<div class="section-link">',
-					'#markup' => l(t('find more'), $term_name),
+					'#markup' => l(t('other of !type', array('!type' => $terms[$term_name]->name)), 'taxonomy/term/'.$terms[$term_name]->tid),
 					'#suffix' => '</div>',
 				);
 			}

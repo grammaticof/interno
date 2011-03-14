@@ -74,3 +74,12 @@
 }
 
 /** END: FIELDS **/
+
+
+.block-firstpage .section-link {
+	text-align: right;
+	font-weight: bold;
+	font-size: 0.786em;
+	margin-right: 10px;
+}
+

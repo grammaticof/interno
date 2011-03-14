@@ -37,9 +37,21 @@ function articles_node_view_alter(&$build) {
 		
 			case 'full': // full page view
 				
+				$type_links = array();
+				// tax type
+				if (isset($build['field_type'])) {
+					hide($build['field_type']);
+
+					$tid_parents = array_reverse(taxonomy_get_parents_all($build['field_type']['#items'][0]['tid']));
+					foreach ($tid_parents as $i => $term_data)
+						$type_links[$term_data->tid] = l($term_data->name, 'taxonomy/term/'.$term_data->tid);
+				}
+				
 				$date = format_date($build['#node']->created, 'medium');
 				$name = theme('username', array('account' => $build['#node']));
-				$build['submitted']['#markup'] = '<div class="submitted">'.$name.' - '.$date.'</div>';
+				$tax_type = implode(' / ', $type_links);
+				
+				$build['submitted']['#markup'] = '<div class="submitted"><span class="author">'.$name.' in '.$tax_type.'</span><span class="date">'.$date.'</span></div>';
 				$build['submitted']['#weight'] = -10;
 				
 				$build['field_short']['#weight'] = -20;
@@ -73,6 +85,8 @@ function articles_node_view_alter(&$build) {
 		}
 	}
 }
+
+
 
 /**
  * Return nodes attached to a term and the descendant across all field instances.
@@ -139,6 +153,5 @@ function taxonomy_select_all_nodes($tid, $pager = TRUE, $limit = FALSE, $max_dep
 	}
 	return $query->execute()->fetchCol();
 }
-
 
 

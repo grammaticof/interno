@@ -40,6 +40,10 @@ OTHERS #066ec9 #4a7801 #333
 	border-color: #d61d00;
 }
 
+h2.block-title {
+	font-family: "Futura Book", "Futura Light", "Futura", "Futura Medium", "FuturaMedium", "Gill Sans", "Helvetica", "Arial", sans-serif;
+}
+
 body.page-taxonomy .content-zone h1 {
 	border-left: 3px solid #4A7389;
 	padding-left: 10px;
@@ -259,6 +263,18 @@ body.page-taxonomy .node.first .field-type-media {
 	margin-bottom: 20px;
 }
 
+.article.full-view.node .submitted {
+	height: 15px;
+}
+
+.article.full-view.node .submitted .author {
+	float: left;
+}
+
+.article.full-view.node .submitted .date {
+	float: right;
+}
+
 .article.full-view a.field-location,
 .article.full-view .field-name-body {
 	font-size: 1.071em; /* 15px */
@@ -278,7 +294,6 @@ body.page-taxonomy .node.first .field-type-media {
 }
 
 .submitted {
-	text-align: right;
 	color: #797979;
 	font-size: 11px;
 	font-weight: normal;
@@ -537,3 +552,37 @@ div.messages {
 }
 
 /** END: SOCIAL BOX **/
+
+
+/** BLOCK: RELEVANT-CONTENT +  **/
+
+#block-node-recent ul,
+#block-relevant-content-related-type ul {
+	list-style-type: disc;
+	list-style-image: url('../images/iconic/red/cd_8x8.png');
+	list-style-position: outside;
+}
+
+#block-node-recent h2.block-title,
+#block-relevant-content-related-type h2.block-title {
+	margin-bottom: 10px;
+	text-align: right;
+}
+
+#block-node-recent ul li,
+#block-relevant-content-related-type ul li {
+	margin-bottom: 4px;
+	padding-bottom: 5px;
+	border-bottom: 1px solid #EFEFEF;
+	line-height: 1.143em;
+}
+
+/** END: RELEVANT-CONTENT **/
+
+.not-front .region-sidebar-first {
+	background-color : #EFEFEF;
+	padding-bottom: 20px;
+}
+
+
+

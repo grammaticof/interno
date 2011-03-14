@@ -1,5 +1,4 @@
 <?php
-// $Id: boost.admin.debug.inc,v 1.1.2.2 2011/02/21 09:28:49 mikeytown2 Exp $
 
 /**
  * @file

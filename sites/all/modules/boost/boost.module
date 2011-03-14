@@ -1,5 +1,4 @@
 <?php
-// $Id: boost.module,v 1.5.2.12 2011/02/23 18:22:05 mikeytown2 Exp $
 
 /**
  * @file
@@ -215,11 +214,11 @@ function boost_exit($destination = NULL) {
   }
 
   // Add note to bottom of content if possible.
-  if ($_boost['matched_header_info']['commment_start'] && $_boost['matched_header_info']['commment_end']) {
+  if ($_boost['matched_header_info']['comment_start'] && $_boost['matched_header_info']['comment_end']) {
     $expire = $_boost['matched_header_info']['lifetime_max'];
     $cached_at = date('Y-m-d H:i:s', REQUEST_TIME);
     $expires_at = date('Y-m-d H:i:s', REQUEST_TIME + $expire);
-    $note = "\n" . $_boost['matched_header_info']['commment_start'] . 'Page cached by Boost @ ' . $cached_at . ', expires @ ' . $expires_at . ', lifetime ' . format_interval($expire) . $_boost['matched_header_info']['commment_end'];
+    $note = "\n" . $_boost['matched_header_info']['comment_start'] . 'Page cached by Boost @ ' . $cached_at . ', expires @ ' . $expires_at . ', lifetime ' . format_interval($expire) . $_boost['matched_header_info']['comment_end'];
     $data .= $note;
   }
 
@@ -320,7 +319,9 @@ function boost_transform_url($url = NULL, $b_path = NULL) {
     $parts['args'] = $args;
 
     // Get content type.
-    $parts = _boost_get_menu_router($parts);
+    if (!empty($parts['normal_path'])) {
+      $parts = _boost_get_menu_router($parts);
+    }
     // See if url is cacheable.
     $parts = boost_is_cacheable($parts);
     $items[$hash] = $parts;
@@ -841,8 +842,8 @@ function boost_match_header_attributes($header_info) {
     'extension',
     'lifetime_max',
     'lifetime_min',
-    'commment_start',
-    'commment_end',
+    'comment_start',
+    'comment_end',
   );
   $info = array();
   foreach ($keys as $key) {
@@ -904,8 +905,8 @@ function boost_get_storage_types() {
     'gzip',
     'lifetime_max',
     'lifetime_min',
-    'commment_start',
-    'commment_end',
+    'comment_start',
+    'comment_end',
 
   );
   foreach ($types as $title => $content_types) {
@@ -939,8 +940,8 @@ function boost_boost_storage_types() {
     'gzip'            => TRUE,
     'lifetime_max'    => 3600,
     'lifetime_min'    => 0,
-    'commment_start'  => '<!-- ',
-    'commment_end'    => ' -->',
+    'comment_start'  => '<!-- ',
+    'comment_end'    => ' -->',
     'variants'        => array(),
   );
   $types['text/xml'] = array(
@@ -951,8 +952,8 @@ function boost_boost_storage_types() {
     'gzip'            => TRUE,
     'lifetime_max'    => 3600,
     'lifetime_min'    => 0,
-    'commment_start'  => '<!-- ',
-    'commment_end'    => ' -->',
+    'comment_start'  => '<!-- ',
+    'comment_end'    => ' -->',
     'variants'        => array(
       'application/xml',
       'application/rss',
@@ -967,8 +968,8 @@ function boost_boost_storage_types() {
     'gzip'            => TRUE,
     'lifetime_max'    => 3600,
     'lifetime_min'    => 0,
-    'commment_start'  => '/* ',
-    'commment_end'    => ' */',
+    'comment_start'  => '/* ',
+    'comment_end'    => ' */',
     'variants'        => array(),
   );
   return $types;
