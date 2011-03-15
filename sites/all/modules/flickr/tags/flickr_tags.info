@@ -1,0 +1,13 @@
+name = Flickr Tags
+description = Adds tags capability to Flickr module.
+dependencies[] = flickr
+package = Flickr
+core = 7.x
+
+files[] = flickr_tag.module
+; Information added by drupal.org packaging script on 2011-02-25
+version = "7.x-1.x-dev"
+core = "7.x"
+project = "flickr"
+datestamp = "1298619281"
+

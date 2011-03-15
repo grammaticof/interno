@@ -231,6 +231,7 @@ body.page-taxonomy .node a.field-location {
 body.page-taxonomy .node h2.node-title {
 	font-size: 1.143em;
 	line-height: 1.143em;
+	margin-bottom: 3px;
 }
 
 body.page-taxonomy .node.first h2.node-title {
@@ -584,5 +585,32 @@ div.messages {
 	padding-bottom: 20px;
 }
 
+/** START : FOOTER **/
 
+#block-articles-main-footer {
+	font-family: "Futura Book", "Futura Light", "Futura", "Futura Medium", "FuturaMedium", "Gill Sans", "Helvetica", "Arial", sans-serif;
+	color: #383838;
+	background-color: #EFEFEF;
+	padding: 15px;
+}
+
+#block-articles-main-footer .reg,
+#block-articles-main-footer .info {
+	margin-bottom: 20px;
+}
+
+#block-articles-main-footer .cc {
+	font-size: 0.857em;
+	line-height: 1.143em;
+	background: url('../images/logo-creative-commons.gif') left center no-repeat;
+	padding-left: 50px;
+	height: 40px;
+}
+
+#block-articles-main-footer .cc p {
+	margin: 0;
+	padding: 5px 0;
+}
+
+/** END : FOOTER **/
 

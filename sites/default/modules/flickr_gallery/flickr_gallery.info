@@ -1,0 +1,5 @@
+name = Flickr gallery
+description = Flickr gallery field.
+package = Custom
+version = VERSION
+core = 7.x

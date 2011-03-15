@@ -1,0 +1,24 @@
+<?php
+
+
+function flickr_gallery_init() {
+	/*
+	require_once(drupal_get_path('module', 'flickr') . '/flickr.inc');
+	$flickr_user = flickr_user_find_by_username('loscus');
+	$nsid = $flickr_user['nsid'];
+	
+	// dsm(flickr_photos_search($nsid));
+	$photosets = flickr_photoset_get_list($nsid);
+	
+	$photoset = $photosets[0];
+	dsm($photoset);
+	
+	$output = theme('flickr_photoset', array(
+		'photoset' => $photoset,
+		'owner' => $nsid,
+		'size' => 's',
+	));
+	
+	print $output;
+	*/
+}

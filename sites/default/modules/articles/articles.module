@@ -12,6 +12,42 @@ function articles_menu_alter(&$items) {
 }
 
 /**
+* Implements hook_block_info().
+*/
+function articles_block_info() {
+$blocks = array();
+
+	$blocks['main_footer'] = array(
+	'info' => t('Main website footer'),
+	'cache' => DRUPAL_CACHE_GLOBAL,
+	);
+
+	return $blocks;
+}
+
+/**
+* Implements hook_block_view().
+*/
+function articles_block_view($block_name = '') {
+	if ($block_name == 'main_footer') {
+		$block = array(
+		'subject' => NULL,
+		'content' => theme('main_footer'),
+		);
+		return $block;
+	}
+}
+
+function articles_theme($existing, $type, $theme, $path) {
+	return array(
+		'main_footer' => array(
+			'variables' => array(),
+			'template' => 'main-footer',
+		),
+	);
+}
+
+/**
  * Implements hook_node_view_alter().
  */
 function articles_node_view_alter(&$build) {
@@ -85,8 +121,6 @@ function articles_node_view_alter(&$build) {
 		}
 	}
 }
-
-
 
 /**
  * Return nodes attached to a term and the descendant across all field instances.
