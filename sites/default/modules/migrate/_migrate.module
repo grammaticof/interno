@@ -1,0 +1,87 @@
+<?php
+
+/**
+ * Implements hook_menu().
+ */
+function migrate_menu() {
+	$items['admin/migrate/page'] = array(
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('migrate_page_form'),
+		'access callback' => TRUE,
+		'type' => MENU_CALLBACK		
+	);
+	
+	return $items;
+}
+
+/**
+ * Form builder function to allow choice of which batch to run.
+ */
+function migrate_page_form() {
+
+	$form['batch'] = array(
+		'#type' => 'select',
+		'#title' => 'Choose batch',
+		'#options' => array(
+			'batch_nodes' => 'Batch NODES - import nodes',
+			'batch_users' => 'Batch USERS - import users',
+		),
+	);
+	$form['submit'] = array(
+		'#type' => 'submit',
+		'#value' => 'Go',
+	);
+
+	// If no node prevent submission.
+	db_set_active('legacy');
+	$test = db_query("SELECT nid FROM {node} LIMIT 1")->fetchField();
+	db_set_active('default');
+
+	if (!$test) {
+		drupal_set_message('OLD db not configured!','error');
+		$form['submit']['#disabled'] = TRUE;
+	}
+	return $form;
+}
+
+function migrate_page_form_submit($form, &$form_state) {
+	$function = 'migrate_' . $form_state['values']['batch'];
+
+	// Execute the function named batch_example_1 or batch_example_2.
+	$batch = $function();
+	batch_set($batch);
+}
+
+function migrate_batch_users() {
+
+	$batch = array(
+		'operations' => array(array('migrate_batch_users_op', array())),
+		'title' => 'Import users',
+		'finished' => 'migrate_batch_users_finished',
+		'init_message' => 'Users import is starting.',
+		'progress_message' => t('Processed @current out of @total.'),
+		'error_message' => t('Example Batch has encountered an error.'),
+		'file' => drupal_get_path('module', 'migrate') . '/migrate.batch.users.inc',
+	);
+	
+	return $batch;
+}
+
+function migrate_batch_nodes() {
+
+	$batch = array(
+		'operations' => array(
+			array('migrate_batch_nodes_op', array())
+		),
+		'title' => 'Import nodes',
+		'finished' => 'migrate_batch_nodes_finished',
+		'init_message' => 'Nodes import is starting.',
+		'progress_message' => t('Processed @current out of @total.'),
+		'error_message' => t('Example Batch has encountered an error.'),
+		'file' => drupal_get_path('module', 'migrate') . '/migrate.batch.nodes.inc',
+	);
+
+	return $batch;
+}
+
+

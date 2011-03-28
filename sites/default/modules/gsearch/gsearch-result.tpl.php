@@ -2,7 +2,8 @@
 <script type="text/javascript">
 	var googleSearchIframeName = "cse-search-results";
 	var googleSearchFormName = "cse-search-box";
-	var googleSearchFrameWidth = 560;
+	var googleSearchResizeIframe = false;
+	var googleSearchFrameWidth = 950;
 	var googleSearchDomain = "www.google.com";
 	var googleSearchPath = "/cse";
 </script>

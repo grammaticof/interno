@@ -1,4 +1,4 @@
-<div class="social-box">
+<div class="box social">
 	<div class="fb-like">
 		<fb:like href="<?php print $absolute_url; ?>" show_faces="false" width="400" action="recommend" font=""></fb:like>
 	</div>

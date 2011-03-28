@@ -58,7 +58,7 @@ function firstpage_block_view($block_name = '') {
 		$terms = _taxonomy_get_terms_by_voc_name('Type', 'name');
 		
 		if (!empty($terms[$term_name])) {
-
+			
 			$nids = taxonomy_select_all_nodes($terms[$term_name]->tid, FALSE, $limit);
 			
 			if ($nids) {
@@ -139,7 +139,7 @@ function firstpage_preprocess_node(&$vars) {
  */ 
 function _firstpage_get_categories_array() {
 	return array(
-		'attualita' => 'Attualità',
+		'attualita' => 'Attualita\'',
 		'politica' => 'Politica',
 		'sport' => 'Sport',
 		'cronaca' => 'Cronaca',

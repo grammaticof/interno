@@ -55,3 +55,20 @@ function articles_term_page($term) {
 	return $build;
 }
 
+/**
+ * Generate the content feed for a taxonomy term.
+ *
+ * @param $term
+ *   The taxonomy term.
+ */
+function articles_term_feed($term) {
+  $channel['link'] = url('taxonomy/term/' . $term->tid, array('absolute' => TRUE));
+  $channel['title'] = variable_get('site_name', 'Drupal') . ' - ' . $term->name;
+  // Only display the description if we have a single term, to avoid clutter and confusion.
+  // HTML will be removed from feed description.
+  $channel['description'] = check_markup($term->description, $term->format, '', TRUE);
+  $nids = taxonomy_select_all_nodes($term->tid, FALSE, variable_get('feed_default_items', 10));
+
+  node_feed($nids, $channel);
+}
+

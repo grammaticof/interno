@@ -40,18 +40,34 @@ OTHERS #066ec9 #4a7801 #333
 	border-color: #d61d00;
 }
 
+.page-gsearch-result .content-region h1,
 h2.block-title {
 	font-family: "Futura Book", "Futura Light", "Futura", "Futura Medium", "FuturaMedium", "Gill Sans", "Helvetica", "Arial", sans-serif;
 }
 
-body.page-taxonomy .content-zone h1 {
-	border-left: 3px solid #4A7389;
-	padding-left: 10px;
-	font-family: "Futura Book", "Futura Light", "Futura", "Futura Medium", "FuturaMedium", "Gill Sans", "Helvetica";
-	font-size: 1em;
+.page-gsearch-result .content-region h1 {
+	font-size: 1.143em;
 }
 
-body.page-taxonomy-type-sport .content-zone h1,
+body.page-taxonomy .content-zone h1 {
+	display: none;
+}
+
+body.page-taxonomy .breadcrumb {
+	border-left: 3px solid #4A7389;
+	padding: 0 10px;
+	font-family: "Futura Book", "Futura Light", "Futura", "Futura Medium", "FuturaMedium", "Gill Sans", "Helvetica";
+	font-size: 0.857em;
+	line-height: 1em;
+	margin-bottom: 10px;
+}
+
+body.page-taxonomy .breadcrumb a.active {
+	font-size: 1.333em;
+}
+
+body.page-taxonomy-type-sport .breadcrumb,
+body.page-taxonomy-type-sport .breadcrumb a,
 #block-firstpage-sport .block-title,
 #region-menu ul.main-menu li.sport.active,
 #region-menu ul.main-menu li.sport a {
@@ -59,7 +75,8 @@ body.page-taxonomy-type-sport .content-zone h1,
 	border-color: #008000;
 }
 
-body.page-taxonomy-type-rubriche .content-zone h1,
+body.page-taxonomy-type-rubriche .breadcrumb,
+body.page-taxonomy-type-rubriche .breadcrumb a,
 #block-firstpage-rubriche .block-title,
 #region-menu ul.main-menu li.rubriche.active,
 #region-menu ul.main-menu li.rubriche a {
@@ -67,7 +84,8 @@ body.page-taxonomy-type-rubriche .content-zone h1,
 	border-color: #0061a6;
 }
 
-body.page-taxonomy-type-cronaca .content-zone h1,
+body.page-taxonomy-type-cronaca .breadcrumb,
+body.page-taxonomy-type-cronaca .breadcrumb a,
 #block-firstpage-cronaca .block-title,
 #region-menu ul.main-menu li.cronaca.active,
 #region-menu ul.main-menu li.cronaca a {
@@ -75,7 +93,8 @@ body.page-taxonomy-type-cronaca .content-zone h1,
 	border-color: #d1008b;
 }
 
-body.page-taxonomy-type-attualità .content-zone h1,
+body.page-taxonomy-type-attualità .breadcrumb,
+body.page-taxonomy-type-attualità .breadcrumb a,
 #block-firstpage-attualita .block-title,
 #region-menu ul.main-menu li.attualita.active,
 #region-menu ul.main-menu li.attualita a {
@@ -83,7 +102,8 @@ body.page-taxonomy-type-attualità .content-zone h1,
 	border-color: #3246ab;
 }
 
-body.page-taxonomy-type-politica .content-zone h1,
+body.page-taxonomy-type-politica .breadcrumb,
+body.page-taxonomy-type-politica .breadcrumb a,
 #block-firstpage-politica .block-title,
 #region-menu ul.main-menu li.politica.active,
 #region-menu ul.main-menu li.politica a {
@@ -91,7 +111,8 @@ body.page-taxonomy-type-politica .content-zone h1,
 	border-color: #8f1ab6;
 }
 
-body.page-taxonomy-type-culturaspettacolo .content-zone h1,
+body.page-taxonomy-type-culturaspettacolo .breadcrumb,
+body.page-taxonomy-type-culturaspettacolo .breadcrumb a,
 #block-firstpage-culturaspettacolo .block-title,
 #region-menu ul.main-menu li.culturaspettacolo.active,
 #region-menu ul.main-menu li.culturaspettacolo a {
@@ -536,8 +557,9 @@ div.messages {
 
 /** SOCIAL BOX **/
 
-.social-box {
+.box {
 	height: 20px;
+	line-height: 1.429em; /* 20px */
 	padding: 5px 0 5px 15px;
 	background-color: #EFEFEF;
 	margin-bottom: 10px;
@@ -545,10 +567,10 @@ div.messages {
 	border-bottom : 1px dotted #DDDDDD;
 }
 
-.social-box .tw-share {
+.social .tw-share {
 	float: right;
 }
-.social-box .fb-like {
+.social .fb-like {
 	float: left;
 }
 

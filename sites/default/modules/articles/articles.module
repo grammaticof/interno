@@ -9,6 +9,11 @@ function articles_menu_alter(&$items) {
 		$items['taxonomy/term/%taxonomy_term']['file path'] = drupal_get_path('module', 'articles');
 		$items['taxonomy/term/%taxonomy_term']['file'] = 'articles.pages.inc';
 	}
+	if (!empty($items['taxonomy/term/%taxonomy_term/feed'])) {
+		$items['taxonomy/term/%taxonomy_term/feed']['page callback'] = 'articles_term_feed';
+		$items['taxonomy/term/%taxonomy_term/feed']['file path'] = drupal_get_path('module', 'articles');
+		$items['taxonomy/term/%taxonomy_term/feed']['file'] = 'articles.pages.inc';
+	}
 }
 
 /**
@@ -72,21 +77,35 @@ function articles_node_view_alter(&$build) {
 			break;
 		
 			case 'full': // full page view
-				
-				$type_links = array();
+
+
 				// tax type
+				$type_links = array();
 				if (isset($build['field_type'])) {
 					hide($build['field_type']);
-
 					$tid_parents = array_reverse(taxonomy_get_parents_all($build['field_type']['#items'][0]['tid']));
 					foreach ($tid_parents as $i => $term_data)
 						$type_links[$term_data->tid] = l($term_data->name, 'taxonomy/term/'.$term_data->tid);
 				}
 				
+				// tax tags
+				if (isset($build['field_tags'])) {
+					hide($build['field_tags']);
+					$tags_links = array();
+					foreach($build['field_tags']['#items'] as $item) {
+						$term = $item['taxonomy_term'];
+						$tags_links[$term->tid] = l($term->name, 'taxonomy/term/'.$term->tid);
+					}
+					$build['field_tags_custom'] = array(
+						'#markup' => '<div class="box tags">'.t('tags:').' '.implode(', ',$tags_links).'</div>',
+						'#weight' => $build['field_tags']['#weight'],
+					);
+				}
+
 				$date = format_date($build['#node']->created, 'medium');
 				$name = theme('username', array('account' => $build['#node']));
 				$tax_type = implode(' / ', $type_links);
-				
+
 				$build['submitted']['#markup'] = '<div class="submitted"><span class="author">'.$name.' in '.$tax_type.'</span><span class="date">'.$date.'</span></div>';
 				$build['submitted']['#weight'] = -10;
 				
@@ -98,6 +117,8 @@ function articles_node_view_alter(&$build) {
 					if ($build['field_location'][0]['#type'] == 'link')
 						$build['body'][0]['#markup'] = l($build['field_location'][0]['#title'].' - ', $build['field_location'][0]['#href'], array('attributes'=>array('class'=>array('field-location')))).$build['body'][0]['#markup'];
 				}
+				
+
 			break;
 		
 			case 'teaser': // teaser view
@@ -117,7 +138,11 @@ function articles_node_view_alter(&$build) {
 				// hide the read more button.
 				hide($build['links']['node']);
 			break;
-		
+			
+			case 'rss': // full page view
+				
+			break;
+			
 		}
 	}
 }
