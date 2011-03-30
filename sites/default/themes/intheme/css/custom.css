@@ -20,21 +20,26 @@ OTHERS #066ec9 #4a7801 #333
 	float: right;
 }
 
+#region-menu {
+	z-index: 1;
+	position: relative;
+	padding-bottom: 1em;
+}
+
 #region-menu ul.main-menu {
 	background: none;
 	border: 0;
-	padding: 0;
-	margin-bottom: 1.5em;
 	font-size: 1em;
 	font-family: "Futura Book", "Futura Light", "Futura", "Futura Medium", "FuturaMedium", "Gill Sans", "Helvetica", "Arial", sans-serif;
+
 }
 
 #region-menu ul.main-menu li {
-	padding: 0 5px;
 	border-bottom: 3px solid #EFEFEF;
+	background: none;
 }
 
-#region-menu ul.main-menu li.home.active,
+#region-menu ul.main-menu li.home.sf-breadcrumb,
 #region-menu ul.main-menu li.home a {
 	color: #d61d00;
 	border-color: #d61d00;
@@ -70,6 +75,7 @@ body.page-taxonomy-type-sport .breadcrumb,
 body.page-taxonomy-type-sport .breadcrumb a,
 #block-firstpage-sport .block-title,
 #region-menu ul.main-menu li.sport.active,
+#region-menu ul.main-menu li.sport.active-trail,
 #region-menu ul.main-menu li.sport a {
 	color: #008000;
 	border-color: #008000;
@@ -115,6 +121,7 @@ body.page-taxonomy-type-culturaspettacolo .breadcrumb,
 body.page-taxonomy-type-culturaspettacolo .breadcrumb a,
 #block-firstpage-culturaspettacolo .block-title,
 #region-menu ul.main-menu li.culturaspettacolo.active,
+#region-menu ul.main-menu li.culturaspettacolo.active-trail,
 #region-menu ul.main-menu li.culturaspettacolo a {
 	color: #ad532f;
 	border-color: #ad532f;
@@ -345,6 +352,9 @@ body.page-taxonomy .node.first .field-type-media {
 	/* float: left;*/
 	display: inline-block;
 	margin: 0 5px 0 0;
+	/* For IE 7 */
+	zoom: 1;
+	*display: inline;
 }
 
 .article.full-view a.field-location {
@@ -402,6 +412,9 @@ body.page-taxonomy .node.first .field-type-media {
 	position: relative;
 	padding: 2px 0;
 	margin: 0;
+	/* For IE 7 */
+	zoom: 1;
+	*display: inline;
 }
 
 #user-toolbar ul li a {
@@ -534,6 +547,7 @@ ul.links li.disqus_comments_num a:hover {
 	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000);
 	/* For IE 8*/
 	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000)";
+	filter: alpha(opacity=60);
 }
 
 /** END: EFFECTS **/

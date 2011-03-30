@@ -9,10 +9,10 @@
       'cse-search-box');
   });
 </script>
-<form action="" id="cse-search-box">
+<form action="<?php print url('gsearch/result', array('absolute' => TRUE)); ?>" id="cse-search-box">
   <div>
-    <input type="hidden" name="cx" value="005171206513133717924:kcnq9zomqqc" />
-    <input type="hidden" name="cof" value="FORID:10" />
+   <input type="hidden" name="cx" value="005171206513133717924:kcnq9zomqqc" />
+    <input type="hidden" name="cof" value="FORID:9" />
     <input type="hidden" name="ie" value="UTF-8" />
     <input type="text" name="as_q" id="q" autocomplete="off" size="20" />
     <input type="submit" name="sa" value="Cerca" />

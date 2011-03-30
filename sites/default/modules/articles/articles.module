@@ -171,9 +171,8 @@ function articles_node_view_alter(&$build) {
  */
 function taxonomy_select_all_nodes($tid, $pager = TRUE, $limit = FALSE, $max_depth = NULL, $order = array('t.sticky' => 'DESC', 't.created' => 'DESC')) {
 
-	if (!variable_get('taxonomy_maintain_index_table', TRUE)) {
+	if (!variable_get('taxonomy_maintain_index_table', TRUE))
 		return array();
-	}
 	
 	$term = taxonomy_term_load($tid);
 	
