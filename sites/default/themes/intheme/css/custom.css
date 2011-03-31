@@ -29,7 +29,7 @@ OTHERS #066ec9 #4a7801 #333
 #region-menu ul.main-menu {
 	background: none;
 	border: 0;
-	font-size: 1em;
+	font-size: 0.929em;
 	font-family: "Futura Book", "Futura Light", "Futura", "Futura Medium", "FuturaMedium", "Gill Sans", "Helvetica", "Arial", sans-serif;
 
 }
@@ -39,7 +39,7 @@ OTHERS #066ec9 #4a7801 #333
 	background: none;
 }
 
-#region-menu ul.main-menu li.home.sf-breadcrumb,
+#region-menu ul.main-menu li.home.active,
 #region-menu ul.main-menu li.home a {
 	color: #d61d00;
 	border-color: #d61d00;
@@ -177,7 +177,7 @@ a.contextual-links-trigger:visited {
 /** GENERAL STYLE **/
 body {
 	font-size: 14px;
-	font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+	font-family: "Verdana","Helvetica Neue", "Helvetica", "Arial", sans-serif;
 	text-transform: normal;
 	word-wrap: break-word;
 }
@@ -274,6 +274,12 @@ body.page-taxonomy .node .field-type-media img {
 	border: 2px solid #DDDDDD;
 	padding: 0;
 	margin: 5px;
+}
+
+body.page-taxonomy .node.first .field-type-media img {
+	border: 0;
+	padding: 0;
+	margin: 0;	
 }
 
 body.page-taxonomy .node.first .field-type-media {
@@ -572,7 +578,8 @@ div.messages {
 /** SOCIAL BOX **/
 
 .box {
-	height: 20px;
+	min-height: 23px;
+	position: relative
 	line-height: 1.429em; /* 20px */
 	padding: 5px 0 5px 15px;
 	background-color: #EFEFEF;

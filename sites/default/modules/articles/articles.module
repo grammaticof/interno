@@ -78,7 +78,6 @@ function articles_node_view_alter(&$build) {
 		
 			case 'full': // full page view
 
-
 				// tax type
 				$type_links = array();
 				if (isset($build['field_type'])) {

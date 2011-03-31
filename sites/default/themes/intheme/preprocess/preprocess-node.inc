@@ -20,8 +20,6 @@ if ($vars['node']->type == 'article') {
 		// add 'first' 'second' 'third' class
 		case 'teaser':
 			
-
-			
 			if (!$vars['is_front']) {
 				if (arg(0) == 'taxonomy' && arg(1) == 'term' && is_numeric(arg(2))) {
 					if ($vars['id'] == 1) {

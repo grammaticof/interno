@@ -36,13 +36,17 @@ function articles_term_page($term) {
 	if ($nids) {
 		$nodes = node_load_multiple($nids);
 		$build += node_view_multiple($nodes);
-
-		/* PAGER
-		$build['pager'] = array(
-			'#theme' => 'pager',
-			'#weight' => 5,
-		);
-		//*/
+		
+		/* only the first one big */
+		$first = TRUE;
+		foreach ($nodes as $nid => $node) {
+			if ($first) {
+				$first = FALSE;
+				if (!empty($node->field_media))
+					$build['nodes'][$nid]['field_media'] = field_view_field('node', $nodes[$nid], 'field_media', 'full');
+					$build['nodes'][$nid]['field_media']['#weight'] = 1;
+			}
+		}
 	}
 	else {
 		$build['no_content'] = array(

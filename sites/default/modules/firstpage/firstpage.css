@@ -3,14 +3,14 @@
 .block-firstpage .node {
 	margin: 10px;
 	border: 0;
-	font-size: 14px;
-	line-height: 16px;
 	border-bottom : 1px solid #DDDDDD;
 	padding: 0;
 }
 
-.block-firstpage .content {
+.block-firstpage .content .field-name-field-short{
 	padding-bottom : 5px;
+	font-size: 0.857em;
+	line-height: 1.333em;
 }
 
 .block-firstpage ul.links li {
@@ -25,8 +25,8 @@
 	color: red;
 }
 
-.block-firstpage .node h2 {
-	font-size: 1.143em;
+.block-firstpage .node h2.node-title {
+	font-size: 1em;
 	margin-bottom: 5px;
 	line-height: 1.143em;
 }
