@@ -41,4 +41,8 @@ function template_preprocess_user_toolbar(&$vars) {
 	}
 	
 	$vars['toolbar_links'] = theme('item_list', array('items' => $items));
+
+	if (module_exists('gsearch'))
+		$vars['google_search'] = theme('gsearch_form');
+	
 }

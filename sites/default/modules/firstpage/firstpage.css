@@ -5,6 +5,7 @@
 	border: 0;
 	border-bottom : 1px solid #DDDDDD;
 	padding: 0;
+	position: relative;
 }
 
 .block-firstpage .content .field-name-field-short{
@@ -75,11 +76,68 @@
 
 /** END: FIELDS **/
 
-
 .block-firstpage .section-link {
 	text-align: right;
 	font-weight: bold;
 	font-size: 0.786em;
 	margin-right: 10px;
+}
+
+#block-firstpage-rubriche {
+	border-color: #EFEFEF;
+	background-color: #EFEFEF;
+}
+
+#block-firstpage-rubriche .node a {
+	font-size: 0.929em;
+	/* text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.3); */
+}
+
+
+
+#block-firstpage-rubriche .node h2 {
+	width: 210px;
+	float: right;
+}
+
+#block-firstpage-rubriche .node,
+#block-firstpage-culturaspettacolo .node {
+	margin: 5px 10px;
+	padding: 0 0 5px 0;
+}
+
+#block-firstpage-rubriche .node img,
+#block-firstpage-culturaspettacolo .node img {
+	border: 0;
+	float: left;
+}
+
+/* culturaspettacolo */
+
+#block-firstpage-culturaspettacolo {
+	border-color: #FFEFEF;
+	background-color: #FFEFEF;
+}
+
+#block-firstpage-culturaspettacolo .node {
+	height: 80px;
+}
+
+#block-firstpage-culturaspettacolo .node h2 a {
+	font-size: 0.857em;
+	color: #FFFFFF;
+}
+
+#block-firstpage-culturaspettacolo .node h2 {
+	position: absolute;
+	padding: 5px;
+	width: 268px;
+	bottom: 0;
+	left: 3px;
+	background: rgb(0, 0, 0);
+	background: rgba(0, 0, 0, 0.6);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000);
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000)";
+	filter: alpha(opacity=60);
 }
 

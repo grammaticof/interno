@@ -29,7 +29,7 @@ OTHERS #066ec9 #4a7801 #333
 #region-menu ul.main-menu {
 	background: none;
 	border: 0;
-	font-size: 0.929em;
+	font-size: 1em;
 	font-family: "Futura Book", "Futura Light", "Futura", "Futura Medium", "FuturaMedium", "Gill Sans", "Helvetica", "Arial", sans-serif;
 
 }
@@ -203,7 +203,7 @@ div#page {
 
 h1 {
 	color: #4A7389;
-	font-family: 'Georgia',serif;
+	font-family: 'Georgia', serif;
 	font-size: 2.571em; /* 36px */
 	font-style: normal;
 	font-variant: normal;

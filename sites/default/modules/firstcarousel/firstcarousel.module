@@ -52,7 +52,7 @@ function firstcarousel_block_info() {
 	
 	$blocks['carousel'] = array(
 		'info' => 'Firstpage Carousel',
-		'cache' => DRUPAL_NO_CACHE,
+		'cache' => DRUPAL_CACHE_GLOBAL,
 	);
 	
 	return $blocks;

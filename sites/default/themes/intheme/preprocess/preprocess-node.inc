@@ -28,11 +28,13 @@ if ($vars['node']->type == 'article') {
 						$vars['node_attributes']['class'][] = 'alpha';
 						$vars['node_attributes']['class'][] = 'omega';
 					}
-					elseif ($vars['id'] == 2) {
+					elseif (in_array($vars['id'], array(2, 8, 14))) {
+						$vars['node_attributes']['class'][] = 'column';
 						$vars['node_attributes']['class'][] = 'grid-7';
 						$vars['node_attributes']['class'][] = 'alpha';
 					}
-					elseif ($vars['id'] == 3) {
+					elseif (in_array($vars['id'], array(3, 9, 15))) {
+						$vars['node_attributes']['class'][] = 'column';
 						$vars['node_attributes']['class'][] = 'grid-7';
 						$vars['node_attributes']['class'][] = 'omega';
 					}

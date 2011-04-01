@@ -50,6 +50,5 @@
     <?php endif; ?>
   </div>
   <?php endif; ?>
-  <?php if(isset($google_search)) print $google_search; ?>
   <?php print $content; ?>
 </div>

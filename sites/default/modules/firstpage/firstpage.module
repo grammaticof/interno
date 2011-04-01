@@ -18,7 +18,6 @@ function firstpage_home() {
 	return '';
 }
 
-
 /**
  * Implements hook_block_info().
  */
@@ -32,7 +31,7 @@ function firstpage_block_info() {
 	foreach ($cat_array as $name => $descr) {
 		$blocks[$name] = array(
 			'info' => 'Firstpage ' . $descr,
-			'cache' => DRUPAL_NO_CACHE,
+			'cache' => DRUPAL_CACHE_GLOBAL,
 		);
 	}	
 	
@@ -64,6 +63,41 @@ function firstpage_block_view($block_name = '') {
 			if ($nids) {
 				$nodes = node_load_multiple($nids);
 				$build += node_view_multiple($nodes, 'firstpage');
+				
+				switch ($block_name) {
+					case 'culturaspettacolo':
+						foreach ($build['nodes'] as $nid => $node) {
+							// remove field_short
+							unset($build['nodes'][$nid]['field_short']);
+							
+							// alter the field_media image
+							if(isset($nodes[$nid]->field_media['und'][0])) {
+								$style_vars = array(
+									'path' => $nodes[$nid]->field_media['und'][0]->uri,
+									'style_name' => 'thumbnail_wide',
+								);
+								$image = theme('image_style', $style_vars);
+								$build['nodes'][$nid]['field_media'][0] = array('#markup' => $image);
+							}
+						}
+					break;
+					case 'Rubriche':
+						foreach ($nodes as $nid => $node) {
+							unset($build['nodes'][$nid]['field_short']);
+
+							if ($node->picture != 0) {
+								$style_vars = array(
+									'path' => file_load($node->picture)->uri,
+									'style_name' => 'square_thumbnail',
+								);
+								$image = theme('image_style', $style_vars);
+								$build['nodes'][$nid]['field_media'][0] = array('#markup' => $image);
+							}
+						}
+					break;
+					
+				}
+				
 				$build['link_section'] = array(
 					'#prefix' => '<div class="section-link">',
 					'#markup' => l(t('other of !type', array('!type' => $terms[$term_name]->name)), 'taxonomy/term/'.$terms[$term_name]->tid),
@@ -175,7 +209,6 @@ function _taxonomy_get_voc_vid_by_name($voc_name = '', $reset = FALSE) {
  * Implements hook_image_default_styles().
  */
 function firstpage_image_default_styles() {
-
 	$styles = array();
 
 	$styles['thumbnail_firstpage'] = array(
@@ -193,7 +226,20 @@ function firstpage_image_default_styles() {
 			),
 		),
 	);
-	
+	$styles['thumbnail_wide'] = array(
+		'effects' => array(
+			array(
+				'name' => 'image_scale_and_crop',
+				'data' => array(
+					'width' => 278,
+					'height' => 64,
+					'upscale' => 1,
+				),
+				'weight' => 0,
+			),
+		),
+	);
+
 	return $styles;
 }
 
