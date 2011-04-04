@@ -64,9 +64,9 @@ function articles_node_view_alter(&$build) {
 					hide($build['field_location']);
 						
 					if ($build['field_location'][0]['#type'] == 'link')
-						$build['field_short'][0]['#markup'] = l($build['field_location'][0]['#title'], $build['field_location'][0]['#href'], array('attributes'=>array('class'=>array('field-location')))).$build['field_short'][0]['#markup'];
+						$build['field_short'][0]['#markup'] = l($build['field_location'][0]['#title'], $build['field_location'][0]['#href'], array('attributes'=>array('class'=>array('field-location')))). '<span class="red"> - </span>' .$build['field_short'][0]['#markup'];
 				}
-		
+
 				// add the time for todays articles.
 				if ($build['#node']->created > $today) {
 					$build['field_short'][0]['#markup'] = '<span class="time">'.

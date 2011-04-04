@@ -8,3 +8,28 @@ function custom_admin_init() {
 	drupal_add_js(drupal_get_path('module', 'custom_admin') . '/custom_admin.js');
 }
 
+/**
+ * Implements hook_js_alter().
+ */
+function custom_admin_js_alter(&$javascript) {
+  uasort($javascript, 'drupal_sort_css_js');
+  $i = 0;
+  foreach ($javascript as $name => $script) {
+    $javascript[$name]['weight'] = $i++;
+    $javascript[$name]['group'] = JS_DEFAULT;
+    $javascript[$name]['every_page'] = FALSE;
+  }
+}
+ 
+/**
+ * Implements hook_css_alter().
+ */
+function custom_admin_css_alter(&$css) {
+  uasort($css, 'drupal_sort_css_js');
+  $i = 0;
+  foreach ($css as $name => $style) {
+    $css[$name]['weight'] = $i++;
+    $css[$name]['group'] = CSS_DEFAULT;
+    $css[$name]['every_page'] = FALSE;
+  }
+}

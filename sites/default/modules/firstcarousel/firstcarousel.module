@@ -196,13 +196,11 @@ function firstcarousel_image_default_styles() {
 		'effects' => array(
 			array(
 				'name' => 'image_scale_and_crop',
-
 				'data' => array(
-					'width' => 470,
+					'width' => 620,
 					'height' => 240,
-					'upscale' => 0,
+					'upscale' => 1,
 				),
-
 				'weight' => 0,
 			),
 		),

@@ -48,8 +48,6 @@ function firstpage_block_view($block_name = '') {
 	if (array_key_exists($block_name, $cat_array)) {
 		$build=array();
 		
-		drupal_add_css(drupal_get_path('module', 'firstpage').'/firstpage.css');
-
 		$limit = variable_get('node_article_'.$block_name.'_block_count', 5);
 		$term_name = $cat_array[$block_name];
 
@@ -95,12 +93,23 @@ function firstpage_block_view($block_name = '') {
 							}
 						}
 					break;
+					default:
+						$i = 0;
+						foreach ($build['nodes'] as $nid => $node) {
+							$i++;
+							if ($i > 2) {
+								unset($build['nodes'][$nid]['field_short']);
+								unset($build['nodes'][$nid]['field_media']);
+							}
+						}
+					break;
 					
 				}
 				
 				$build['link_section'] = array(
 					'#prefix' => '<div class="section-link">',
-					'#markup' => l(t('other of !type', array('!type' => $terms[$term_name]->name)), 'taxonomy/term/'.$terms[$term_name]->tid),
+					//'#markup' => l(t('vai a !type &raquo;', array('!type' => $terms[$term_name]->name)), 'taxonomy/term/'.$terms[$term_name]->tid, array('html' => TRUE)),
+					'#markup' => l('', 'taxonomy/term/'.$terms[$term_name]->tid, array('html' => TRUE)),
 					'#suffix' => '</div>',
 				);
 			}
