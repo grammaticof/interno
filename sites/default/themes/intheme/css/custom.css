@@ -73,21 +73,22 @@ blockquote {
 	width: 100%;
 }
 
+#region-menu ul.main-menu li a {
+	border:0;
+	color: #000000;
+	background: none;
+}
+
 #region-menu ul.main-menu li {
 	border-bottom: 3px solid #EFEFEF;
 	background: none;
 }
 
 #region-menu ul.main-menu li.active,
-#region-menu ul.main-menu li.active a {
+#region-menu ul.main-menu a.active,
+#region-menu ul.main-menu li.active-trail {
 	color: #d61d00;
 	border-color: #d61d00;
-}
-
-#region-menu ul.main-menu li a {
-	border:0;
-	color: #000000;
-	background: none;
 }
 
 #region-menu ul.main-menu li a:hover {
@@ -327,24 +328,30 @@ body.page-taxonomy .node.first .field-type-media {
 /** USER TOOLBAR **/
 
 #user-toolbar {
-	height: 20px;
-	font-size: 0.8em;
+	height: 26px;
+	padding: 3px;
+	background: #000000;
+	-moz-box-shadow: 0 3px 10px black;
+	-webkit-box-shadow: 0 3px 10px black;
+	box-shadow: 0 3px 10px black;
+	filter: progid:DXImageTransform.Microsoft.Shadow(color=black, direction='180', strength='10');
+	-ms-filter: "progid:DXImageTransform.Microsoft.Shadow(color=black, direction='180', strength='10')";
+	z-index: 10;
 }
 
 #user-toolbar ul {
 	margin: 0;
+	height: 26px;
+	padding: 3px;
+	line-height: 20px;
 }
 
 #user-toolbar ul li {
 	color: #FFFFFF;
 	float: right;
-	display: inline-block;
+	display: inline;
 	position: relative;
-	padding: 2px 0;
-	margin: 0;
-	/* For IE 7 */
-	zoom: 1;
-	*display: inline;
+	margin: 0 5px 0 0;
 }
 
 #user-toolbar ul li a {
@@ -380,7 +387,34 @@ body.page-taxonomy .node.first .field-type-media {
 #user-toolbar-login .form-actions input {
 	cursor: pointer;
 	color: #FFFFFF;
-	line-height: 25px;
+	line-height: 30px;
+}
+
+#google-search {
+	float: right;
+	width: 180px;
+	height: 16px;
+	margin: 5px;
+	position: relative;
+}
+
+#google-search form {
+	display: inline;
+}
+
+#google-search input.searchbox {
+	width: 180px;
+	height: 20px;
+}
+
+#google-search input.searchbox_submit {
+	border:0px; /*important*/
+	background-color:transparent; /*important*/
+	position:absolute; /*important*/
+	top:2px;
+	right:5px;
+	width:16px;
+	height:16px;	
 }
 
 /** END: USER TOOLBAR **/
@@ -418,22 +452,6 @@ body.page-taxonomy .node.first .field-type-media {
 	background: url('../images/iconic/gray_dark/x_11x11.png') no-repeat center left;
 }
 
-#main-content ul.links li.disqus_comments_num a,
-ul.links li.disqus_comments_num a {
-	color: #AAACAF;
-	font-size: 11px;
-	font-weight: bold;
-	padding: 0 0 0 15px;
-	background: url('../images/iconic/gray_light/comment_stroke_12x11.png') no-repeat center left;
-	text-decoration: none;
-	border: 0;
-}
-
-#main-content ul.links li.disqus_comments_num a:hover,
-ul.links li.disqus_comments_num a:hover {
-	background: url('../images/iconic/gray_light/comment_fill_12x11.png') no-repeat center left;	
-}
-
 #user-toolbar ul li a.logout-link,
 #user-toolbar ul li a.login-link {
 	display: block;
@@ -441,8 +459,8 @@ ul.links li.disqus_comments_num a:hover {
 }
 
 #user-toolbar ul li a.logout-link {
-	height: 16px;
-	width: 16px;
+	height: 12px;
+	width: 12px;
 	background: url('../images/iconic/gray_light/x_alt_12x12.png') no-repeat;
 }
 
@@ -703,8 +721,8 @@ div.messages {
 /* culturaspettacolo */
 
 #block-firstpage-culturaspettacolo {
-	border-color: #FFEFEF;
-	background-color: #FFEFEF;
+	border-color: #EFEFEF;
+	background-color: #EFEFEF;
 }
 
 #block-firstpage-culturaspettacolo .node {

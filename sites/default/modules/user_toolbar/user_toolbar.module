@@ -32,7 +32,10 @@ function user_toolbar_theme() {
 function template_preprocess_user_toolbar(&$vars) {
 	global $user;
 	
-	$items = array();
+	$items[] = l(t('segnala/contatta'), 'contact', array('attributes' => array('class' => array('contact-link'))));
+	
+	
+	
 	if ($user->uid > 0) { // logged user
 		$items[] = l('logout', 'user/logout', array('attributes' => array('class' => array('logout-link'))));
 	}
