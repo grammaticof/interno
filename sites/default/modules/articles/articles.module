@@ -112,9 +112,14 @@ function articles_node_view_alter(&$build) {
 				
 				if (!empty($build['field_location'])) {
 					hide($build['field_location']);
+					
+					if ($build['field_location'][0]['#type'] == 'link') {
+						$dash = '<span class="red"> - </span>';
+						$location = l($build['field_location'][0]['#title'], $build['field_location'][0]['#href'],
+							array('attributes'=>array('class'=>array('field-location'))));
 						
-					if ($build['field_location'][0]['#type'] == 'link')
-						$build['body'][0]['#markup'] = l($build['field_location'][0]['#title'].' - ', $build['field_location'][0]['#href'], array('attributes'=>array('class'=>array('field-location')))).$build['body'][0]['#markup'];
+						$build['body'][0]['#markup'] = preg_replace('/<p>/', '<p>'.$location.$dash, $build['body'][0]['#markup'], 1);
+					}
 				}
 				
 

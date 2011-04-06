@@ -93,35 +93,11 @@ function migrate_batch_nodes(&$context) {
 
 	foreach ($result as $row) {
 		$node = (object) array(
-			'type' => 'article',
 			'nid' => $row->nid,
-			'vid' => $row->nid,
-			'uid' => $row->uid,
-			'status' => $row->status,
-			'language' => LANGUAGE_NONE,
-			'created' => $row->created,
-			'changed' => $row->changed,
-			'comment' => COMMENT_NODE_HIDDEN,
-			'promote' => 1,
-			'title' => $row->title,
-			'body' => array(LANGUAGE_NONE => array(array('value' => $row->body, 'summary' => '', 'format' => 'filtered_html'))),
-			'teaser' => '',
-			'log' => '',
 		);
 
 		db_set_active('legacy'); // Switch databases.
 
-		// Migrate story-specific fields.
-		if ($node->type == 'article') {
-			$query = db_select('content_type_story', 'f');
-			$query->fields('f');
-			$query->condition('vid', $row->vid);
-			$story_results = $query->execute();
-			foreach ($story_results as $story) {
-				$node->field_short[LANGUAGE_NONE][] = array('value' => $story->field_sommarietto_value);
-			}
-		}
-		
 		// Migrate taxonomies.
 		$query = db_select('term_node', 'tn');
 		$query->join('term_data', 'td', 'tn.tid = td.tid');
@@ -130,14 +106,7 @@ function migrate_batch_nodes(&$context) {
 		$query->condition('tn.nid', $row->nid);
 		$term_results = $query->execute();
 
-
 		db_set_active('default');
-		$tax_map = array(
-			4 => 2, //'old' => 'new'
-			5 => 1,
-			7 => 3,
-			10 => 4,
-		);
 
 		foreach ($term_results as $term) {
 			$tid = db_query('SELECT tid FROM {taxonomy_term_data} WHERE name=:term_name AND vid=:voc_vid', 
@@ -158,28 +127,13 @@ function migrate_batch_nodes(&$context) {
 			}
 
 			switch ($term->vid) {
-				case 4: // old Type.
-					$node->field_type[LANGUAGE_NONE][0]['tid'] = $tid;
-					break;
 				case 5: // old Tags.
 					$node->field_tags[LANGUAGE_NONE][] = array('tid' => $tid);
-					break;
-				case 7: // old Location
-					$node->field_location[LANGUAGE_NONE][] = array('tid' => $tid);
-					break;
-				case 10: // old Rubric
-					$node->field_rubric[LANGUAGE_NONE][] = array('tid' => $tid);
-					break;
+				break;
 			}
 			
 		}		
 
-		
-		// To maintain the same NID, use drupal_write_record() first, then save.
-		db_set_active('default');
-		node_delete($node->nid);
-		drupal_write_record('node', $node);
-		drupal_write_record('node_revision', $node);
 		node_save($node);
 		
 		$context['message'] = t('Importing node @title', array('@title' => $node->title));

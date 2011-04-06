@@ -22,7 +22,6 @@ INSERT INTO drupal7.field_data_field_short (entity_type, bundle, deleted, entity
 TRUNCATE TABLE drupal7.field_revision_field_short;
 INSERT INTO drupal7.field_revision_field_short (entity_type, bundle, deleted, entity_id, revision_id, language, delta, field_short_value) SELECT DISTINCT 'node' AS entity_type, 'article' AS bundle, 0 AS deleted, nr.nid AS entity_id, nr.nid AS revision_id, 'und' AS language, 0 AS delta, nr.field_sommarietto_value AS field_short_value FROM interno.node n INNER JOIN interno.content_type_story nr ON n.vid = nr.vid WHERE n.type = 'story' ORDER BY n.vid DESC;
 
-
 #taxonomy
 TRUNCATE TABLE drupal7.taxonomy_term_data;
 TRUNCATE TABLE drupal7.taxonomy_term_hierarchy;
@@ -75,4 +74,6 @@ INSERT INTO drupal7.field_revision_field_rubric (entity_type, bundle, deleted, e
 # url alias
 TRUNCATE TABLE drupal7.url_alias;
 INSERT INTO drupal7.url_alias (source, alias, language) SELECT ua.src AS source, ua.dst AS alias, 'und' AS language FROM  interno.url_alias ua WHERE  ua.dst NOT LIKE '%feed%' AND ua.dst NOT LIKE 'eventi/%' AND ua.dst NOT LIKE 'administration' AND ua.dst NOT LIKE 'utente/%';
+
+
 

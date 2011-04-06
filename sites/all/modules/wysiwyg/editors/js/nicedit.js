@@ -1,4 +1,3 @@
-// $Id: nicedit.js,v 1.5 2010/02/07 14:36:00 sun Exp $
 (function($) {
 
 /**

@@ -153,6 +153,7 @@ div.contextual-links-active {
 a.contextual-links-trigger:link,
 a.contextual-links-trigger:visited {
 	color: #FFFFFF;
+	text-indent: -9999px;
 }
 
 /** END: CONTEXTUAL LINKS **/
@@ -209,6 +210,7 @@ body.page-taxonomy .node.first .field-type-media img {
 
 body.page-taxonomy .node.first .field-type-media {
 	float: left;
+	margin: 0 10px 5px 0;
 }
 
 /** END TERM SECTIONS **/
@@ -235,19 +237,37 @@ body.page-taxonomy .node.first .field-type-media {
 	float: right;
 }
 
-.article.full-view a.field-location,
 .article.full-view .field-name-body {
-	font-size: 1.071em; /* 15px */
-	line-height: 24px;
+	font-size: 1.25em; /* 15px */
+	line-height: 1.5em;
+}
+
+.article.full-view img{
+	float: left;
+	display: block;
+	clear: left;
+	margin: 5px 10px 10px 0; 
+}
+
+.article.full-view .field-name-body iframe {
+	width: 550px;
+	height: 340px;
+	margin: 5px 0;
+}
+
+.article.full-view a.field-location {
+	text-transform: uppercase;
+	font-weight: bold;
+	color : #000000;
 }
 
 .article.full-view .field-name-field-short {
 	display: block;
 	color: #797979;
 	font-family: 'Georgia-Italic', Georgia, "Times New Roman", Times, serif;
-	font-size: 18px;
+	font-size: 1.5em;
 	font-style: italic;
-	line-height: 25px;
+	line-height: 1.5em;
 	text-align: left;
 	margin-bottom: 5px;
 	padding: 0;
@@ -260,14 +280,7 @@ body.page-taxonomy .node.first .field-type-media {
 	font-style: normal;
 }
 
-.article.full-view .field-name-field-media {
-	float: left;
-	padding: 0;
-}
-
 .article.full-view .field-name-field-tags {
-	font-size: 0.857em; /* 12px */
-	line-height: 0.857em;
 	padding: 5px 0 5px 15px;
 	background-color: #EFEFEF;
 	border-top : 1px dotted #DDDDDD;
@@ -283,32 +296,17 @@ body.page-taxonomy .node.first .field-type-media {
 	/* float: left;*/
 	display: inline-block;
 	margin: 0 5px 0 0;
-	/* For IE 7 */
-	zoom: 1;
-	*display: inline;
 }
-
-.article.full-view a.field-location {
-	margin-right: 5px;
-	font-variant: small-caps;
-	float: left;
-}
-
-.article.full-view a.field-location:hover {
-	text-decoration: none;
-}
-
 
 .article.full-view .fb-comments-title {
 	font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
 	color: #3B5998;
-	font-size: 1.286em;
+	font-size: 1.333em;
 	margin: 20px 0;
 }
 
-
 .article.full-view .field-type-node-reference .field-item {
-	line-height: 1.571em; /* 22px */
+	line-height: 1.833em; /* 22px */
 }
 
 /** END: NODE ARTICLES FULL **/
