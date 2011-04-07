@@ -148,12 +148,25 @@ function articles_node_view_alter(&$build) {
 			break;
 			
 			case 'rss': // full page view
+				$location = '';
+				$text = '';
+				
+				if (isset($build['field_location'][0])) {
+					$location = $build['field_location'][0]['#markup'] . ' - ';
+					hide($build['field_location']);
+				}
+				
+				if (isset($build['field_short'][0]))
+					$text = $build['field_short'][0]['#markup'];
+				
+				unset($build['field_short']);
+				$build['field_short']['#markup'] = $location . $text;
 				
 			break;
-			
 		}
 	}
 }
+
 
 /**
  * Return nodes attached to a term and the descendant across all field instances.
