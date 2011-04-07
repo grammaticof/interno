@@ -105,13 +105,6 @@ function firstpage_block_view($block_name = '') {
 					break;
 					
 				}
-				
-				$build['link_section'] = array(
-					'#prefix' => '<div class="section-link">',
-					//'#markup' => l(t('vai a !type &raquo;', array('!type' => $terms[$term_name]->name)), 'taxonomy/term/'.$terms[$term_name]->tid, array('html' => TRUE)),
-					'#markup' => l('', 'taxonomy/term/'.$terms[$term_name]->tid, array('html' => TRUE)),
-					'#suffix' => '</div>',
-				);
 			}
 			else {
 				$build['no_content'] = array(
@@ -123,7 +116,7 @@ function firstpage_block_view($block_name = '') {
 		}
 		
 		$block = array(
-			'subject' => $cat_array[$block_name],
+			'subject' => l($cat_array[$block_name], 'taxonomy/term/'.$terms[$term_name]->tid, array('html' => TRUE)),
 			'content' => $build,
 		);
 		

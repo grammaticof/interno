@@ -62,7 +62,6 @@ blockquote {
 #region-menu {
 	z-index: 1;
 	position: relative;
-	padding-bottom: 1em;
 	font-size: 1.167em; /* 14px */
 	font-family: "Futura Book", "Futura Light", "Futura", "Futura Medium", "FuturaMedium", "Gill Sans", "Helvetica", "Arial", sans-serif;
 }
@@ -75,6 +74,7 @@ blockquote {
 
 #region-menu ul.main-menu li a {
 	border:0;
+	padding: .75em;
 	color: #000000;
 	background: none;
 }
@@ -172,6 +172,7 @@ body.page-taxonomy .node.over {
 }
 
 body.page-taxonomy .submitted {
+	margin-top: 10px;
 	text-align: right;
 }
 
@@ -326,8 +327,7 @@ body.page-taxonomy .node.first .field-type-media {
 /** USER TOOLBAR **/
 
 #user-toolbar {
-	height: 26px;
-	padding: 3px;
+	height: 24px;
 	background: #000000;
 	-moz-box-shadow: 0 3px 10px black;
 	-webkit-box-shadow: 0 3px 10px black;
@@ -376,6 +376,7 @@ body.page-taxonomy .node.first .field-type-media {
 
 #user-toolbar-login .form-item input {
 	width: 190px;
+	background: #616161 url(search_bg.gif) no-repeat;		
 }
 
 #user-toolbar-login .form-actions {
@@ -386,13 +387,13 @@ body.page-taxonomy .node.first .field-type-media {
 	cursor: pointer;
 	color: #FFFFFF;
 	line-height: 30px;
+
 }
 
 #google-search {
 	float: right;
 	width: 180px;
-	height: 16px;
-	margin: 5px;
+	margin: 2px;
 	position: relative;
 }
 
@@ -402,7 +403,7 @@ body.page-taxonomy .node.first .field-type-media {
 
 #google-search input.searchbox {
 	width: 180px;
-	height: 20px;
+	height: 14px;
 }
 
 #google-search input.searchbox_submit {
@@ -416,21 +417,6 @@ body.page-taxonomy .node.first .field-type-media {
 }
 
 /** END: USER TOOLBAR **/
-
-/** PAGE TITLE **/
-	
-.page-contact h1.title {
-	font-family: Delicious, Verdana, Arial;
-	text-align: center;
-}
-
-/** END: PAGE TITLE **/
-
-/** RECAPTCHA **/
-
-
-
-/** END: RECAPTCHA **/
 
 /** ICONS **/
 
@@ -558,7 +544,7 @@ div.messages {
 	margin-bottom: 4px;
 	padding-bottom: 5px;
 	border-bottom: 1px solid #EFEFEF;
-	line-height: 1.143em;
+	line-height: 1.25em;
 }
 
 /** END: RELEVANT-CONTENT **/
@@ -583,8 +569,6 @@ div.messages {
 }
 
 #block-articles-main-footer .cc {
-	font-size: 0.857em;
-	line-height: 1.143em;
 	background: url('../images/logo-creative-commons.gif') left center no-repeat;
 	padding-left: 50px;
 	height: 40px;
@@ -598,6 +582,10 @@ div.messages {
 /** END : FOOTER **/
 
 /** FIRSTPAGE BLOCKS **/
+
+.block-firstpage {
+	margin-bottom: 25px;
+}
 
 .block-firstpage .node {
 	margin: 10px;
@@ -631,10 +619,10 @@ div.messages {
 }
 
 .block-firstpage {
-	border: 1px solid #DDDDDD;
+	/* border: 1px solid #DDDDDD;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
-	border-radius: 5px;
+	border-radius: 5px; */
 }
 
 .block-firstpage h2.block-title{
@@ -642,13 +630,25 @@ div.messages {
 	font-size: 1.071em;
 	text-align: right;
 	font-variant: small-caps;
-	padding: 0 5px;
+	padding: 5px 10px;
 }
+
+.block-firstpage h2.block-title a {
+	color: #000000;
+	padding-right: 16px;
+	background-image: url('../images/iconic/gray_light/arrow_right_alt1_12x12.png');
+	background-repeat:no-repeat;
+	background-position:center right;
+}
+
+.block-firstpage h2.block-title a:hover {
+	background-image: url('../images/iconic/red/arrow_right_alt1_12x12.png');	
+}
+
 
 .block-firstpage .node img {
 	float: right;
-	margin-left: 3px;
-	border: 2px solid #DDDDDD;
+	margin-left: 5px;
 }
 
 /** END: FIRSTPAGE BLOCKS **/
@@ -671,22 +671,7 @@ div.messages {
 
 /** END: FIELDS **/
 
-.block-firstpage .section-link a {
-	float: right;
-	margin: 0 10px 5px 0;
-	display: block;
-	height: 12px;
-	width: 12px;
-	background-image: url('../images/iconic/gray_light/arrow_right_alt1_12x12.png');
-	background-repeat:no-repeat;
-	background-position:center right;
-	font-weight: bold;
-	color: #404040;
-}
 
-.block-firstpage .section-link a:hover {
-	background-image: url('../images/iconic/red/arrow_right_alt1_12x12.png');	
-}
 
 /* rubriche */
 
@@ -726,6 +711,7 @@ div.messages {
 #block-firstpage-culturaspettacolo .node {
 	height: 80px;
 	border-bottom: 0;
+	background-color: #FFFFFF;
 }
 
 #block-firstpage-culturaspettacolo .node h2 a {
@@ -746,4 +732,61 @@ div.messages {
 	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000)";
 	filter: alpha(opacity=60);
 }
+
+/** FORMS **/
+
+.page-contact h1 {
+	font-family: Delicious, Verdana, Arial;
+	text-align: center;
+}
+
+.region-content form label {
+	font-size: 1.667em;
+	margin-bottom: 5px;
+}
+
+.region-content .form-type-checkbox label {
+	font-size: 1em;
+	line-height: 1em;
+}
+
+.region-content form {
+	width: 500px;
+	margin: auto;
+}
+
+.region-content form .form-type-textfield input,
+.region-content form .form-type-textarea input {
+	font-size: 1.667em;
+	margin-bottom: 10px;
+	width: 100%;
+}
+
+.region-content form .form-actions {
+	text-align: center;
+}
+
+.region-content form .form-actions input {
+	font-size: 1.667em;
+	line-height: 1em;
+	margin-top: 20px;
+	padding: 0 10px;
+	cursor: pointer; 
+}
+
+.region-content form .description {
+	font-size: 1.083em;
+	background-color: #F2F2F2;
+	border: 1px solid #DDDDDD;
+	padding: 5px;
+	margin: 5px 0 0 0;
+}
+
+#recaptcha_table {
+	margin: auto!important;
+}
+
+/** END: FORMS **/
+
+
 

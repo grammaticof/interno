@@ -130,8 +130,12 @@ function articles_node_view_alter(&$build) {
 				if (!empty($build['field_location'])) {
 					hide($build['field_location']);
 						
-					if ($build['field_location'][0]['#type'] == 'link')
-						$build['field_short'][0]['#markup'] = l($build['field_location'][0]['#title'], $build['field_location'][0]['#href'], array('attributes'=>array('class'=>array('field-location')))).' '.$build['field_short'][0]['#markup'];
+					if ($build['field_location'][0]['#type'] == 'link') {
+						$dash = '<span class="red"> - </span>';
+						$location = l($build['field_location'][0]['#title'], $build['field_location'][0]['#href'], array('attributes'=>array('class'=>array('field-location'))));
+						
+						$build['field_short'][0]['#markup'] = $location.$dash.$build['field_short'][0]['#markup'];
+					}
 				}
 
 				$date = format_date($build['#node']->created, 'medium');
