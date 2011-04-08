@@ -30,7 +30,6 @@ function firstpage_home_feed() {
 
 	$select = db_select('node', 'n')
 		->fields('n', array('nid', 'sticky', 'created'))
-		// ->condition('promote', 1)
 		->condition('status', 1)
 		->condition('type', 'article')
 		->orderBy('sticky', 'DESC')

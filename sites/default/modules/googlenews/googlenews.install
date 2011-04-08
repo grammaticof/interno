@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the googlenews module.
+ */
+
+/**
+ * Implementation of googlenews_uninstall().
+ */
+function googlenews_uninstall() {
+  variable_del('googlenews_node_types');
+  variable_del('googlenews_category');
+}
+
+/**
+ * Fix the googlenews_category variable.
+ */
+function googlenews_update_6000() {
+  $ret = array();
+
+  $node_types = variable_get('googlenews_category', array());
+  if (!empty($node_types['_gnall'])) {
+    $node_types = array_keys(node_get_types('names'));
+  }
+  else {
+    unset($node_types['_gnall']);
+    $node_types = array_keys(array_filter($node_types));
+  }
+
+  variable_set('googlenews_node_types', $node_types);
+  variable_del('googlenews_category');
+  return $ret;
+}

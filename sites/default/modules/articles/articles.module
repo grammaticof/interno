@@ -148,20 +148,25 @@ function articles_node_view_alter(&$build) {
 			break;
 			
 			case 'rss': // full page view
-				$location = '';
-				$text = '';
+				$output = '';
 				
-				if (isset($build['field_location'][0])) {
-					$location = $build['field_location'][0]['#markup'] . ' - ';
-					hide($build['field_location']);
+				if (isset($build['field_media']['#items'][0])) {
+					$image_src = image_style_url('', $build['field_media']['#items'][0]->uri);
+					$output = '<img src="'. $image_src .'" style="float:left;margin-right:10px; margin-bottom:5px" />';
+					hide($build['field_media']);
 				}
 				
+				$output .= '<p>';
+				if (isset($build['field_location'][0])) {
+					$output .= $build['field_location'][0]['#markup'] . ' - ';
+					hide($build['field_location']);
+				}
 				if (isset($build['field_short'][0]))
-					$text = $build['field_short'][0]['#markup'];
-				
+					$output .= $build['field_short'][0]['#markup'];
 				unset($build['field_short']);
-				$build['field_short']['#markup'] = $location . $text;
-				
+				$output .= '</p>';
+
+				$build['field_short']['#markup'] = $output;
 			break;
 		}
 	}

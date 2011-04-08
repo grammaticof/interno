@@ -1,0 +1,6 @@
+name = Google News sitemap
+description = Generates Google News sitemap
+package = Custom
+version = VERSION
+core = 7.x
+

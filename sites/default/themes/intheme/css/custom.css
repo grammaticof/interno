@@ -282,20 +282,16 @@ body.page-taxonomy .node.first .field-type-media {
 }
 
 .article.full-view .field-name-field-tags {
-	padding: 5px 0 5px 15px;
+	padding: 0;
 	background-color: #EFEFEF;
 	border-top : 1px dotted #DDDDDD;
 	border-bottom : 1px dotted #DDDDDD;
 	margin: 15px 0;
 }
 
-.article.full-view .field-name-field-tags span {
-	color: #696969;
-}
-
 .article.full-view .field-name-field-tags .field-items .field-item {
 	/* float: left;*/
-	display: inline-block;
+	display: inline;
 	margin: 0 5px 0 0;
 }
 
@@ -504,21 +500,34 @@ div.messages {
 /** SOCIAL BOX **/
 
 .box {
-	min-height: 23px;
-	position: relative
-	line-height: 1.429em; /* 20px */
-	padding: 5px 0 5px 15px;
+	position: relative;
+	padding: 0 15px;
 	background-color: #EFEFEF;
 	margin-bottom: 10px;
 	border-top : 1px dotted #DDDDDD;
 	border-bottom : 1px dotted #DDDDDD;
 }
 
-.social .tw-share {
-	float: right;
+.box.social {
+	height: 25px;
 }
-.social .fb-like {
+
+.fb-like {
+	padding-top : 1px;
 	float: left;
+}
+
+.tw-share {
+	float: right;
+	padding-top : 2px;
+}
+
+.box.tags {
+	font-weight: bold;
+	line-height: 1.25em;
+	color: gray;
+	padding-top: 3px;
+	padding-bottom: 3px;
 }
 
 /** END: SOCIAL BOX **/
