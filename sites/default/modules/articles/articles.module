@@ -151,7 +151,7 @@ function articles_node_view_alter(&$build) {
 				$output = '';
 				
 				if (isset($build['field_media']['#items'][0])) {
-					$image_src = image_style_url('', $build['field_media']['#items'][0]->uri);
+					$image_src = image_style_url('large', $build['field_media']['#items'][0]->uri);
 					$output = '<img src="'. $image_src .'" style="float:left;margin-right:10px; margin-bottom:5px" />';
 					hide($build['field_media']);
 				}

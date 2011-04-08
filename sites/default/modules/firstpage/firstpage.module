@@ -19,6 +19,7 @@ function firstpage_menu() {
 
 function firstpage_home() {
 	drupal_set_title('');
+	drupal_add_feed('home/feed', 'RSS - interno18.it');
 	return '';
 }
 
@@ -26,7 +27,7 @@ function firstpage_home_feed() {
 	$channel['link'] = url('<front>', array('absolute' => TRUE));
 	// Only display the description if we have a single term, to avoid clutter and confusion.
 	// HTML will be removed from feed description.
-	// $channel['description'] = check_markup($term->description, $term->format, '', TRUE);
+	$channel['description'] = 'Laboratorio di informazione';
 
 	$select = db_select('node', 'n')
 		->fields('n', array('nid', 'sticky', 'created'))
