@@ -9,7 +9,7 @@ function firstpage_menu() {
 		'access arguments' => array('access content'),
 		'type' => MENU_CALLBACK
 	);
-	$items['home/feed'] = array(
+	$items['feed'] = array(
 		'page callback' => 'firstpage_home_feed',
 		'access arguments' => array('access content'),
 		'type' => MENU_CALLBACK
@@ -19,7 +19,7 @@ function firstpage_menu() {
 
 function firstpage_home() {
 	drupal_set_title('');
-	drupal_add_feed('home/feed', 'RSS - interno18.it');
+	// drupal_add_feed('feed', 'RSS - interno18.it');
 	return '';
 }
 
@@ -115,9 +115,16 @@ function firstpage_block_view($block_name = '') {
 									'path' => file_load($node->picture)->uri,
 									'style_name' => 'square_thumbnail',
 								);
-								$image = theme('image_style', $style_vars);
-								$build['nodes'][$nid]['field_media'][0] = array('#markup' => $image);
 							}
+							else {
+								$style_vars = array(
+									'path' => 'public://noavatar.png',
+									'style_name' => 'square_thumbnail',
+								);
+							}
+							
+							$image = theme('image_style', $style_vars);
+							$build['nodes'][$nid]['field_media'][0] = array('#markup' => $image);
 						}
 					break;
 					default:

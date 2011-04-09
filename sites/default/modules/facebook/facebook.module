@@ -169,7 +169,7 @@ function facebook_node_view($node, $view_mode, $langcode) {
 			);
 
 
-			$fb_comments_box = '<div class="fb-comments-title"><h3>'.t('Comments on Facebook').'</h3></div>';
+			$fb_comments_box = '<div class="fb-comments-title"><h3>'.t('Commenta su Facebook').'</h3></div>';
 			$fb_comments_box .= '<fb:comments href="'.$absolute_url.'" num_posts="10" width="550"></fb:comments>';
 			$node->content['facebook_comments_box'] = array(
 				'#markup'=> $fb_comments_box,

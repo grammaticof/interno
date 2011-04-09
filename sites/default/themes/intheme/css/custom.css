@@ -28,7 +28,7 @@ div#page {
 h1 {
 	color: #4A7389;
 	font-family: Georgia, "Times New Roman", Times, serif;
-	font-size: 2.571em; /* 36px */
+	font-size: 2.583em;
 	font-style: normal;
 	font-variant: normal;
 	font-weight: 400;
@@ -39,6 +39,7 @@ h1 {
 	text-transform: none;
 	margin: 0;
 	padding: 0;
+	line-height: 1.29em;
 }
 
 blockquote {
@@ -177,14 +178,14 @@ body.page-taxonomy .submitted {
 }
 
 body.page-taxonomy .node .field-name-field-short {
-	font-size: 1.167em;
-	line-height: 1.25em;
+	font-size: 1em;
+	line-height: 1.5em;
 }
 
-body.page-taxonomy .node a.field-location {
+a.field-location {
 	text-transform: uppercase;
 	font-weight: bold;
-	color: #000000;
+	color: #606060;
 }
 
 body.page-taxonomy .node h2.node-title {
@@ -256,12 +257,6 @@ body.page-taxonomy .node.first .field-type-media {
 	margin: 5px 0;
 }
 
-.article.full-view a.field-location {
-	text-transform: uppercase;
-	font-weight: bold;
-	color : #000000;
-}
-
 .article.full-view .field-name-field-short {
 	display: block;
 	color: #797979;
@@ -270,7 +265,7 @@ body.page-taxonomy .node.first .field-type-media {
 	font-style: italic;
 	line-height: 1.5em;
 	text-align: left;
-	margin-bottom: 5px;
+	margin-bottom: 15px;
 	padding: 0;
 }
 
@@ -503,7 +498,7 @@ div.messages {
 	position: relative;
 	padding: 0 15px;
 	background-color: #EFEFEF;
-	margin-bottom: 10px;
+	margin-bottom: 20px;
 	border-top : 1px dotted #DDDDDD;
 	border-bottom : 1px dotted #DDDDDD;
 }
@@ -597,7 +592,7 @@ div.messages {
 }
 
 .block-firstpage .node {
-	margin: 10px;
+	margin: 10px 0;
 	border: 0;
 	border-bottom : 1px solid #DDDDDD;
 	padding: 0;
@@ -664,12 +659,6 @@ div.messages {
 
 /** FIELDS **/
 
-.block-firstpage a.field-location {
-	text-transform: uppercase;
-	font-weight: bold;
-	color : #000000;
-}
-
 .block-firstpage .field-type-node-reference {
 	margin-top: 5px;
 }
@@ -677,16 +666,18 @@ div.messages {
 .block-firstpage .field-type-node-reference .field-item {
 	padding-left: 10px;
 }
-
 /** END: FIELDS **/
-
-
 
 /* rubriche */
 
-#block-firstpage-rubriche {
+#block-firstpage-rubriche,
+#block-firstpage-culturaspettacolo {
 	border-color: #EFEFEF;
 	background-color: #EFEFEF;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	padding-bottom: 10px;
 }
 
 #block-firstpage-rubriche .node a {
@@ -702,6 +693,13 @@ div.messages {
 	margin: 5px 10px;
 	padding: 0 0 5px 0;
 	border-bottom: 0;
+	background: #FFFFFF;
+	-webkit-border-top-right-radius: 5px;
+	-webkit-border-bottom-right-radius: 5px;
+	-moz-border-radius-topright: 5px;
+	-moz-border-radius-bottomright: 5px;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
 }
 
 #block-firstpage-rubriche .node img,
@@ -712,15 +710,12 @@ div.messages {
 
 /* culturaspettacolo */
 
-#block-firstpage-culturaspettacolo {
-	border-color: #EFEFEF;
-	background-color: #EFEFEF;
-}
-
 #block-firstpage-culturaspettacolo .node {
+	margin: 5px 10px;
 	height: 80px;
 	border-bottom: 0;
 	background-color: #FFFFFF;
+	margin-bottom: 0;
 }
 
 #block-firstpage-culturaspettacolo .node h2 a {
@@ -732,14 +727,19 @@ div.messages {
 	position: absolute;
 	padding: 5px;
 	margin: 0;
-	width: 268px;
+	width: 270px;
 	bottom: 0;
-	left: 3px;
+	left: 0;
 	background: rgb(0, 0, 0);
 	background: rgba(0, 0, 0, 0.6);
 	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000);
 	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000)";
 	filter: alpha(opacity=60);
+}
+
+#block-firstpage-culturaspettacolo .node img {
+	border: 0;
+	margin: 0;
 }
 
 /** FORMS **/
@@ -797,5 +797,13 @@ div.messages {
 
 /** END: FORMS **/
 
+/** PAGE USER **/
 
+.page-user .profile .field-name-field-name,
+.page-user .profile .field-name-field-surname {
+	font-size: 1.667em;
+	line-height: 1.833em;
+}
+
+/** END: PAGE USER **/
 
