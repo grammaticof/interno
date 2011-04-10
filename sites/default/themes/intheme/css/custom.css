@@ -6,6 +6,10 @@ body {
 	word-wrap: break-word;
 }
 
+strong {font-weight: bold;}
+
+em {font-style: italic;}
+
 a:link, a:visited {
 	color: #0062A0;
 	text-decoration: none;
