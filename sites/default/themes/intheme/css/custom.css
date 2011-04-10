@@ -229,6 +229,7 @@ body.page-taxonomy .node.first .field-type-media {
 
 .article.full-view.node .submitted {
 	height: 15px;
+	margin-bottom: 5px;
 }
 
 .article.full-view.node .submitted .author {
@@ -583,6 +584,11 @@ div.messages {
 	padding: 5px 0;
 }
 
+#block-articles-main-footer .notes {
+	margin-top: 5px;
+	text-align: right;
+}
+
 /** END : FOOTER **/
 
 /** FIRSTPAGE BLOCKS **/
@@ -743,10 +749,14 @@ div.messages {
 }
 
 /** FORMS **/
-
-.page-contact h1 {
+.page-contact .region-content {
 	font-family: Delicious, Verdana, Arial;
+	margin: 30px 0;
+}
+
+.page-contact .region-content h1 {
 	text-align: center;
+	color: #000000;
 }
 
 .region-content form label {
@@ -764,10 +774,13 @@ div.messages {
 	margin: auto;
 }
 
+.region-content .form form-item {
+	margin-top: 15px;
+}
+
 .region-content form .form-type-textfield input,
 .region-content form .form-type-textarea input {
 	font-size: 1.667em;
-	margin-bottom: 10px;
 	width: 100%;
 }
 
@@ -799,6 +812,12 @@ div.messages {
 
 /** PAGE USER **/
 
+.page-user .content-region form {
+	font-family: Delicious, Verdana, Arial;
+	margin-top: 30px;
+	min-height: 400px;
+}
+
 .page-user .profile .field-name-field-name,
 .page-user .profile .field-name-field-surname {
 	font-size: 1.667em;
@@ -807,3 +826,6 @@ div.messages {
 
 /** END: PAGE USER **/
 
+.front .header-second-region .content {
+	padding: 0 5px;
+}

@@ -24,8 +24,8 @@ function articles_block_info() {
 $blocks = array();
 
 	$blocks['main_footer'] = array(
-	'info' => t('Main website footer'),
-	'cache' => DRUPAL_CACHE_GLOBAL,
+		'info' => t('Main website footer'),
+		'cache' => DRUPAL_CACHE_GLOBAL,
 	);
 
 	return $blocks;
@@ -37,8 +37,8 @@ $blocks = array();
 function articles_block_view($block_name = '') {
 	if ($block_name == 'main_footer') {
 		$block = array(
-		'subject' => NULL,
-		'content' => theme('main_footer'),
+			'subject' => NULL,
+			'content' => theme('main_footer'),
 		);
 		return $block;
 	}
