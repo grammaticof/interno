@@ -192,9 +192,7 @@ function media_add_upload($form, &$form_state, $types = NULL) {
     unset($validators['file_validate_extensions']);
   }
   // Use the PHP limit for filesize if no variable was set.
-  if (!$validators['file_validate_size']) {
-    $validators['file_validate_size'] = file_upload_max_size();
-  }
+  $validators['file_validate_size'] = file_upload_max_size();
 
   if ($validators['file_validate_size'][0] == 0) {
     unset($validators['file_validate_size']);
