@@ -1,5 +1,5 @@
 <div class="rss">
-	<a href="<?php print url('feed', array('absolute'=>TRUE)); ?>"></a>
+	<a href="<?php print url('feed', array('absolute'=>TRUE)); ?>" target="_blank"></a>
 </div>
 
 <div class="info">
