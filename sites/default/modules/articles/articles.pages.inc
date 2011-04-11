@@ -19,7 +19,7 @@ function articles_term_page($term) {
 	$breadcrumb[] = l(t('Home'), NULL);
 	$breadcrumb = array_reverse($breadcrumb);
 	drupal_set_breadcrumb($breadcrumb);
-	drupal_add_feed('taxonomy/term/' . $term->tid . '/feed', 'RSS - ' . $term->name);
+	// drupal_add_feed('taxonomy/term/' . $term->tid . '/feed', 'RSS - ' . $term->name);
 	
 	$build = array();
 	// Add term heading if the term has a description
@@ -65,6 +65,7 @@ function articles_term_page($term) {
  * @param $term
  *   The taxonomy term.
  */
+/*
 function articles_term_feed($term) {
   $channel['link'] = url('taxonomy/term/' . $term->tid, array('absolute' => TRUE));
   $channel['title'] = variable_get('site_name', 'Drupal') . ' - ' . $term->name;
@@ -75,4 +76,4 @@ function articles_term_feed($term) {
 
   node_feed($nids, $channel);
 }
-
+*/

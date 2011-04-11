@@ -9,3 +9,7 @@
 <div class="cc">
 	<p>L'utilizzo del contenuto di questo articolo è soggetto alle condizioni della Licenza Creative Commons. Sono consentite la distribuzione, la riproduzione e la realizzazione di opere derivate per fini non commerciali, purchè venga citata la fonte.</p>
 </div>
+
+<div class="notes">
+	<p><strong class="red">Interno18.it</strong> 2008 - 2011 / sviluppo: Francesco Grammatico<p>
+</div>

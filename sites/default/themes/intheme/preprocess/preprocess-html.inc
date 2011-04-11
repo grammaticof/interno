@@ -29,5 +29,6 @@ if (!$vars['is_front']) {
 	}
 }
 
-
+// add rss feed to every page
+drupal_add_feed('feed', 'RSS - interno18.it');
 

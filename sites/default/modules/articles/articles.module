@@ -10,9 +10,10 @@ function articles_menu_alter(&$items) {
 		$items['taxonomy/term/%taxonomy_term']['file'] = 'articles.pages.inc';
 	}
 	if (!empty($items['taxonomy/term/%taxonomy_term/feed'])) {
-		$items['taxonomy/term/%taxonomy_term/feed']['page callback'] = 'articles_term_feed';
+		unset($items['taxonomy/term/%taxonomy_term/feed']);
+		/* $items['taxonomy/term/%taxonomy_term/feed']['page callback'] = 'articles_term_feed';
 		$items['taxonomy/term/%taxonomy_term/feed']['file path'] = drupal_get_path('module', 'articles');
-		$items['taxonomy/term/%taxonomy_term/feed']['file'] = 'articles.pages.inc';
+		$items['taxonomy/term/%taxonomy_term/feed']['file'] = 'articles.pages.inc'; */
 	}
 }
 
@@ -23,8 +24,8 @@ function articles_block_info() {
 $blocks = array();
 
 	$blocks['main_footer'] = array(
-	'info' => t('Main website footer'),
-	'cache' => DRUPAL_CACHE_GLOBAL,
+		'info' => t('Main website footer'),
+		'cache' => DRUPAL_CACHE_GLOBAL,
 	);
 
 	return $blocks;
@@ -36,8 +37,8 @@ $blocks = array();
 function articles_block_view($block_name = '') {
 	if ($block_name == 'main_footer') {
 		$block = array(
-		'subject' => NULL,
-		'content' => theme('main_footer'),
+			'subject' => NULL,
+			'content' => theme('main_footer'),
 		);
 		return $block;
 	}
