@@ -650,10 +650,14 @@ div.messages {
 	background-position:center right;
 }
 
-.block-firstpage h2.block-title a:hover {
-	background-image: url('../images/iconic/red/arrow_right_alt1_12x12.png');	
+.block-firstpage h2.block-title:first-letter {
+	color: #D61D00;
 }
 
+.block-firstpage h2.block-title a:hover {
+	background-image: url('../images/iconic/red/arrow_right_alt1_12x12.png');
+	color: #D61D00;
+}
 
 .block-firstpage .node img {
 	float: right;
