@@ -1,3 +1,7 @@
+<div class="rss">
+	<a href="<?php print url('feed', array('absolute'=>TRUE)); ?>"></a>
+</div>
+
 <div class="info">
 	Associazione ‘interno18’ - Caserta CF 93065040615 tel. 3297943224/3282656347 fax 0823847165	
 </div>

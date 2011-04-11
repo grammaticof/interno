@@ -209,7 +209,7 @@ function firstcarousel_image_default_styles() {
  * Implements hook_image_style_flush().
  *
  */
-function firstcarousel_style_flush($style) {
+function firstcarousel_image_style_flush($style) {
 	// The $style parameter is an image style array.
 
 	cache_clear_all('*', 'carousel', TRUE);

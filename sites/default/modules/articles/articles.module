@@ -152,8 +152,8 @@ function articles_node_view_alter(&$build) {
 				$output = '';
 				
 				if (isset($build['field_media']['#items'][0])) {
-					$image_src = image_style_url('large', $build['field_media']['#items'][0]->uri);
-					$output = '<img src="'. $image_src .'" style="float:left;margin-right:10px; margin-bottom:5px" />';
+					$image_src = image_style_url('thumbnail', $build['field_media']['#items'][0]->uri);
+					$output = '<img src="'. $image_src .'" style="float:right;margin-left:10px; margin-bottom:5px" />';
 					hide($build['field_media']);
 				}
 				
@@ -238,5 +238,4 @@ function taxonomy_select_all_nodes($tid, $pager = TRUE, $limit = FALSE, $max_dep
 	}
 	return $query->execute()->fetchCol();
 }
-
 

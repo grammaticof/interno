@@ -589,6 +589,14 @@ div.messages {
 	text-align: right;
 }
 
+#block-articles-main-footer .rss a {
+	float: right;
+	height: 24px;
+	width: 24px;
+	display: block;
+	background-image: url('../images/rss_small_icon.gif');
+}
+
 /** END : FOOTER **/
 
 /** FIRSTPAGE BLOCKS **/
