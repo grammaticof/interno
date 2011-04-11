@@ -142,10 +142,8 @@ function facebook_node_view($node, $view_mode, $langcode) {
 
 			if (isset($node->field_media['und'][0]))
 				$img_path = image_style_url('square_thumbnail', $node->field_media['und'][0]->uri);
-			else {
-				$logo_uri = theme_get_setting('logo_path');
-				$img_path = !empty($logo_uri) ? file_create_url($logo_uri) : '';
-			}
+			else
+				$img_path = image_style_url('square_thumbnail', 'public://logo.png');
 
 			$meta_description = array(
 				'#type' => 'html_tag',
