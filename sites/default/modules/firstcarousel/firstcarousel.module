@@ -62,7 +62,7 @@ function firstcarousel_block_info() {
 /**
  * Implements hook_block_view().
  */
-function firstcarousel_block_view() {
+function firstcarousel_block_view($block_name = '') {
 	if ($block_name == 'carousel') {
 
 		$limit = variable_get('firstcarousel_block_count', 4);
