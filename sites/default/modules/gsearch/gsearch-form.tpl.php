@@ -1,4 +1,5 @@
 <div id="google-search">
+<!--//--><![CDATA[//><!--
 <script type="text/javascript" src="http://www.google.com/jsapi"></script>
 <script type="text/javascript">
   google.load('search', '1');
@@ -9,6 +10,7 @@
       'cse-search-box');
   });
 </script>
+//--><!]]>
 <form action="<?php print url('gsearch/result', array('absolute' => TRUE)); ?>" id="cse-search-box">
   <div>
    <input type="hidden" name="cx" value="005171206513133717924:kcnq9zomqqc" />
