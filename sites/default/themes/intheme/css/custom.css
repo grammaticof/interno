@@ -227,10 +227,6 @@ body.page-taxonomy .node.first .field-type-media {
 	border-bottom: 0;
 }
 
-.article.full-view.node p {
-	margin-bottom: 20px;
-}
-
 .article.full-view.node .submitted {
 	height: 15px;
 	margin-bottom: 5px;
@@ -632,13 +628,6 @@ div.messages {
 	margin-bottom: 5px;
 }
 
-.block-firstpage {
-	/* border: 1px solid #DDDDDD;
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px; */
-}
-
 .block-firstpage h2.block-title{
 	font-family: "Futura Book", "Futura Light", "Futura", "Futura Medium", "FuturaMedium", "Gill Sans", "Helvetica", "Arial", sans-serif;
 	font-size: 1.071em;
@@ -667,6 +656,7 @@ div.messages {
 .block-firstpage .node img {
 	float: right;
 	margin-left: 5px;
+	border: 3px solid #EFEFEF;
 }
 
 /** END: FIRSTPAGE BLOCKS **/
