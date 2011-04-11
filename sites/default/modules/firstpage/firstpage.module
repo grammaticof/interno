@@ -19,6 +19,13 @@ function firstpage_menu() {
 
 function firstpage_home() {
 	drupal_set_title('');
+	
+	// carousel css+js
+	$module_path = drupal_get_path('module', 'firstcarousel');
+	drupal_add_js(drupal_get_path('theme', 'intheme').'/js/jquery.tools.min.js');
+	drupal_add_js($module_path.'/firstcarousel.js');
+	drupal_add_css($module_path.'/firstcarousel.css');
+	
 	// drupal_add_feed('feed', 'RSS - interno18.it');
 	return '';
 }

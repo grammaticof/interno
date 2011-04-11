@@ -62,13 +62,9 @@ function firstcarousel_block_info() {
 /**
  * Implements hook_block_view().
  */
-function firstcarousel_block_view($block_name = '') {
+function firstcarousel_block_view() {
 	if ($block_name == 'carousel') {
-		$module_path = drupal_get_path('module', 'firstcarousel');
-		drupal_add_js(drupal_get_path('theme', 'intheme').'/js/jquery.tools.min.js');
-		drupal_add_js($module_path.'/firstcarousel.js');
-		drupal_add_css($module_path.'/firstcarousel.css');
-		
+
 		$limit = variable_get('firstcarousel_block_count', 4);
 		
 		$query = db_select('node', 'n');
