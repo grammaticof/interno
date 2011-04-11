@@ -23,7 +23,7 @@ function media_media_plugin() {
     'icon file' => 'wysiwyg-media.gif',
     'icon title' => t(media_variable_get('wysiwyg_icon_title')),
     // @todo: move this to the plugin directory for the wysiwyg plugin.
-    'js path' => drupal_get_path('module','media').'/javascript/',
+    'js path' => drupal_get_path('module','media').'/js/',
     'js file' => 'wysiwyg-media.js',
     'css file' => NULL,
     'css path' => NULL,
@@ -49,7 +49,7 @@ function media_include_browser_js() {
     return;
   }
   $included = TRUE;
-  module_load_include('inc', 'media', 'media.browser');
+  module_load_include('inc', 'media', 'includes/media.browser');
   $javascript = media_browser_js();
   foreach ($javascript as $key => $definitions) {
     foreach ($definitions as $definition) {

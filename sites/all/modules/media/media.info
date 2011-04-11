@@ -6,10 +6,10 @@ core = 7.x
 php = 5.2
 files[] = media.install
 files[] = media.module
-files[] = media.admin.inc
-files[] = media.theme.inc
-files[] = media.types.inc
-files[] = MediaReadOnlyStreamWrapper.inc
+files[] = includes/media.admin.inc
+files[] = includes/media.theme.inc
+files[] = includes/media.types.inc
+files[] = includes/MediaReadOnlyStreamWrapper.inc
 ; Tests
 files[] = test/media.types.test
 files[] = test/media.entity.test
@@ -20,9 +20,9 @@ dependencies[] = file_styles
 
 testing_api = 2.x
 
-; Information added by drupal.org packaging script on 2011-03-06
+; Information added by drupal.org packaging script on 2011-04-11
 version = "7.x-1.x-dev"
 core = "7.x"
 project = "media"
-datestamp = "1299370197"
+datestamp = "1302523790"
 

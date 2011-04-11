@@ -20,7 +20,7 @@ function media_admin($form, $form_state) {
   $path = drupal_get_path('module', 'media');
 
   $form['#attached'] = array(
-    'js' => array($path . '/javascript/media-admin.js'),
+    'js' => array($path . '/js/media.admin.js'),
     'css' => array($path . '/css/media.css'),
   );
 
@@ -116,6 +116,7 @@ function media_admin_list() {
   $result = $query
    ->fields('f')
    ->fields('u', array('name'))
+   ->condition('f.status', FILE_STATUS_PERMANENT)
    ->limit($limit)
    ->orderByHeader($header)
    ->execute();
@@ -159,7 +160,8 @@ function media_admin_thumbnails() {
 
   $query->pager($limit);
   $query->entityCondition('entity_type', 'media');
-  
+  $query->propertyCondition('status', FILE_STATUS_PERMANENT);
+
   $result = $query->execute();
   $ids = key_exists('media', $result) ? array_keys($result['media']) : FALSE;
   if ($ids) {
@@ -351,14 +353,14 @@ function media_admin_type_manage_form($form, &$form_state, $media_type) {
     $options = array(
       'all' => t('All'),
       'any' => t('Any'),
-      '0' => t('Other'),
+      'other' => t('Other'),
     );
     if ($media_type->type_callback_args['match_type'] && isset($options[$media_type->type_callback_args['match_type']])) {
       $default_value = $media_type->type_callback_args['match_type'];
       $other_default_value = '';
     }
     else {
-      $default_value = 0;
+      $default_value = 'other';
       $other_default_value = $media_type->type_callback_args['match_type'];
     }
     $form['match_type'] = array(
@@ -372,7 +374,7 @@ function media_admin_type_manage_form($form, &$form_state, $media_type) {
       '#title' => t('Other match type value'),
       '#default_value' => $other_default_value,
       '#attached' => array(
-        'js' => array(drupal_get_path('module', 'media') . '/javascript/media-admin.js'),
+        'js' => array(drupal_get_path('module', 'media') . '/js/media.admin.js'),
       ),
     );
 
@@ -422,20 +424,38 @@ function media_admin_type_manage_form($form, &$form_state, $media_type) {
 
 function media_admin_type_manage_form_submit($form, &$form_state) {
   $media_type = media_type_load($form_state['values']['media_type']);
+  // Reset all values to empty.
+  $media_type->type_callback_args = array();
+
+  // What is the logic of the match (AND / OR).
   if ($form_state['values']['match_type']) {
     $media_type->type_callback_args['match_type'] = $form_state['values']['match_type'];
   }
   else {
     $media_type->type_callback_args['match_type'] = $form_state['values']['match_type_other'];
   }
+
+  // Which streams are valid for this type.
   $media_type->type_callback_args['streams'] = array();
   foreach ($form_state['values']['streams'] as $stream) {
     if ($stream) {
       $media_type->type_callback_args['streams'][] = $stream;
     }
   }
-  $media_type->type_callback_args['mimetypes'] = explode(' ', $form_state['values']['mimetypes']);
-  $media_type->type_callback_args['extensions'] = explode(' ', $form_state['values']['extensions']);
+
+  // Which mimetypes are valid for this type.
+  if (trim($form_state['values']['mimetypes'])) {
+    $media_type->type_callback_args['mimetypes'] = explode(' ', $form_state['values']['mimetypes']);
+    array_walk($media_type->type_callback_args['mimetypes'], 'trim');
+    array_filter($media_type->type_callback_args['mimetypes']);
+  }
+
+  // Which file extensions are valid for this type.
+  if (trim($form_state['values']['extensions'])) {
+    $media_type->type_callback_args['extensions'] = explode(' ', $form_state['values']['extensions']);
+    array_walk($media_type->type_callback_args['extensions'], 'trim');
+    array_filter($media_type->type_callback_args['extensions']);
+  }
 
   media_type_save($media_type);
   drupal_set_message(t('The @label media type has been saved.', array('@label' => $media_type->label)));
@@ -507,7 +527,7 @@ function media_import_submit($form, &$form_state) {
         array('media_import_batch_import_files', array($files)),
       ),
       'finished' => 'media_import_batch_import_complete',
-      'file' => drupal_get_path('module', 'media') . '/media.admin.inc',
+      'file' => drupal_get_path('module', 'media') . '/includes/media.admin.inc',
     );
     batch_set($batch);
     return;
@@ -633,7 +653,7 @@ function media_admin_rebuild_types_form_submit(&$form, &$form_state) {
       array('media_admin_rebuild_types_batch_op', array($total)),
     ),
     'finished' => 'media_admin_rebuild_types_batch_complete',
-    'file' => drupal_get_path('module', 'media') . '/media.admin.inc',
+    'file' => drupal_get_path('module', 'media') . '/includes/media.admin.inc',
   );
   batch_set($batch);
 }
