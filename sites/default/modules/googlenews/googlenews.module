@@ -102,9 +102,15 @@ function googlenews_admin_settings() {
  */
 function googlenews_node_insert($node) {
 	if ($node->type == 'article') {
-		$submit_url = 'http://www.google.com/webmasters/tools/ping?sitemap='.url('googlenews.xml', array('absolute' => TRUE));
-		$request = drupal_http_request($submit_url);
-		watchdog('googlenews', 'Submitted the sitemap to %url and received response @code.', array('%url' => $submit_url, '@code' => $request->code));
+		// ping google news
+		$google_url = 'http://www.google.com/webmasters/tools/ping?sitemap='.url('googlenews.xml', array('absolute' => TRUE));
+		$request = drupal_http_request($google_url);
+		watchdog('googlenews', 'Submitted the sitemap to %url and received response @code.', array('%url' => $google_url, '@code' => $request->code));
+		
+		// ping feedburner
+		$feedb_url = 'http://feedburner.google.com/fb/a/pingSubmit?bloglink='.url('<front>', array('absolute' => TRUE));
+		$request = drupal_http_request($feedb_url);
+		watchdog('feedburn', 'Submitted the rss-feed to %url and received response @code.', array('%url' => $feedb_url, '@code' => $request->code));
 	}
 }
 
