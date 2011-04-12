@@ -241,8 +241,8 @@ body.page-taxonomy .node.first .field-type-media {
 }
 
 .article.full-view .field-name-body {
-	font-size: 1.25em; /* 15px */
-	line-height: 1.5em;
+	font-size: 1.167em; /* 14px */
+	line-height: 1.5em
 }
 
 .article.full-view img{
