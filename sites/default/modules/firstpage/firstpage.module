@@ -98,21 +98,21 @@ function firstpage_block_view($block_name = '') {
 				
 				switch ($block_name) {
 					case 'culturaspettacolo':
-						foreach ($build['nodes'] as $nid => $node) {
+						foreach ($nodes as $node) {
 							// remove field_short
-							unset($build['nodes'][$nid]['field_short']);
+							unset($build['nodes'][$node->nid]['field_short']);
 							
-							// alter the field_media image
-							$lang = $node['#language'];
-							if(isset($nodes[$nid]->field_media[$lang][0])) {
+							if (!empty($node->field_media)) {
 								$style_vars = array(
-									'path' => $nodes[$nid]->field_media[$lang][0]->uri,
+									'path' => $node->field_media[$node->language][0]->uri,
 									'style_name' => 'thumbnail_wide',
 								);
 								$image = theme('image_style', $style_vars);
-								$build['nodes'][$nid]['field_media'][0] = array('#markup' => $image);
+								
+								unset($build['nodes'][$node->nid]['field_media']);
+								$build['nodes'][$node->nid]['field_media'][0] = array('#markup' => $image);
 							}
-						}
+						}						
 					break;
 					case 'Rubriche':
 						foreach ($nodes as $nid => $node) {
@@ -130,7 +130,6 @@ function firstpage_block_view($block_name = '') {
 									'style_name' => 'square_thumbnail',
 								);
 							}
-							
 							$image = theme('image_style', $style_vars);
 							$build['nodes'][$nid]['field_media'][0] = array('#markup' => $image);
 						}
