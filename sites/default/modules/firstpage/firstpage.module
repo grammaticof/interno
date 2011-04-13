@@ -65,7 +65,7 @@ function firstpage_block_info() {
 	foreach ($cat_array as $name => $descr) {
 		$blocks[$name] = array(
 			'info' => 'Firstpage ' . $descr,
-			'cache' => DRUPAL_CACHE_GLOBAL,
+			'cache' => DRUPAL_NO_CACHE,
 		);
 	}	
 	

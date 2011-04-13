@@ -839,11 +839,11 @@ div.messages {
 /** STATISTICS **/
 ul.inline li.statistics_counter {
 	position: absolute;
-	top:  5px;
-	left: -14px;
+	top: 5px;
+	left: -20px;
 	padding: 14px 0 0 0;
-	width: 12px;
-	background: url('../images/eye.png') no-repeat top left;
+	width: 20px;
+	background: #FFFFFF url('../images/eye.png') no-repeat top center;
 	text-align: center;
 	color: #606060;
 	font-weight: bold;
