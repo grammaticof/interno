@@ -39,7 +39,7 @@ function template_preprocess_user_toolbar(&$vars) {
 
 		// Perform database queries to gather online user lists. We use s.timestamp
 		// rather than u.access because it is much faster.
-		$users_count = db_query("SELECT COUNT(DISTINCT s.uid) FROM {sessions} s WHERE s.timestamp >= :timestamp AND s.uid = 0", array(':timestamp' => $interval))->fetchField();
+		$users_count = db_query("SELECT COUNT(s.uid) FROM {sessions} s WHERE s.timestamp >= :timestamp AND s.uid = 0", array(':timestamp' => $interval))->fetchField();
 
 		$items[] = '<span class="online-users">' . $users_count . '</span>';
 	}
