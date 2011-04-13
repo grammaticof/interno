@@ -123,6 +123,8 @@ function node_page_carousel_form_submit($form, &$form_state) {
 		
 		$query->execute();
 	}
+	// clear all the caches!
+	cache_clear_all();
 	
 	drupal_set_message(t('Queue updated.'), 'form-status');
 }
