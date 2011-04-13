@@ -849,5 +849,11 @@ ul.inline li.statistics_counter {
 	font-weight: bold;
 	font-size: 0.833em;
 }
+
+.online-users {
+	padding-left: 16px;
+	background: url('../images/eye.png') no-repeat center left;
+	text-align: center;
+}
 /** END: STATISTICS **/
 

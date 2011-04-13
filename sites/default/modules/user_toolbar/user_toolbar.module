@@ -32,9 +32,19 @@ function user_toolbar_theme() {
 function template_preprocess_user_toolbar(&$vars) {
 	global $user;
 	
+	// count online users
+	if (user_access('administer users')) {
+		// Count users active within the defined period.
+		$interval = REQUEST_TIME - variable_get('user_block_seconds_online', 900);
+
+		// Perform database queries to gather online user lists. We use s.timestamp
+		// rather than u.access because it is much faster.
+		$users_count = db_query("SELECT COUNT(DISTINCT s.uid) FROM {sessions} s WHERE s.timestamp >= :timestamp AND s.uid = 0", array(':timestamp' => $interval))->fetchField();
+
+		$items[] = '<span class="online-users">' . $users_count . '</span>';
+	}
+		
 	$items[] = l(t('segnala/contatta'), 'contact', array('attributes' => array('class' => array('contact-link'))));
-	
-	
 	
 	if ($user->uid > 0) { // logged user
 		$items[] = l('logout', 'user/logout', array('attributes' => array('class' => array('logout-link'))));
