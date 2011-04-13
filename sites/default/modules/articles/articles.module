@@ -74,7 +74,7 @@ function articles_node_view_alter(&$build) {
 						format_date($build['#node']->created, 'custom', 'H:i').'</span> '.
 						$build['field_short'][0]['#markup'];
 				}
-			
+
 			break;
 		
 			case 'full': // full page view

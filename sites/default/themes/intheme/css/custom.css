@@ -835,3 +835,19 @@ div.messages {
 .front .header-second-region .content {
 	padding: 0 5px;
 }
+
+/** STATISTICS **/
+ul.inline li.statistics_counter {
+	position: absolute;
+	top:  5px;
+	left: -14px;
+	padding: 14px 0 0 0;
+	width: 12px;
+	background: url('../images/eye.png') no-repeat top left;
+	text-align: center;
+	color: #606060;
+	font-weight: bold;
+	font-size: 0.833em;
+}
+/** END: STATISTICS **/
+
