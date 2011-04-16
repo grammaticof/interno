@@ -702,17 +702,25 @@ div.messages {
 }
 
 #block-firstpage-rubriche .node a {
-	/* text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.3); */
+	text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2);
+	color: #383838;
+	font-size: 0.917em;
 }
 
-#block-firstpage-rubriche .node h2 {
+#block-firstpage-rubriche .node img {
+	margin: 0;
+}
+
+#block-firstpage-rubriche .node h2.node-title {
 	width: 210px;
 	float: right;
+	margin: 0;
+	padding-top: 5px;
 }
 
 #block-firstpage-rubriche .node {
 	margin: 5px 10px;
-	padding: 0 0 5px 0;
+	padding: 0;
 	border-bottom: 0;
 	background: #FFFFFF;
 	-webkit-border-top-right-radius: 5px;
