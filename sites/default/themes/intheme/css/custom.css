@@ -543,17 +543,19 @@ div.messages {
 
 /** BLOCK: RELEVANT-CONTENT +  **/
 
+.page-node .sidebar-second-region ul,
 .page-taxonomy .sidebar-second-region ul {
 	list-style-type: disc;
 	list-style-image: url('../images/iconic/red/cd_8x8.png');
 	list-style-position: outside;
 }
 
+.page-node .sidebar-second-region h2.block-title,
 .page-taxonomy .sidebar-second-region h2.block-title {
 	margin-bottom: 10px;
 	text-align: right;
 }
-
+.page-node .sidebar-second-region ul li,
 .page-taxonomy .sidebar-second-region ul li {
 	margin-bottom: 4px;
 	padding-bottom: 5px;
