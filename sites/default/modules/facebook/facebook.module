@@ -10,7 +10,8 @@ function facebook_init() {
 	$sdk = '//connect.facebook.net/it_IT/all.js';
 	if (variable_get('facebook_sdk_test', FALSE))
 		$sdk ='//static.ak.fbcdn.net/connect/en_US/core.debug.js';
-
+	
+	// app_id
 	$meta_description = array(
 		'#type' => 'html_tag',
 		'#tag' => 'meta',
@@ -20,6 +21,16 @@ function facebook_init() {
 		)
 	);
 	drupal_add_html_head($meta_description, 'meta_facebook_app_id');
+	
+	// admins
+	$meta_description = array(
+		'#type' => 'html_tag',
+		'#tag' => 'meta',
+		'#attributes' => array(
+			'property' => 'fb:admins',
+			'content' => '1052423019,711873308',
+		)
+	);
 	
 	$script = "
 		if (document.getElementById('fb-root')) {
