@@ -509,7 +509,7 @@ div.messages {
 
 .box {
 	position: relative;
-	padding: 0 15px;
+	padding: 3px 15px;
 	background-color: #EFEFEF;
 	margin-bottom: 20px;
 	border-top : 1px dotted #DDDDDD;
