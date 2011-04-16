@@ -31,6 +31,7 @@ function facebook_init() {
 			'content' => '1052423019,711873308',
 		)
 	);
+	drupal_add_html_head($meta_description, 'meta_facebook_admins');
 	
 	$script = "
 		if (document.getElementById('fb-root')) {
