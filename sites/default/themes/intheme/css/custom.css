@@ -543,21 +543,18 @@ div.messages {
 
 /** BLOCK: RELEVANT-CONTENT +  **/
 
-#block-node-recent ul,
-#block-relevant-content-related-type ul {
+.page-taxonomy .sidebar-second-region ul {
 	list-style-type: disc;
 	list-style-image: url('../images/iconic/red/cd_8x8.png');
 	list-style-position: outside;
 }
 
-#block-node-recent h2.block-title,
-#block-relevant-content-related-type h2.block-title {
+.page-taxonomy .sidebar-second-region h2.block-title {
 	margin-bottom: 10px;
 	text-align: right;
 }
 
-#block-node-recent ul li,
-#block-relevant-content-related-type ul li {
+.page-taxonomy .sidebar-second-region ul li {
 	margin-bottom: 4px;
 	padding-bottom: 5px;
 	border-bottom: 1px solid #EFEFEF;
