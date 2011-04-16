@@ -43,16 +43,21 @@ Disallow: /admin/
 Disallow: /comment/reply/
 Disallow: /node/add/
 Disallow: /search/
+Disallow: /user/
 Disallow: /user/register/
 Disallow: /user/password/
 Disallow: /user/login/
 Disallow: /user/logout/
+Disallow: /utente/
 # Paths (no clean URLs)
 Disallow: /?q=admin/
 Disallow: /?q=comment/reply/
 Disallow: /?q=node/add/
 Disallow: /?q=search/
+Disallow: /?q=user/
 Disallow: /?q=user/password/
 Disallow: /?q=user/register/
 Disallow: /?q=user/login/
 Disallow: /?q=user/logout/
+Disallow: /?q=utente/
+
