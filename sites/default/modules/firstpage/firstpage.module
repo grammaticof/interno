@@ -286,13 +286,3 @@ function firstpage_image_default_styles() {
 	return $styles;
 }
 
-/**
- * Implements hook_image_style_flush().
- *
- */
-function firstpage_style_flush($style) {
-	// The $style parameter is an image style array.
-	cache_clear_all('*', 'firstpage', TRUE);
-}
-
-
