@@ -29,7 +29,7 @@
 ?>
 <div class="<?php print $classes; ?>" <?php print $attributes; ?>>
   <?php if($menu_type == 'drupal'): ?>
-  <div class="primary-navigation">
+  <div class="primary-navigation clearfix">
     <?php if($main_menu): ?>
     <div class="main-menu">
       <?php print $main_menu; ?>

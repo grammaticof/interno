@@ -1,3 +1,10 @@
+/** FONTS **/
+@font-face {
+  font-family: "FuturaMedium";
+  src: url('../fonts/Futura_medium.eot');
+  src: local('Futura Md BT Medium'), local('FuturaBT-Medium'), url('../fonts/Futura_medium.ttf') format('truetype'), url('/css/Futura_medium.svg#FuturaBT-Medium') format('svg');
+}
+
 /** GENERAL STYLE **/
 body {
 	font-size: 12px;
@@ -67,25 +74,26 @@ blockquote {
 #region-menu {
 	z-index: 1;
 	position: relative;
-	font-size: 1.167em; /* 14px */
-	font-family: "Futura Book", "Futura Light", "Futura", "Futura Medium", "FuturaMedium", "Gill Sans", "Helvetica", "Arial", sans-serif;
 }
 
 #region-menu ul.main-menu {
+	font-size: 1.167em; /* 14px */
+	font-family: "Futura Book", "Futura Light", "Futura", "Futura Medium", "FuturaMedium", "Gill Sans", "Helvetica", "Arial", sans-serif;
 	background: none;
 	border: 0;
 	width: 100%;
+	margin: 0;
 }
 
 #region-menu ul.main-menu li a {
 	border:0;
-	padding: .75em;
+	padding: 0.5em 1em;
 	color: #000000;
 	background: none;
 }
 
 #region-menu ul.main-menu li {
-	border-bottom: 3px solid #EFEFEF;
+	/*border-bottom: 3px solid #EFEFEF;*/
 	background: none;
 }
 
@@ -93,7 +101,7 @@ blockquote {
 #region-menu ul.main-menu a.active,
 #region-menu ul.main-menu li.active-trail {
 	color: #d61d00;
-	border-color: #d61d00;
+	/*border-color: #d61d00;*/
 }
 
 #region-menu ul.main-menu li a:hover {
@@ -775,7 +783,7 @@ div.messages {
 
 /** FORMS **/
 .page-contact .region-content {
-	font-family: Delicious, Verdana, Arial;
+	font-family: "Futura Book", "Futura Light", "Futura", "Futura Medium", "FuturaMedium", "Gill Sans", "Helvetica", "Arial", sans
 	margin: 30px 0;
 }
 
@@ -838,7 +846,7 @@ div.messages {
 /** PAGE USER **/
 
 .page-user .content-region form {
-	font-family: Delicious, Verdana, Arial;
+	font-family: "Futura Book", "Futura Light", "Futura", "Futura Medium", "FuturaMedium", "Gill Sans", "Helvetica", "Arial", sans
 	margin-top: 30px;
 	min-height: 400px;
 }
@@ -870,4 +878,63 @@ ul.inline li.statistics_counter {
 }
 
 /** END: STATISTICS **/
+
+
+/** SUBMENU **/
+#block-user-toolbar-sub-menu {
+	margin: 5px 0 0 0;
+}
+
+ul#sub-menu {
+	margin: 0 0 15px 0;
+	padding-left: 5px;
+	height: 20px;
+	width: 950px;
+	overflow: hidden;
+	line-height: 20px;
+}
+
+ul#sub-menu li {
+	display: block;
+	float: left;
+	padding: 0 10px;
+	margin: 0;
+	background-color: #EFEFEF;
+}
+
+ul#sub-menu.location li {
+
+}
+
+ul#sub-menu.location li a {
+ color: #606060;
+ text-decoration: none;
+}
+
+ul#sub-menu.location li a:hover,
+ul#sub-menu.location li a.active {
+	color: #D61D00;
+}
+
+ul#sub-menu li.title {
+	background-color: #D61D00;
+	color: #FFFFFF;
+	font-weight: bold;
+}
+
+ul#sub-menu li.triangle {
+	border-color: transparent transparent transparent #EFEFEF;
+	background-color: #FFFFFF;
+	border-style: solid;
+	border-width: 10px;
+	height: 0;
+	width: 0;
+	margin: 0;
+	padding: 0;
+}
+
+ul#sub-menu li.triangle.red {
+	border-color: transparent transparent transparent #D61D00;
+	background-color: #EFEFEF;
+}
 

@@ -16,16 +16,6 @@ switch ($vars['region']) {
 			$title = pathauto_cleanstring($data['title']);
 			unset($menu[$mid]);
 			$menu[$title] = $data;
-
-			/* superfish-nav hack
-			if (!isset($menu[$title]['below'])) {
-				$placeholder['holder'] = array(
-					'href' => '#',
-					'title' => '',
-				);
-				$menu[$title]['below'] = $placeholder;
-			}
-			//*/ /* end: superfish-nav hack */
 		}
 		
 		$vars['main_menu'] = theme('links', array(

@@ -40,6 +40,8 @@ function articles_block_info() {
 * Implements hook_block_view().
 */
 function articles_block_view($block_name = '') {
+	$block = array();
+	
 	switch ($block_name) {
 		case 'main_footer':
 			$block = array(

@@ -1,5 +1,60 @@
 <?php
 
+
+/**
+ * Implements hook_block_info().
+ */
+function user_toolbar_block_info() {
+	
+	$blocks['sub_menu'] = array(
+		'info' => 'Sub-menu',
+		'cache' => DRUPAL_NO_CACHE,
+	);
+	
+	return $blocks;
+}
+
+
+/**
+ * Implements hook_block_view().
+ */
+function user_toolbar_block_view($block_name = '') {
+	// retrieve the categories array
+	$block = array();
+	
+	switch ($block_name) {
+		case 'sub_menu':
+			
+			// 
+			$vid_loc = 3;
+			
+			$results = db_query('SELECT td.name, td.tid, COUNT(td.tid) AS count FROM taxonomy_index t INNER JOIN taxonomy_term_data td ON t.tid=td.tid WHERE td.vid=:vid_loc GROUP BY t.tid ORDER BY count DESC LIMIT 7', array(':vid_loc'=>$vid_loc))->fetchAll();
+			
+			$attributes = array('id' => 'sub-menu', 'class' => array('location'));
+			
+			$items[] = array('data' => t('Città'),'class' => array('title'));
+			$items[] = array('data' => '', 'class' => array('triangle','red'));
+			
+			foreach($results as $i => $data) {
+				$items[] = array(
+					'data' => l($data->name, 'taxonomy/term/'.$data->tid)
+				);
+			}
+			
+			$items[] = array('data' => '', 'class' => array('triangle'));
+			
+			$block = array(
+				'subject' => '',
+				'content' => theme('item_list', array('items' => $items, 'attributes' => $attributes)),
+			);
+		break;
+	}
+	
+	return $block;
+}
+
+
+
 /**
  * Implements hook_form_alter().
  */
