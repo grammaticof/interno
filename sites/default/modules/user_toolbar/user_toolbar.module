@@ -25,10 +25,13 @@ function user_toolbar_block_view($block_name = '') {
 	switch ($block_name) {
 		case 'sub_menu':
 			
-			// 
+			//
+			$output = '';
+			
+			// location
 			$vid_loc = 3;
 			
-			$results = db_query('SELECT td.name, td.tid, COUNT(td.tid) AS count FROM taxonomy_index t INNER JOIN taxonomy_term_data td ON t.tid=td.tid WHERE td.vid=:vid_loc GROUP BY t.tid ORDER BY count DESC LIMIT 7', array(':vid_loc'=>$vid_loc))->fetchAll();
+			$results = db_query('SELECT td.name, td.tid, COUNT(td.tid) AS count FROM taxonomy_index t INNER JOIN taxonomy_term_data td ON t.tid=td.tid WHERE td.vid=:vid_loc GROUP BY t.tid ORDER BY count DESC LIMIT 8', array(':vid_loc'=>$vid_loc))->fetchAll();
 			
 			$attributes = array('id' => 'sub-menu', 'class' => array('location'));
 			
@@ -40,12 +43,19 @@ function user_toolbar_block_view($block_name = '') {
 					'data' => l($data->name, 'taxonomy/term/'.$data->tid)
 				);
 			}
-			
 			$items[] = array('data' => '', 'class' => array('triangle'));
+			$output = theme('item_list', array('items' => $items, 'attributes' => $attributes));
+			// end : location
+			
+			// last news
+			
+			
+			// end : last news
+			
 			
 			$block = array(
 				'subject' => '',
-				'content' => theme('item_list', array('items' => $items, 'attributes' => $attributes)),
+				'content' => $output,
 			);
 		break;
 	}
