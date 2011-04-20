@@ -25,13 +25,12 @@ function user_toolbar_block_view($block_name = '') {
 	switch ($block_name) {
 		case 'sub_menu':
 			
-			// 
+			// location
 			$vid_loc = 3;
 			
 			$results = db_query('SELECT td.name, td.tid, COUNT(td.tid) AS count FROM taxonomy_index t INNER JOIN taxonomy_term_data td ON t.tid=td.tid WHERE td.vid=:vid_loc GROUP BY t.tid ORDER BY count DESC LIMIT 7', array(':vid_loc'=>$vid_loc))->fetchAll();
 			
 			$attributes = array('id' => 'sub-menu', 'class' => array('location'));
-			
 			$items[] = array('data' => t('Città'),'class' => array('title'));
 			$items[] = array('data' => '', 'class' => array('triangle','red'));
 			
