@@ -934,62 +934,59 @@ ul.inline li.statistics_counter {
 
 /** END: STATISTICS **/
 
-
 /** SUBMENU **/
 #block-user-toolbar-sub-menu {
-	margin: 5px 0 0 0;
-}
-
-ul#sub-menu {
-	margin: 0 0 5px 0;
-	padding-left: 5px;
+	margin: 0 0 10px 0;
+	position: relative;
 	height: 20px;
 	width: 950px;
-	overflow: hidden;
-	line-height: 20px;
 }
 
-ul#sub-menu li {
+#block-user-toolbar-sub-menu ul {
+	font-family: "FuturaLT", "Helvetica", "Arial", sans-serif;
+	background-color: #EFEFEF;
+	margin: 0 0 0 10px;
+	height: 20px;
+	width: 940px;
+	overflow: hidden;
+	line-height: 20px;
+	position: absolute;
+	top:0;
+	left:0;
+}
+
+#block-user-toolbar-sub-menu ul li {
 	display: block;
 	float: left;
 	padding: 0 10px;
 	margin: 0;
-	background-color: #EFEFEF;
 }
 
-ul#sub-menu.location li {
-
-}
-
-ul#sub-menu.location li a {
+#block-user-toolbar-sub-menu ul li,
+#block-user-toolbar-sub-menu ul li a {
  color: #606060;
  text-decoration: none;
 }
 
-ul#sub-menu.location li a:hover,
-ul#sub-menu.location li a.active {
+#block-user-toolbar-sub-menu ul.location li a:hover,
+#block-user-toolbar-sub-menu ul.location li a.active {
 	color: #D61D00;
 }
 
-ul#sub-menu li.title {
+#block-user-toolbar-sub-menu ul li.title {
 	background-color: #D61D00;
 	color: #FFFFFF;
 	font-weight: bold;
 }
 
-ul#sub-menu li.triangle {
-	border-color: transparent transparent transparent #EFEFEF;
-	background-color: #FFFFFF;
+#block-user-toolbar-sub-menu ul li.triangle.red {
+	border-color: transparent transparent transparent #D61D00;
+	background-color: #EFEFEF;
 	border-style: solid;
 	border-width: 10px;
 	height: 0;
 	width: 0;
 	margin: 0;
 	padding: 0;
-}
-
-ul#sub-menu li.triangle.red {
-	border-color: transparent transparent transparent #D61D00;
-	background-color: #EFEFEF;
 }
 

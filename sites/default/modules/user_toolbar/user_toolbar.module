@@ -26,29 +26,43 @@ function user_toolbar_block_view($block_name = '') {
 		case 'sub_menu':
 			
 			//
-			$output = '';
+			$output = array();
 			
 			// location
 			$vid_loc = 3;
 			
 			$results = db_query('SELECT td.name, td.tid, COUNT(td.tid) AS count FROM taxonomy_index t INNER JOIN taxonomy_term_data td ON t.tid=td.tid WHERE td.vid=:vid_loc GROUP BY t.tid ORDER BY count DESC LIMIT 8', array(':vid_loc'=>$vid_loc))->fetchAll();
 			
-			$attributes = array('id' => 'sub-menu', 'class' => array('location'));
+			$attributes = array('class' => array('location', 'current'));
 			$items[] = array('data' => t('Città'),'class' => array('title'));
 			$items[] = array('data' => '', 'class' => array('triangle','red'));
 			
 			foreach($results as $i => $data) {
 				$items[] = array(
-					'data' => l($data->name, 'taxonomy/term/'.$data->tid)
+					'data' => l($data->name, 'taxonomy/term/'.$data->tid),
 				);
 			}
-			$items[] = array('data' => '', 'class' => array('triangle'));
-			$output = theme('item_list', array('items' => $items, 'attributes' => $attributes));
+			$output[] = theme('item_list_no_div', array('items' => $items, 'attributes' => $attributes));
 			// end : location
+			
+			// last 5 articles
+			$results = db_query('SELECT nid, title FROM {node} WHERE type= :type AND status = :status ORDER BY created DESC LIMIT 5', array(':type'=>'article', ':status'=>1))->fetchAll();
+			
+			$attributes = array('style' => 'display:none', 'class' => array('latest'));
+			
+			foreach ($results as $i => $data) {
+				$items = array();
+				$items[] = array('data' => t('News'),'class' => array('title'));
+				$items[] = array('data' => '', 'class' => array('triangle','red'));
+				$items[] = array(
+					'data' => l($data->title, 'node/'.$data->nid),
+				);
+				$output[] = theme('item_list_no_div', array('items' => $items, 'attributes' => $attributes));
+			}
 			
 			$block = array(
 				'subject' => '',
-				'content' => $output,
+				'content' => implode('',$output),
 			);
 		break;
 	}
