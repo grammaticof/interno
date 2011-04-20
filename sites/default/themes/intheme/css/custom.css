@@ -1,8 +1,44 @@
 /** FONTS **/
 @font-face {
-  font-family: "FuturaMedium";
-  src: url('../fonts/Futura_medium.eot');
-  src: local('Futura Md BT Medium'), local('FuturaBT-Medium'), url('../fonts/Futura_medium.ttf') format('truetype'), url('/css/Futura_medium.svg#FuturaBT-Medium') format('svg');
+    font-family: 'FuturaLT';
+    src: url('../fonts/futuralt-webfont.eot');
+    src: url('../fonts/futuralt-webfont.eot?#iefix') format('eot'),
+         url('../fonts/futuralt-webfont.woff') format('woff'),
+         url('../fonts/futuralt-webfont.ttf') format('truetype'),
+         url('../fonts/futuralt-webfont.svg#webfontkPxSRfGH') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'FuturaLT';
+    src: url('../fonts/futuralt-boldoblique-webfont.eot');
+    src: url('../fonts/futuralt-boldoblique-webfont.eot?#iefix') format('eot'),
+         url('../fonts/futuralt-boldoblique-webfont.woff') format('woff'),
+         url('../fonts/futuralt-boldoblique-webfont.ttf') format('truetype'),
+         url('../fonts/futuralt-boldoblique-webfont.svg#webfontj7G1Wg5A') format('svg');
+    font-weight: bold;
+    font-style: italic, oblique;
+
+}
+@font-face {
+    font-family: 'FuturaLT';
+    src: url('../fonts/futuralt-bold-webfont.eot');
+    src: url('../fonts/futuralt-bold-webfont.eot?#iefix') format('eot'),
+         url('../fonts/futuralt-bold-webfont.woff') format('woff'),
+         url('../fonts/futuralt-bold-webfont.ttf') format('truetype'),
+         url('../fonts/futuralt-bold-webfont.svg#webfonttHXEhdAB') format('svg');
+    font-weight: bold;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'FuturaLT';
+    src: url('../fonts/futuralt-oblique-webfont.eot');
+    src: url('../fonts/futuralt-oblique-webfont.eot?#iefix') format('eot'),
+         url('../fonts/futuralt-oblique-webfont.woff') format('woff'),
+         url('../fonts/futuralt-oblique-webfont.ttf') format('truetype'),
+         url('../fonts/futuralt-oblique-webfont.svg#webfontKkQwwvC1') format('svg');
+    font-weight: normal;
+    font-style: italic, oblique;
 }
 
 /** GENERAL STYLE **/
@@ -77,17 +113,28 @@ blockquote {
 }
 
 #region-menu ul.main-menu {
-	font-size: 1.167em; /* 14px */
-	font-family: "Futura Book", "Futura Light", "Futura", "Futura Medium", "FuturaMedium", "Gill Sans", "Helvetica", "Arial", sans-serif;
+
 	background: none;
 	border: 0;
 	width: 100%;
 	margin: 0;
 }
 
+#region-menu ul.main-menu.sf-navbar {
+	margin: 10px 0 0 0;
+}
+
+.sf-menu li:hover ul, .sf-menu li.sfHover ul {
+left: 0;
+top: 1.167em;
+z-index: 99;
+}
+
 #region-menu ul.main-menu li a {
+	font-size: 1.25em; /* 15px */
+	font-family: "FuturaLT", "Helvetica", "Arial", sans-serif;
 	border:0;
-	padding: 0.5em 1em;
+	padding: 0.5em 0.75em;
 	color: #000000;
 	background: none;
 }
@@ -99,9 +146,13 @@ blockquote {
 
 #region-menu ul.main-menu li.active,
 #region-menu ul.main-menu a.active,
-#region-menu ul.main-menu li.active-trail {
+#region-menu ul.main-menu.secondary-items li a.active,
+#region-menu ul.main-menu li.active-trail a {
 	color: #d61d00;
-	/*border-color: #d61d00;*/
+}
+
+#region-menu ul.main-menu.secondary-items li a {
+	color: #000000;
 }
 
 #region-menu ul.main-menu li a:hover {
@@ -117,6 +168,7 @@ blockquote {
 #region-menu ul.secondary-items {
 	background-color: #FFFFFF;
 	border: 3px solid #EFEFEF;
+
 	-webkit-border-bottom-right-radius: 5px;
 	-webkit-border-bottom-left-radius: 5px;
 	-moz-border-radius-bottomright: 5px;
@@ -131,7 +183,9 @@ blockquote {
 
 .page-gsearch-result .content-region h1,
 h2.block-title {
-	font-family: "Futura Book", "Futura Light", "Futura", "Futura Medium", "FuturaMedium", "Gill Sans", "Helvetica", "Arial", sans-serif;
+	font-family: "FuturaLT", "Helvetica", "Arial", sans-serif;
+	font-variant: small-caps;
+	font-size: 1.25em;
 }
 
 .page-gsearch-result .content-region h1 {
@@ -145,7 +199,7 @@ body.page-taxonomy .content-zone h1 {
 body.page-taxonomy .breadcrumb {
 	border-left: 3px solid #4A7389;
 	padding: 0 10px;
-	font-family: "Futura Book", "Futura Light", "Futura", "Futura Medium", "FuturaMedium", "Gill Sans", "Helvetica";
+	font-family: "FuturaLT", "Helvetica";
 	font-size: 0.857em;
 	line-height: 1em;
 	margin-bottom: 10px;
@@ -581,7 +635,7 @@ div.messages {
 /** START : FOOTER **/
 
 #block-articles-main-footer {
-	font-family: "Futura Book", "Futura Light", "Futura", "Futura Medium", "FuturaMedium", "Gill Sans", "Helvetica", "Arial", sans-serif;
+	font-family: "FuturaLT", "Helvetica", "Arial", sans-serif;
 	color: #383838;
 	background-color: #EFEFEF;
 	padding: 15px;
@@ -656,8 +710,8 @@ div.messages {
 }
 
 .block-firstpage h2.block-title{
-	font-family: "Futura Book", "Futura Light", "Futura", "Futura Medium", "FuturaMedium", "Gill Sans", "Helvetica", "Arial", sans-serif;
-	font-size: 1.071em;
+	font-family: "FuturaLT", "Helvetica", "Arial", sans-serif;
+	font-size: 1em;
 	text-align: right;
 	font-variant: small-caps;
 	padding: 5px 10px;
@@ -671,7 +725,8 @@ div.messages {
 	background-position:center right;
 }
 
-.block-firstpage h2.block-title:first-letter {
+.block-firstpage h2.block-title:first-letter,
+.page-gsearch-result .content-region h1, h2.block-title:first-letter {
 	color: #D61D00;
 }
 
@@ -783,7 +838,7 @@ div.messages {
 
 /** FORMS **/
 .page-contact .region-content {
-	font-family: "Futura Book", "Futura Light", "Futura", "Futura Medium", "FuturaMedium", "Gill Sans", "Helvetica", "Arial", sans
+	font-family: "FuturaLT", "Helvetica", "Arial", sans
 	margin: 30px 0;
 }
 
@@ -846,7 +901,7 @@ div.messages {
 /** PAGE USER **/
 
 .page-user .content-region form {
-	font-family: "Futura Book", "Futura Light", "Futura", "Futura Medium", "FuturaMedium", "Gill Sans", "Helvetica", "Arial", sans
+	font-family: "FuturaLT", "Helvetica", "Arial", sans
 	margin-top: 30px;
 	min-height: 400px;
 }
@@ -886,7 +941,7 @@ ul.inline li.statistics_counter {
 }
 
 ul#sub-menu {
-	margin: 0 0 15px 0;
+	margin: 0 0 5px 0;
 	padding-left: 5px;
 	height: 20px;
 	width: 950px;
