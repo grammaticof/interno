@@ -573,7 +573,7 @@ div.messages {
 	position: relative;
 	padding: 3px 15px;
 	background-color: #EFEFEF;
-	margin-bottom: 20px;
+	margin-bottom: 5px;
 	border-top : 1px dotted #DDDDDD;
 	border-bottom : 1px dotted #DDDDDD;
 }

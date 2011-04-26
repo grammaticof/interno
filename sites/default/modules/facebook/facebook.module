@@ -172,6 +172,10 @@ function facebook_node_view($node, $view_mode, $langcode) {
 				'#markup' => theme('social_box', array('node' => $node)),
 				'#weight' => -5,
 			);
+			$node->content['adsense-box'] = array(
+				'#markup' => theme('adsense_box'),
+				'#weight' => -4,
+			);
 			
 			$node->content['social-box-bottom'] = array(
 				'#markup' => theme('social_box', array('node' => $node)),
@@ -200,6 +204,10 @@ function facebook_theme($existing, $type, $theme, $path) {
 				'node' => NULL,
 			),
 			'template' => 'social-box',
+		),
+		'adsense_box' => array(
+			'variables' => array(),
+			'template' => 'adsense-box',
 		),
 	);
 }

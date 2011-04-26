@@ -11,9 +11,6 @@ function articles_menu_alter(&$items) {
 	}
 	if (!empty($items['taxonomy/term/%taxonomy_term/feed'])) {
 		unset($items['taxonomy/term/%taxonomy_term/feed']);
-		/* $items['taxonomy/term/%taxonomy_term/feed']['page callback'] = 'articles_term_feed';
-		$items['taxonomy/term/%taxonomy_term/feed']['file path'] = drupal_get_path('module', 'articles');
-		$items['taxonomy/term/%taxonomy_term/feed']['file'] = 'articles.pages.inc'; */
 	}
 }
 

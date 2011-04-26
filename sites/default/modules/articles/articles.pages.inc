@@ -35,6 +35,11 @@ function articles_term_page($term) {
 
 	if ($nids) {
 		$nodes = node_load_multiple($nids);
+		
+		// adsense on top
+		$build['adsense'] = array(
+			'#markup' => theme('adsense_box'),
+		);		
 		$build += node_view_multiple($nodes);
 		
 		/* only the first one big */
@@ -42,6 +47,7 @@ function articles_term_page($term) {
 		foreach ($nodes as $nid => $node) {
 			if ($first) {
 				$first = FALSE;
+			
 				if (!empty($node->field_media))
 					$build['nodes'][$nid]['field_media'] = field_view_field('node', $nodes[$nid], 'field_media', 'full');
 					$build['nodes'][$nid]['field_media']['#weight'] = 1;
