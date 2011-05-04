@@ -117,7 +117,8 @@ function firstpage_block_view($block_name = '') {
 					case 'Rubriche':
 						foreach ($nodes as $nid => $node) {
 							unset($build['nodes'][$nid]['field_short']);
-
+							unset($build['nodes'][$nid]['field_media']);
+							
 							if ($node->picture != 0) {
 								$style_vars = array(
 									'path' => file_load($node->picture)->uri,
@@ -131,7 +132,8 @@ function firstpage_block_view($block_name = '') {
 								);
 							}
 							$image = theme('image_style', $style_vars);
-							$build['nodes'][$nid]['field_media'][0] = array('#markup' => $image);
+							
+							$build['nodes'][$nid]['field_avatar'] = array('#markup' => $image);
 						}
 					break;
 					default:
