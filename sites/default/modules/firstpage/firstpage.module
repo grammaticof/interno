@@ -22,9 +22,12 @@ function firstpage_home() {
 	
 	// carousel css+js
 	$module_path = drupal_get_path('module', 'firstcarousel');
-	drupal_add_js(drupal_get_path('theme', 'intheme').'/js/jquery.tools.min.js');
+	$theme_path = drupal_get_path('theme', 'intheme');
+	drupal_add_js($theme_path.'/js/jquery.tools.min.js');
 	drupal_add_js($module_path.'/firstcarousel.js');
 	drupal_add_css($module_path.'/firstcarousel.css');
+	// lazy loader
+	drupal_add_js($theme_path.'/js/jquery.lazyload.min.js');
 	
 	// drupal_add_feed('feed', 'RSS - interno18.it');
 	return '';

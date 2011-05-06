@@ -118,9 +118,15 @@ function firstcarousel_preprocess_firstcarousel_block_html(&$vars) {
 	$tabs = array();
 	$items = '';
 	$nids = $vars['nids'];
+	$first = TRUE;
 	
 	foreach ($nids as $nid) {
 		$node = node_load($nid);
+		
+		if ($first) { // first node
+			$node->first = TRUE;
+			$first = FALSE;
+		}
 		
 		$tabs[] = truncate_utf8($node->title, '80', FALSE, TRUE, 1);		
 		$items .= theme('firstcarousel_block_item', array('node' => $node));
@@ -136,17 +142,29 @@ function firstcarousel_preprocess_firstcarousel_block_item(&$vars) {
 
 	$image = '';
 	if (isset($node->field_media[$lang][0])) {
+		$style_name = 'carousel';
+		$attr = array();
+		
+		// proper image
 		$file = (object) $node->field_media[$lang][0];
-		$fid = $file->fid;
+		$img_uri = file_load($file->fid)->uri;
+		
+		if (!isset($node->first)) {
+			// throbber
+			$attr = array(
+				'class' => array('lazy'),
+				'original' => image_style_url($style_name, $img_uri),
+			);
+			$img_uri = 'public://white.gif';
+		}
 		
 		$style_vars = array(
-			'path' => file_load($fid)->uri,
-			'style_name' => variable_get('firstcarousel_image_style', 'carousel'),
+			'path' => $img_uri,
+			'style_name' => $style_name,
+			'attributes' => $attr,
 		);
 		$image = theme('image_style', $style_vars);
 	}
-	
-	// print_r($style_vars);
 	
 	$vars['image'] = $image;
 	$vars['title'] = $node->title;
