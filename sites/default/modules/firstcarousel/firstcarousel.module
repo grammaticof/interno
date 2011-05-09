@@ -149,7 +149,7 @@ function firstcarousel_preprocess_firstcarousel_block_item(&$vars) {
 		$file = (object) $node->field_media[$lang][0];
 		$img_uri = file_load($file->fid)->uri;
 		
-		if (isset($node->first)) {
+		if (!isset($node->first)) {
 			$attr = array(
 				'class' => array('lazy'),
 				'original' => image_style_url($style_name, $img_uri),
