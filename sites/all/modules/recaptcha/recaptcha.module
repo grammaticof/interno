@@ -1,5 +1,4 @@
 <?php
-// $Id: recaptcha.module,v 1.13.2.4.2.11.2.14.2.1 2010/12/21 14:30:28 robloach Exp $
 
 /**
  * @file
@@ -167,10 +166,11 @@ function recaptcha_captcha() {
  * CAPTCHA Callback; Validates the reCAPTCHA code.
  */
 function recaptcha_captcha_validation($solution = NULL, $response = NULL) {
+  global $user;
   if ($response == 'reCAPTCHA' && isset($_POST['recaptcha_challenge_field']) && isset($_POST['recaptcha_response_field'])) {
     $resp = recaptcha_check_answer(
       variable_get('recaptcha_private_key', ''),
-      $_SERVER['REMOTE_ADDR'],
+      $user->hostname,
       $_POST['recaptcha_challenge_field'],
       $_POST['recaptcha_response_field']
     );

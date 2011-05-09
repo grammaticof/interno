@@ -37,10 +37,18 @@
 }
 
 #block-firstcarousel-carousel .scrollable .item a {
-	display: block;
-	line-height: 1.25em;
+	display: table-cell;
+	vertical-align:middle;
+	/* display: block; */
+	height: 240px;
+	width: 620px;
 	text-decoration: none;
 	color: #FFFFFF;
+}
+
+#block-firstcarousel-carousel .scrollable .item a img {
+	display:block;
+	margin:auto;
 }
 
 #block-firstcarousel-carousel .scrollable .item h3 {

@@ -139,8 +139,8 @@ function firstcarousel_preprocess_firstcarousel_block_html(&$vars) {
 function firstcarousel_preprocess_firstcarousel_block_item(&$vars) {
 	$node = $vars['node'];
 	$lang = $node->language;
-
 	$image = '';
+
 	if (isset($node->field_media[$lang][0])) {
 		$style_name = 'carousel';
 		$attr = array();
@@ -149,21 +149,30 @@ function firstcarousel_preprocess_firstcarousel_block_item(&$vars) {
 		$file = (object) $node->field_media[$lang][0];
 		$img_uri = file_load($file->fid)->uri;
 		
-		if (!isset($node->first)) {
-			// throbber
+		if (isset($node->first)) {
 			$attr = array(
 				'class' => array('lazy'),
 				'original' => image_style_url($style_name, $img_uri),
 			);
-			$img_uri = 'public://white.gif';
+
+			// throbber
+			$style_vars = array(
+				'path' => 'public://throbber.gif',
+				'attributes' => $attr,
+				'alt' => $node->title,
+				'title' => $node->title,
+			);
+			$image = theme('image', $style_vars);
 		}
-		
-		$style_vars = array(
-			'path' => $img_uri,
-			'style_name' => $style_name,
-			'attributes' => $attr,
-		);
-		$image = theme('image_style', $style_vars);
+		else {
+			$style_vars = array(
+				'path' => $img_uri,
+				'style_name' => $style_name,
+				'alt' => $node->title,
+				'title' => $node->title,
+			);
+			$image = theme('image_style', $style_vars);			
+		}
 	}
 	
 	$vars['image'] = $image;

@@ -1,5 +1,4 @@
 <?php
-// $Id: recaptcha_mailhide.module,v 1.1.2.7.2.5.2.1 2010/12/21 14:30:28 robloach Exp $
 
 /**
  * @file
@@ -65,17 +64,19 @@ function _filter_recaptcha_mailhide($text, $filter, $format) {
 
 function _filter_recaptcha_mailhide_settings($form, &$form_state, $filter, $format, $defaults, $filters) {
   _recaptcha_mailhide_load_library();
+  $public = isset($filter->settings['recaptcha_mailhide_public_key']) ? $filter->settings['recaptcha_mailhide_public_key'] : '';
+  $private = isset($filter->settings['recaptcha_mailhide_private_key']) ? $filter->settings['recaptcha_mailhide_private_key'] : '';
   $settings['recaptcha_mailhide_public_key'] = array(
     '#type' => 'textfield',
     '#title' => t('Public Key'),
-    '#default_value' => $filter->settings['recaptcha_mailhide_public_key'],
+    '#default_value' => $public,
     '#maxlength' => 50,
     '#description' => t('Your public Mailhide key obtained from <a href="@url" target="_blank">reCAPTCHA</a>.', array('@url' => 'http://mailhide.recaptcha.net/apikey')),
     );
   $settings['recaptcha_mailhide_private_key'] = array(
     '#type' => 'textfield',
     '#title' => t('Private Key'),
-    '#default_value' => $filter->settings['recaptcha_mailhide_private_key'],
+    '#default_value' => $private,
     '#maxlength' => 50,
     '#description' => t('Your private Mailhide key obtained from <a href="@url" target="_blank">reCAPTCHA</a>.', array('@url' => 'http://mailhide.recaptcha.net/apikey')),
     );

@@ -12,7 +12,7 @@
 			$(".scrollable img.lazy").bind('Foo', {}, function(e) {});
 			
 			$(".scrollable img.lazy").lazyload({
-				placeholder: "sites/default/files/white.gif", 
+				placeholder: "sites/default/files/throbber.gif", 
 				event: 'Foo'
 			});
 		}
