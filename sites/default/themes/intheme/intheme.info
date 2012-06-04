@@ -15,7 +15,7 @@ base theme = omega
 
 ; ------- Declare default stylesheets
 stylesheets[all][] = css/custom.css
-; stylesheets[all][] = css/fonts.css
+stylesheets[all][] = fonts/stylesheet.css
 ; stylesheets[all][] = css/form.css
 
 ; ------- Declare default JavaScript includes

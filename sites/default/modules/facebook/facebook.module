@@ -32,8 +32,18 @@ function facebook_init() {
 		)
 	);
 	drupal_add_html_head($meta_description, 'meta_facebook_admins');
-	
+
 	$script = "
+	(function(d, s, id) {
+	  var js, fjs = d.getElementsByTagName(s)[0];
+	  if (d.getElementById(id)) return;
+	  js = d.createElement(s); js.id = id;
+	  js.src = '//connect.facebook.net/it_IT/all.js#xfbml=1&appId=$appId';
+	  fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));
+	";
+
+	/* $script = "
 		if (document.getElementById('fb-root')) {
 			window.fbAsyncInit = function() {
 			FB.init({appId: '$appId', status: true, cookie: true, xfbml: true});};
@@ -44,6 +54,7 @@ function facebook_init() {
 			}());
 		}
 	";
+	*/
 	drupal_add_js($script, array('type' => 'inline', 'scope' => 'footer', 'weight' => 5));	
 }
 
@@ -153,7 +164,7 @@ function facebook_node_view($node, $view_mode, $langcode) {
 			drupal_add_html_head($meta_description, 'meta_facebook_type');
 			
 			if (!empty($node->field_media))
-				$img_path = image_style_url('square_thumbnail', $node->field_media[$node->language][0]->uri);
+				$img_path = image_style_url('square_thumbnail', $node->field_media[$node->language][0]['file']->uri);
 			else
 				$img_path = file_create_url('public://logo.png');
 

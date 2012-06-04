@@ -43,9 +43,8 @@
 
 /** GENERAL STYLE **/
 body {
-	font-size: 12px;
-	font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
-	text-transform: normal;
+	font-size: 13px;
+	font-family: "TeXGyreHerosRegular", "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
 	word-wrap: break-word;
 }
 
@@ -74,8 +73,7 @@ div#page {
 
 h1 {
 	color: #4A7389;
-	font-family: Georgia, "Times New Roman", Times, serif;
-	font-size: 2.583em;
+	font-size: 33px;
 	font-style: normal;
 	font-variant: normal;
 	font-weight: 400;
@@ -86,7 +84,7 @@ h1 {
 	text-transform: none;
 	margin: 0;
 	padding: 0;
-	line-height: 1.29em;
+	line-height: 36px;
 }
 
 blockquote {
@@ -131,8 +129,8 @@ z-index: 99;
 }
 
 #region-menu ul.main-menu li a {
-	font-size: 1.25em; /* 15px */
-	font-family: "FuturaLT", "Helvetica", "Arial", sans-serif;
+	font-size: 15px;
+	/* font-family: "FuturaLT", "Helvetica", "Arial", sans-serif; */
 	border:0;
 	padding: 0.5em 0.75em;
 	color: #000000;
@@ -185,11 +183,11 @@ z-index: 99;
 h2.block-title {
 	font-family: "FuturaLT", "Helvetica", "Arial", sans-serif;
 	font-variant: small-caps;
-	font-size: 1.25em;
+	font-size: 15px;
 }
 
 .page-gsearch-result .content-region h1 {
-	font-size: 1.25em; /* 15px */
+	font-size: 15px; /* 15px */
 }
 
 body.page-taxonomy .content-zone h1 {
@@ -200,13 +198,13 @@ body.page-taxonomy .breadcrumb {
 	border-left: 3px solid #4A7389;
 	padding: 0 10px;
 	font-family: "FuturaLT", "Helvetica";
-	font-size: 0.857em;
+	font-size: 11px;
 	line-height: 1em;
 	margin-bottom: 10px;
 }
 
 body.page-taxonomy .breadcrumb a.active {
-	font-size: 1.333em;
+	font-size: 16px;
 }
 
 /** END: REGION MENU **/
@@ -244,20 +242,24 @@ body.page-taxonomy .submitted {
 }
 
 body.page-taxonomy .node .field-name-field-short {
-	font-size: 1em;
-	line-height: 1.5em;
+	font-size: 14px;
+	line-height: 18px;
 }
 
 a.field-location {
 	text-transform: uppercase;
-	font-weight: bold;
 	color: #606060;
 }
 
 body.page-taxonomy .node h2.node-title {
-	font-size: 1.333em;
-	line-height: 1.333em;
+	font-size: 16px;
+	line-height: 18px;
 	margin-bottom: 5px;
+}
+
+body.page-taxonomy .node a.field-location {
+    font-size: 12px;
+    line-height: 16px;
 }
 
 body.page-taxonomy .node .field-type-media {
@@ -303,8 +305,8 @@ body.page-taxonomy .node.first .field-type-media {
 }
 
 .article.full-view .field-name-body {
-	font-size: 1.167em; /* 14px */
-	line-height: 1.5em
+	font-size: 16px; /* 14px */
+	line-height: 22px;
 }
 
 .article.full-view img{
@@ -323,10 +325,9 @@ body.page-taxonomy .node.first .field-type-media {
 .article.full-view .field-name-field-short {
 	display: block;
 	color: #797979;
-	font-family: 'Georgia-Italic', Georgia, "Times New Roman", Times, serif;
-	font-size: 1.5em;
+	font-size: 16px;
 	font-style: italic;
-	line-height: 1.5em;
+	line-height: 22px;
 	text-align: left;
 	margin-bottom: 15px;
 	padding: 0;
@@ -356,7 +357,7 @@ body.page-taxonomy .node.first .field-type-media {
 .article.full-view .fb-comments-title {
 	font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
 	color: #3B5998;
-	font-size: 1.333em;
+	font-size: 15px;
 	margin: 20px 0;
 }
 
@@ -398,7 +399,7 @@ body.page-taxonomy .node.first .field-type-media {
 	font-family: Arial, Verdana;
 	color: #DDDDDD;
 	font-weight: bold;
-	font-size: 0.917em;
+	font-size: 10px;
 }
 
 #user-toolbar ul li {
@@ -562,7 +563,7 @@ div.messages {
 
 .block-firstpage .field-type-node-reference .field-item {
 	padding-left: 10px;
-	font-size: 0.857em;
+	font-size: 10px;
 }
 
 /** END: FIELDS **/
@@ -571,8 +572,7 @@ div.messages {
 
 .box {
 	position: relative;
-	padding: 3px 15px;
-	background-color: #EFEFEF;
+	padding: 6px 0;
 	margin-bottom: 5px;
 	border-top : 1px dotted #DDDDDD;
 	border-bottom : 1px dotted #DDDDDD;
@@ -681,14 +681,15 @@ div.messages {
 .block-firstpage .node {
 	margin: 10px 0;
 	border: 0;
-	border-bottom : 1px solid #DDDDDD;
+	/* border-bottom : 1px solid #DDDDDD; */
 	padding: 0;
 	position: relative;
 }
 
 .block-firstpage .content .field-name-field-short{
 	padding-bottom : 5px;
-	line-height: 1.333em;
+	line-height: 16px;
+	font-size: 12px;
 }
 
 .block-firstpage ul.links li {
@@ -704,14 +705,14 @@ div.messages {
 }
 
 .block-firstpage .node h2.node-title {
-	font-size: 1.083em;
-	line-height: 1.167em;
+	font-size: 14px;
+	line-height: 16px;
 	margin-bottom: 5px;
 }
 
 .block-firstpage h2.block-title{
 	font-family: "FuturaLT", "Helvetica", "Arial", sans-serif;
-	font-size: 1em;
+	font-size: 14px;
 	text-align: right;
 	font-variant: small-caps;
 	padding: 5px 10px;
@@ -767,9 +768,10 @@ div.messages {
 }
 
 #block-firstpage-rubriche .node a {
-	text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2);
+	text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);
 	color: #383838;
-	font-size: 0.917em;
+	font-size: 14px;
+	line-height: 16px;
 }
 
 #block-firstpage-rubriche .node img {
@@ -813,7 +815,7 @@ div.messages {
 }
 
 #block-firstpage-culturaspettacolo .node h2 a {
-	font-size: 0.917em;
+	font-size: 13px;
 	color: #FFFFFF;
 }
 
@@ -848,12 +850,12 @@ div.messages {
 }
 
 .region-content form label {
-	font-size: 1.667em;
-	margin-bottom: 5px;
+	font-size: 22px;
+	margin-bottom: 6px;
 }
 
 .region-content .form-type-checkbox label {
-	font-size: 1em;
+	font-size: 14px;
 	line-height: 1em;
 }
 
@@ -868,7 +870,7 @@ div.messages {
 
 .region-content form .form-type-textfield input,
 .region-content form .form-type-textarea input {
-	font-size: 1.667em;
+	font-size: 22px;
 	width: 100%;
 }
 
@@ -877,15 +879,15 @@ div.messages {
 }
 
 .region-content form .form-actions input {
-	font-size: 1.667em;
-	line-height: 1em;
+	font-size: 18px;
+	line-height: 18px;
 	margin-top: 20px;
 	padding: 0 10px;
 	cursor: pointer; 
 }
 
 .region-content form .description {
-	font-size: 1.083em;
+	font-size: 18px;
 	background-color: #F2F2F2;
 	border: 1px solid #DDDDDD;
 	padding: 5px;
@@ -908,8 +910,8 @@ div.messages {
 
 .page-user .profile .field-name-field-name,
 .page-user .profile .field-name-field-surname {
-	font-size: 1.667em;
-	line-height: 1.833em;
+	font-size: 18px;
+	line-height: 20px;
 }
 
 /** END: PAGE USER **/
@@ -929,7 +931,7 @@ ul.inline li.statistics_counter {
 	text-align: center;
 	color: #606060;
 	font-weight: bold;
-	font-size: 0.583em;
+	font-size: 7px;
 }
 
 /** END: STATISTICS **/
@@ -988,5 +990,9 @@ ul.inline li.statistics_counter {
 	width: 0;
 	margin: 0;
 	padding: 0;
+}
+
+.center {
+	text-align: center;
 }
 

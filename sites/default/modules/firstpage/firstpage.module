@@ -142,7 +142,7 @@ function firstpage_block_view($block_name = '') {
 						$i = 0;
 						foreach ($build['nodes'] as $nid => $node) {
 							$i++;
-							if ($i > 2) {
+							if ($i > 3) {
 								unset($build['nodes'][$nid]['field_short']);
 								unset($build['nodes'][$nid]['field_media']);
 							}
@@ -164,7 +164,6 @@ function firstpage_block_view($block_name = '') {
 			'subject' => l($cat_array[$block_name], 'taxonomy/term/'.$terms[$term_name]->tid, array('html' => TRUE)),
 			'content' => $build,
 		);
-		
 		return $block;
 	}
 }

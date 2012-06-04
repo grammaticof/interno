@@ -154,7 +154,6 @@ function articles_node_view_alter(&$build) {
 			break;
 		
 			case 'teaser': // teaser view
-				
 				if (!empty($build['field_location'])) {
 					hide($build['field_location']);
 						

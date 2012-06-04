@@ -52,8 +52,13 @@
 }
 
 #block-firstcarousel-carousel .scrollable .item h3 {
-	font-size: 1.167em;
+	font-size: 16px;
 	margin: 0 0 5px 0;
+	font-weight: bold;
+}
+
+#block-firstcarousel-carousel .scrollable .item p {
+    display:none;
 }
 
 #block-firstcarousel-carousel .scrollable .item span {
