@@ -7,6 +7,31 @@
 
 
 /**
+ * Preset storage constant for user-defined presets in the DB.
+ */
+define('RELEVANT_CONTENT_STORAGE_NORMAL', 0);
+
+/**
+ * Preset storage constant for module-defined presets in code.
+ */
+define('RELEVANT_CONTENT_STORAGE_DEFAULT', 1);
+
+/**
+ * Preset storage constant for user-defined presets that override
+ * module-defined presets.
+ */
+define('RELEVANT_CONTENT_STORAGE_OVERRIDDEN', 2);
+
+
+/**
+ * Preset status constants for blocks.
+ */
+define('RELEVANT_CONTENT_STATUS_DISABLED', 0);
+define('RELEVANT_CONTENT_STATUS_ENABLED', 1);
+
+define('RELEVANT_CONTENT_ADMIN_BASE_PATH', 'admin/config/search/relevant_content');
+
+/**
  * Implement hook_help().
  */
 function relevant_content_help($path, $arg) {
@@ -14,9 +39,9 @@ function relevant_content_help($path, $arg) {
     case 'admin/help' :
       return t('Provides a block using the Views module to display relevant nodes for the current page.');
     case 'admin/blocks/relevant_content' :
-      $output  = '<p>'. t('On this page you can configure which blocks should be provided on a per-content-type basis. If you enabled a content type, please make sure to provided a block title.') .'</p>';
-      $output .= '<p>'. t('The <em>Limit</em> field allows you to provide a maximum number of nodes to be displayed for that block.') .'</p>';
-      $output .= '<p>'. t('The <em>Block Header Text</em> field allows you to provide some text which can appear at the top of the block - good for explaining to the user what the block is.') .'</p>';
+      $output  = '<p>' . t('On this page you can configure which blocks should be provided on a per-content-type basis. If you enabled a content type, please make sure to provided a block title.') . '</p>';
+      $output .= '<p>' . t('The <em>Limit</em> field allows you to provide a maximum number of nodes to be displayed for that block.') . '</p>';
+      $output .= '<p>' . t('The <em>Block Header Text</em> field allows you to provide some text which can appear at the top of the block - good for explaining to the user what the block is.') . '</p>';
       return $output;
   }
 }
@@ -34,6 +59,10 @@ function relevant_content_perm() {
  * Implement hook_menu().
  */
 function relevant_content_menu() {
+  // Rebuild the settings when the menu gets rebuilt - this is the only way to
+  // clear the settings cache on a module submit
+  relevant_content_get_settings(NULL, TRUE);
+
   $items = array();
 
   $defaults = array(
@@ -42,34 +71,32 @@ function relevant_content_menu() {
     'file path' => drupal_get_path('module', 'relevant_content'),
   );
 
-  $items['admin/config/relevant_content'] = array(
-    'title' => 'Relevant Content',
-    'description' => 'Configuration for Relevant Content',
-    'page callback' => 'system_admin_menu_block_page',
-    'file' => 'system.admin.inc',
-    'file path' => drupal_get_path('module', 'system'),
-    'access arguments' => array('administer relevant content'),
-  );
-
-  $items['admin/config/relevant_content/blocks'] = $defaults + array(
+  $items[RELEVANT_CONTENT_ADMIN_BASE_PATH] = array(
     'title' => 'Relevant Content',
     'description' => 'Configure the sites <em>relevant content</em> blocks.',
     'page callback' => 'relevant_content_admin',
-  );
+  ) + $defaults;
 
-  $items['admin/config/relevant_content/blocks/%relevant_content_delta'] = $defaults + array(
-    'title' => 'Edit Block',
-    'description' => 'Configure the sites <em>relevant content</em> blocks.',
+  $items[RELEVANT_CONTENT_ADMIN_BASE_PATH . '/overview'] = array(
+    'title' => 'Overview',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => -10,
+  ) + $defaults;
+
+  $items[RELEVANT_CONTENT_ADMIN_BASE_PATH . '/add'] = array(
+    'title' => 'Add',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('relevant_content_admin_block_form', 4),
-    'type' => MENU_CALLBACK,
-  );
+    'page arguments' => array('relevant_content_admin_block_form'),
+    'type' => MENU_LOCAL_TASK,
+  ) + $defaults;
 
-  $items['admin/config/relevant_content/blocks/%relevant_content_delta/delete'] = $defaults + array(
-    'page callback' => 'relevant_content_admin_delete',
-    'page arguments' => array(4),
+  $items[RELEVANT_CONTENT_ADMIN_BASE_PATH . '/%relevant_content_block/%relevant_content_admin_op'] = array(
+    'title callback' => 'relevant_content_admin_block_operator_title',
+    'title arguments' => array(4, 5),
+    'page callback' => 'relevant_content_admin_block_operator_callback',
+    'page arguments' => array(4, 5),
     'type' => MENU_CALLBACK,
-  );
+  ) + $defaults;
 
   return $items;
 }
@@ -81,11 +108,38 @@ function relevant_content_menu() {
  * This is simply here (currently) to act as a nice URL delta parser. Returns false if block not available.
  * TODO: Modify system to load the settings. This means modifying form inputs too.
  */
-function relevant_content_delta_load($delta) {
-  $settings = variable_get('relevant_content', array());
-  if (isset($settings[$delta])) return $delta;
+function relevant_content_block_load($block_id) {
+  return relevant_content_get_settings($block_id);
+}
 
-  return FALSE;
+
+/**
+ * Implement hook_load().
+ *
+ * Relevant Content admin op loader callback for the Menu API
+ * This allows a single Admin URL to serve several operations on a block
+ */
+function relevant_content_admin_op_load($op) {
+  $ret = array('op' => $op);
+
+  switch ($op) {
+    case 'edit'    : $ret['title'] = t('Edit');    $ret['callback'] = 'relevant_content_admin_block_form'; break;
+    case 'delete'  : $ret['title'] = t('Delete');  $ret['callback'] = 'relevant_content_admin_delete_confirm'; break;
+    case 'revert'  : $ret['title'] = t('Revert');  $ret['callback'] = 'relevant_content_admin_revert_confirm'; break;
+    case 'enable'  : $ret['title'] = t('Enable');  $ret['callback'] = 'relevant_content_admin_enable_confirm'; break;
+    case 'disable' : $ret['title'] = t('Disable'); $ret['callback'] = 'relevant_content_admin_disable_confirm'; break;
+
+    default : return FALSE;
+  }
+  return $ret;
+}
+
+
+/**
+ * Admin block operation title callback
+ */
+function relevant_content_admin_block_operator_title($block, $op) {
+  return t('!op Relevant Content Block - @id', array('!op' => $op['title'], '@id' => $block['id']));
 }
 
 
@@ -106,12 +160,14 @@ function relevant_content_form_alter(&$form, &$form_state, $form_id) {
  */
 function relevant_content_block_info() {
   $blocks = array();
-  $settings = variable_get('relevant_content', array());
+  $settings = relevant_content_get_settings();
 
   if (!empty($settings)) {
-    foreach ($settings as $delta => $params) {
-      $blocks[$delta] = array(
-        'info' => t('Relevant Content: @title', array('@title' => $delta)),
+    foreach ($settings as $block) {
+      if (!$block['status']) continue;
+
+      $blocks[$block['id']] = array(
+        'info' => t('Relevant Content: @title', array('@title' => $block['id'])),
         'cache' => DRUPAL_CACHE_PER_ROLE | DRUPAL_CACHE_PER_PAGE,
         'visibility' => 1,
         'pages' => 'node/*',
@@ -126,8 +182,14 @@ function relevant_content_block_info() {
 /**
  * Implement hook_block_view().
  */
-function relevant_content_block_view($delta = '') {
-  $settings = variable_get('relevant_content', array());
+function relevant_content_block_view($block_id) {
+  // Get the block by its ID
+  $block = relevant_content_get_settings($block_id);
+
+  // If no block, return
+  if (!$block) {
+    return;
+  }
 
   //Get the terms for the current page using a little reusable wrapper function
   $terms = relevant_content_get_page_terms();
@@ -139,7 +201,7 @@ function relevant_content_block_view($delta = '') {
 
   //Filter out the terms which are not in a selected vocabulary
   foreach ($terms as $key => $term) {
-    if (isset($settings[$delta]['vocabs'][$term->vid])) {
+    if (isset($block['vocabs'][$term->vid])) {
       $terms[$key] = $term->tid;
     }
     else {
@@ -155,15 +217,16 @@ function relevant_content_block_view($delta = '') {
   //Create a node exclusion list - this will exclude the currently viewed node - if applicable.
   //This stops the currently viewed node appearing top of a list - afterall, it IS the most relevant!
   $exclude = array();
-  if (arg(0) == 'node' && is_numeric(arg(1))) {
-    $exclude[] = arg(1);
+  if ($node = menu_get_object()) {
+    $exclude[] = $node->nid;
   }
 
-  if ($nodes = relevant_content_get_nodes($settings[$delta]['types'], $terms, $exclude, $settings[$delta]['limit'])) {
-    $header = isset($settings[$delta]['header_text']) ? $settings[$delta]['header_text'] : FALSE;
+  if ($nodes = relevant_content_get_nodes($block['types'], $terms, $exclude, $block['max_items'])) {
+    // Return a block
+    // See @template_preprocess_relevant_content_block
     return array(
       'subject' => t('Relevant Content'),
-      'content' => theme('relevant_content_block', array('nodes' => $nodes, 'header' => $header, 'delta' => $delta)),
+      'content' => theme('relevant_content_block', array('nodes' => $nodes, 'block' => $block)),
     );
   }
 }
@@ -177,7 +240,7 @@ function relevant_content_get_page_terms($node = NULL) {
    * If we have passed in a node, or if there is one available from the menu object, use the node ID to load all the terms for the node...
    * This seems to be necessary due to the new Field API not really giving us "one" taxonomy array on the node.
    */
-  if (isset($node) || (arg(0) == 'node' && is_numeric(arg(1)) && $node = menu_get_object())) {
+  if (isset($node) || ($node = menu_get_object())) {
     // Select from the taxonomy_index and the taxonomy_term_data
     $query = db_select('taxonomy_index', 't');
     $query->join('taxonomy_term_data', 'td', 'td.tid = t.tid');
@@ -211,16 +274,9 @@ function relevant_content_theme($existing, $type, $theme, $path) {
   $base = array('file' => 'relevant_content.theme.inc', 'theme path' => $path);
 
   return array(
-    'relevant_content_block'                        => $base + array('arguments' => array('nodes' => NULL, 'header' => NULL, 'delta' => NULL),),
-    'relevant_content_token_help'                   => $base + array('arguments' => array()),
-    'relevant_content_field_formatter_general'      => $base + array('arguments' => array('element' => NULL, 'type' => NULL)),
-    'relevant_content_individual_field'             => $base + array('arguments' => array('attributes' => NULL, 'result' => NULL)),
-    'field_formatter_relevant_content_default'      => $base + array('arguments' => array('element' => NULL)),
-    'field_formatter_relevant_content_plain'        => $base + array('arguments' => array('element' => NULL)),
-    'field_formatter_relevant_content_teaser'       => $base + array('arguments' => array('element' => NULL)),
-    'field_formatter_relevant_content_full'         => $base + array('arguments' => array('element' => NULL)),
-    'field_formatter_relevant_content_token_teaser' => $base + array('arguments' => array('element' => NULL)),
-    'field_formatter_relevant_content_token_full'   => $base + array('arguments' => array('element' => NULL)),
+    'relevant_content_block'            => $base + array('variables' => array('nodes' => NULL, 'block' => NULL), 'template' => 'relevant_content_block'),
+    'relevant_content_admin_overview'   => $base + array('render_element' => 'element', 'template' => 'relevant_content_admin_overview'),
+    'relevant_content_individual_field' => $base + array('variables' => array('attributes' => NULL, 'result' => NULL)),
   );
 }
 
@@ -261,10 +317,14 @@ function relevant_content_get_nodes($types, $terms, $exclude = array(), $limit =
   $query->condition('n.status', 1)->condition('n.type', $types, 'IN')->condition('ti.tid', $terms, 'IN');
 
   // Exclude any specific node id's
-  if (!empty($exclude))   { $query->condition('n.nid', $exclude, 'NOT IN'); }
+  if (!empty($exclude)) {
+    $query->condition('n.nid', $exclude, 'NOT IN');
+  }
 
   // IF language is specified, make sure we filter for those too
-  if (!empty($languages)) { $query->condition('n.language', $languages, 'IN'); }
+  if (!empty($languages)) {
+    $query->condition('n.language', $languages, 'IN');
+  }
 
   // Group, order and limit the query
   $query->groupBy('n.nid')->orderBy('cnt', 'DESC')->orderBy('n.created', 'DESC')->orderBy('n.nid', 'DESC')->range(0, $limit);
@@ -308,44 +368,32 @@ function relevant_content_term_cache($terms = array(), $clear = FALSE) {
 
 
 /**
- * Private function used as a callback for array_map which sets the item to the value of $value using $key as either an array offset or an object property.
- *
- * @param $item
- *   This is a variable reference to the item being mapped to. Chaning this value will change the value in the array being mapped using array_map
- * @param $key
- *   They key of $item in the array being mapped
- * @param $values
- *   A user defined array passed in. In this case, it us used for reference purposes
- */
-function _relevant_content_array_map_key_to_values(&$item, $key, $values) {
-  if (isset($values[$key])) {
-    if (is_object($values[$key])) {
-      $item = $values[$key]->name;
-    }
-    else {
-      $item = $values[$key];
-    }
-  }
-  else {
-    $item = t('Error: Item missing.');
-  }
-}
-
-
-/**
  * Implement hook_field_info().
  *
  * Field settings: ...
  */
 function relevant_content_field_info() {
+  $default_format = filter_default_format();
+
   return array(
     'relevant_content' => array(
       'label' => t('Relevant Content'),
       'description' => t('This is an output-only field which looks up related content for the node the field is attached to.'),
       'default_widget' => 'relevant_content_list',
-      'default_formatter' => 'relevant_content_default',
-      'settings' => array(),
-      'instance_settings' => array(),
+      //'default_formatter' => 'relevant_content_default',
+      'default_formatter' => 'default',
+      'settings' => array(
+        'relevant_nodetypes' => array(),
+        'relevant_vocabs' => array(),
+        'relevant_result_limit' => 5,
+        'relevant_header' => array('value' => '', 'format' => $default_format),
+      ),
+      'instance_settings' => array(
+        'token_settings' => array(
+          'token_teaser' => array('value' => '', 'format' => $default_format),
+          'token_full' => array('value' => '', 'format' => $default_format),
+        ),
+      ),
     ),
   );
 }
@@ -400,19 +448,11 @@ function relevant_content_field_settings_form($field, $instance, $has_data) {
 
   // Define a result header field with formatter options
   $form['relevant_header'] = array(
-    '#tree' => TRUE,
+    '#type' => 'text_format',
     '#title' => t('Header Text'),
-    '#type' => 'fieldset',
     '#description' => t('Optionally include some text to appear above the list and below the label (if the label is enabled).'),
-  );
-  $form['relevant_header']['body'] = array(
-    '#type' => 'textarea',
-    '#default_value' => isset($field['settings']['relevant_header']['body']) ? $field['settings']['relevant_header']['body'] : '',
-  );
-  $form['relevant_header']['format'] = filter_form(
-    isset($field['settings']['relevant_header']['format']) ? $field['settings']['relevant_header']['format'] : NULL,
-    NULL,
-    array('field', 'settings', 'relevant_header', 'format')
+    '#default_value' => isset($field['settings']['relevant_header']['value']) ? $field['settings']['relevant_header']['value'] : '',
+    '#format' => isset($field['settings']['relevant_header']['format']) ? $field['settings']['relevant_header']['format'] : NULL,
   );
 
   return $form;
@@ -424,56 +464,35 @@ function relevant_content_field_settings_form($field, $instance, $has_data) {
  */
 function relevant_content_field_instance_settings_form($field, $instance) {
   $form = array();
+
   $form['token_settings'] = array(
     '#type' => 'fieldset',
     '#title' => t('Token Output Settings'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
   );
+
   $form['token_settings']['token_teaser'] = array(
-    '#type' => 'fieldset',
     '#title' => t('Tokens for teaser view formatter'),
-    '#tree' => TRUE,
-  );
-  $form['token_settings']['token_teaser']['body'] = array(
-    '#type' => 'textarea',
+    '#type' => 'text_format',
     '#description' => t('Tokens entered in here will be used for the optional token teaser formatter. This allows customized output.'),
-    '#default_value' => isset($instance['settings']['token_settings']['token_teaser']['body']) ? $instance['settings']['token_settings']['token_teaser']['body'] : '',
+    '#default_value' => isset($instance['settings']['token_settings']['token_teaser']['value']) ? $instance['settings']['token_settings']['token_teaser']['value'] : '',
+    '#format' => isset($instance['settings']['token_settings']['token_teaser']['format']) ? $instance['settings']['token_settings']['token_teaser']['format'] : NULL,
     '#rows' => 4,
   );
-  $form['token_settings']['token_teaser']['format'] = filter_form(
-    isset($instance['settings']['token_settings']['token_teaser']['format']) ? $instance['settings']['token_settings']['token_teaser']['format'] : NULL,
-    NULL,
-    array('instance', 'settings', 'token_settings', 'token_teaser', 'format')
-  );
-
 
   $form['token_settings']['token_full'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'text_format',
     '#title' => t('Tokens for full view formatter'),
-    '#tree' => TRUE,
-  );
-  $form['token_settings']['token_full']['body'] = array(
-    '#type' => 'textarea',
     '#description' => t('Tokens entered in here will be used for the optional token full formatter. This allows customized output.'),
-    '#default_value' => isset($instance['settings']['token_settings']['token_full']['body']) ? $instance['settings']['token_settings']['token_full']['body'] : '',
+    '#default_value' => isset($instance['settings']['token_settings']['token_full']['value']) ? $instance['settings']['token_settings']['token_full']['value'] : '',
+    '#format' => isset($instance['settings']['token_settings']['token_full']['format']) ? $instance['settings']['token_settings']['token_full']['format'] : '',
     '#rows' => 4,
-  );
-  $form['token_settings']['token_full']['format'] = filter_form(
-    isset($instance['settings']['token_settings']['token_full']['format']) ? $instance['settings']['token_settings']['token_full']['format'] : '',
-    NULL,
-    array('instance', 'settings', 'token_settings', 'token_full', 'format')
   );
 
   $form['token_settings']['token_help'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Token Help'),
-    '#collapsed' => TRUE,
-    '#collapsible' => TRUE,
-  );
-  $form['token_settings']['token_help']['view'] = array(
-    '#type' => 'markup',
-    '#markup' => theme('relevant_content_token_help'),
+    '#theme' => 'token_tree',
+    '#token_types' => array('node'),
   );
 
   return $form;
@@ -493,7 +512,21 @@ function relevant_content_field_is_empty($item, $field) {
  * Implement hook_field_formatter_info().
  */
 function relevant_content_field_formatter_info() {
-  $defaults = array('field types' => array('relevant_content'), 'behaviors' => array('multiple values' => FIELD_BEHAVIOR_CUSTOM));
+  return array(
+    'default' => array(
+      'label' => t('Default'),
+      'field types' => array('relevant_content'),
+      'settings' => array('item_style' => 'default'),
+    ),
+  );
+
+/*
+  $defaults = array(
+    'field types' => array('relevant_content'),
+    'behaviors' => array(
+      //'multiple values' => FIELD_BEHAVIOR_CUSTOM,
+    ),
+  );
 
   return array(
     'relevant_content_default'      => $defaults + array('label' => t('Node Title - Link')),
@@ -503,6 +536,131 @@ function relevant_content_field_formatter_info() {
     'relevant_content_token_teaser' => $defaults + array('label' => t('Node Token Teaser')),
     'relevant_content_token_full'   => $defaults + array('label' => t('Node Token Full')),
   );
+  */
+}
+
+
+/**
+ * Local function to make the options array re-usable.
+ * TODO: Would a static cache be more efficient here if t() is used several times?
+ */
+function _relevant_content_field_formatter_settings_options() {
+  return array(
+    'default' => t('Node Title - Link'),
+    'plain' => t('Node Title - Plain'),
+    'teaser' => t('Node Teaser'),
+    'full' => t('Node Full'),
+    'token_teaser' => t('Token Teaser Template'),
+    'token_full' => t('Token Full Template'),
+  );
+}
+
+
+/**
+ * Implement hook_field_formatter_settings_form().
+ */
+function relevant_content_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+  $element = array();
+
+  $element['item_style'] = array(
+    '#title' => t('Item Style'),
+    '#type' => 'select',
+    '#default_value' => $settings['item_style'],
+    '#options' => _relevant_content_field_formatter_settings_options(),
+  );
+
+  // TODO Add Row Style (div, ol/ul li, dt/dd, etc)
+  return $element;
+}
+
+
+/**
+ * Implement hook_field_formatter_settings_summary().
+ */
+function relevant_content_field_formatter_settings_summary($field, $instance, $view_mode) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+
+  $options = _relevant_content_field_formatter_settings_options();
+  $summary = array();
+
+  $summary[] = $options[$settings['item_style']];
+
+  return implode('<br />', $summary);
+}
+
+
+/**
+ * Implement hook_field_formatter_view().
+ */
+function relevant_content_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  // If there are no items, return nothing. Anything else risks empty fields
+  if (empty($items)) return;
+
+  // Get the settings
+  $display_settings = $display['settings'];
+  $item_style = $display_settings['item_style'];
+
+  // Get the formatter type from the variables (only default available ATM).
+  $type = $display['type'];
+
+  // We only need this bit for token_* formatters
+  if ($item_style == 'token_full' || $item_style == 'token_teaser') {
+    // Get the settings from the instance - this is a convenience variable for later
+    $token_settings = $instance['settings']['token_settings'][$item_style];
+
+    // Unfortunately, we cannot do a single check_markup() on the token pattern as filter_xss appears to effect some tokens
+    // D7 BUG ? filter_xss('[node:url]') == 'url]'
+  }
+
+  // Init the count and num item variables
+  $count = 0;
+  $num_items = count($items);
+  $element = array();
+
+  // Loop over all the items and create the field output
+  foreach ($items as $item) {
+    // Depending on the type, render a field
+    switch ($item_style) {
+      default:
+      case 'default' :
+        $result = l($item['title'], 'node/' . $item['nid']);
+        break;
+
+      case 'plain' :
+        $result = check_plain($item['title']);
+        break;
+
+      case 'teaser' :
+      case 'full' :
+        // TODO - make much better user of node_view_multiple()...
+        // TODO - this isn't right...
+        $node = node_load($item['nid']);
+        $result = render(node_view_multiple(array($node->nid => $node), $item_style));
+        break;
+
+      case 'token_full' :
+      case 'token_teaser' :
+        // Run a token replace on the content
+        $types = array('global' => NULL, 'node' => node_load($item['nid']));
+
+        // Do a token replace on the pattern
+        $result = token_replace($token_settings['value'], $types);
+
+        // Do a check_markup. Needs to be done here due to the filter_xss bug on [node:url:relative]...
+        $result = check_markup($result, $token_settings['format']);
+        break;
+    }
+
+    // Add the result as a row to the table
+    $element[$count] = array('#markup' => $result);
+
+    $count++;
+  }
+
+  return $element;
 }
 
 
@@ -539,9 +697,8 @@ function relevant_content_field_load($obj_type, $objects, $field, $instances, $l
     if (empty($relevant_items)) return;
 
     // Set the items which will get passed to the theme layer
-    $items[$id]['items'] = $relevant_items;
-    $items[$id]['header'] = $field['settings']['relevant_header'];
-    $items[$id]['#settings'] = $instances[$id]['settings']['token_settings'];
+    // Use Array Values as relevant_content_get_nodes(...) keys by Node ID. Field API expects keys to be Delta's
+    $items[$id] = array_values($relevant_items);
   }
 }
 
@@ -555,7 +712,7 @@ function relevant_content_field_widget_info() {
       'label' => t('Relevant Nodes (Read Only)'),
       'field types' => array('relevant_content'),
       'behaviors' => array(
-        'multiple values' => FIELD_BEHAVIOR_CUSTOM,
+        'multiple values' => FIELD_BEHAVIOR_DEFAULT,
       ),
     ),
   );
@@ -577,23 +734,303 @@ function relevant_content_element_info() {
 function relevant_content_preprocess_field(&$variables) {
   // If the field is a relevant content field, we need to add more suggestion types (so we can easily theme all RC fields).
   // This is necessary so that we can override the default content-field template (which doesn't work correctly for us)
-  if (isset($variables['field_type']) && $variables['field_type'] == 'relevant_content') {
+  if (isset($variables['field_type']) && ($variables['field_type'] == 'relevant_content')) {
     $suggestions = array(
       'field-relevant-content',
-      'field-relevant-content-'. $variables['field_name'],
-      'field-relevant-content-'. $variables['instance']['bundle'],
-      'field-relevant-content-'. $variables['field_name'] .'-'. $variables['instance']['bundle'],
+      'field-relevant-content-' . $variables['field_name'],
+      'field-relevant-content-' . $variables['instance']['bundle'],
+      'field-relevant-content-' . $variables['field_name'] . '-' . $variables['instance']['bundle'],
     );
 
     $variables['template_files'] = array_merge($variables['template_files'], $suggestions);
     $header = $variables['element']['items']['header']['#item'];
-    $variables['header'] = check_markup($header['body'], $header['format']);
+    $variables['header'] = check_markup($header['value'], $header['format']);
   }
-  drupal_add_css(drupal_get_path('module', 'relevant_content') .'/relevant_content.css');
+  drupal_add_css(drupal_get_path('module', 'relevant_content') . '/relevant_content.css');
 }
 
 
 function relevant_content_theme_registry_alter(&$theme_registry) {
   // This seems necessary to allow the theme registry to also search the RC folder for template files.
   $theme_registry['field']['theme paths'][] = drupal_get_path('module', 'relevant_content');
+}
+
+
+/**
+ * Function to get the relevant_content settings
+ * Settings are cached both statically and in the cache table for performance.
+ */
+function relevant_content_get_settings($block_delta = NULL, $reset = FALSE) {
+  // Static settings cache variable
+  static $settings = NULL;
+
+  // If we're resetting, clear static and cache table
+  if ($reset) {
+    $settings = NULL;
+    cache_clear_all('relevant_content:settings', 'cache');
+  }
+
+  // If settings are not set, lets define them
+  if (!isset($settings)) {
+    // First, try to get from the cache table
+    if (($cache = cache_get('relevant_content:settings', 'cache')) && is_array($cache->data)) {
+      $settings = $cache->data;
+    }
+    // Nope, ok - lets make them from scratch
+    else {
+      // Initialize the settings
+      $settings = array();
+
+      // Get anything we have defined from the DB
+      $blocks = db_select('relevant_content_blocks', 'r')
+                  ->fields('r')
+                  ->execute()
+                  ->fetchAllAssoc('id', PDO::FETCH_ASSOC);
+
+      foreach ($blocks as $block) {
+        // This ensures all blocks have a complete set of default values if not already provided.
+        // This includes a "normal" storage
+        $block = _relevant_content_santize_block($block);
+
+        // TODO - tidy this line a bit...
+        $block['status'] = ($block['status'] == RELEVANT_CONTENT_STATUS_ENABLED) ? RELEVANT_CONTENT_STATUS_ENABLED : RELEVANT_CONTENT_STATUS_DISABLED;
+
+        // Load types
+        $block['types'] = db_select('relevant_content_blocks_types', 'r')
+                            ->fields('r', array('type'))
+                            ->condition('id', $block['id'])
+                            ->execute()
+                            ->fetchAllKeyed(0, 0);
+        // Load vocabs
+        // TODO - cast to int?
+        $block['vocabs'] = db_select('relevant_content_blocks_vocabs', 'r')
+                            ->fields('r', array('vid'))
+                            ->condition('id', $block['id'])
+                            ->execute()
+                            ->fetchAllKeyed(0, 0);
+
+
+        // Store the block
+        $settings[$block['id']] = $block;
+      }
+
+      // Now loop over the hook to get any module defined relevant content
+      // blocks, using hook_relevant_content_default_blocks().
+      $default_blocks = module_invoke_all('relevant_content_default_blocks');
+
+      // Allow other modules to alter the module-defined blocks using:
+      // hook_relevant_content_default_blocks_alter(&$default_blocks)
+      drupal_alter('relevant_content_default_blocks', $default_blocks);
+
+      // Add each defined block to our list...
+      foreach ($default_blocks as $block) {
+        // ... but only if an id is set!
+        if (!empty($block['id'])) {
+          $block = _relevant_content_santize_block($block);
+          // If the id is already in our settings, then we have overridden a module-level item
+          if (isset($settings[$block['id']])) {
+            // Set the block as 'overridden', but do not store the module defined block
+            $settings[$block['id']]['storage'] = RELEVANT_CONTENT_STORAGE_OVERRIDDEN;
+          }
+          // Otherwise, it's a custom block
+          else {
+            // Store the block as a default store
+            $block['storage'] = RELEVANT_CONTENT_STORAGE_DEFAULT;
+            $settings[$block['id']] = $block;
+          }
+        }
+      }
+
+      // Cache it for later use
+      cache_set('relevant_content:settings', $settings);
+    }
+  }
+
+  // Did we ask for a SPECIFIC block by delta? If so, return it (or FALSE if
+  // it is not available)
+  if ($block_delta) {
+    return isset($settings[$block_delta]) ? $settings[$block_delta] : FALSE;
+  }
+
+  // Otherwise, return ALL settings
+  return $settings;
+}
+
+
+/**
+ * Internal function for santizing a block. Also useful for defining "defaults" for a form.
+ */
+function _relevant_content_santize_block($block = array()) {
+  // Define the defaults
+  $defaults = array(
+    'id' => '',
+    'types' => array(),
+    'vocabs' => array(),
+    'max_items' => 5,
+    'header_text' => '',
+    'header_format' => filter_default_format(),
+    'token_settings' => '',
+    'absolute_links' => 0,
+    'status' => RELEVANT_CONTENT_STATUS_DISABLED,
+    'storage' => RELEVANT_CONTENT_STORAGE_NORMAL,
+  );
+
+  // Overlay the defaults onto $block
+  $block = $block + $defaults;
+
+  // Cast some items to "int" - this helps keep feature exporting clean
+  $block['max_items'] = (int)$block['max_items'];
+
+  return $block;
+}
+
+
+/**
+ * Delete Block Handler
+ */
+function relevant_content_delete_block($block_id, $flush_cache = TRUE) {
+  // Delete the settings
+  db_delete('relevant_content_blocks')->condition('id', $block_id)->execute();
+  db_delete('relevant_content_blocks_types')->condition('id', $block_id)->execute();
+  db_delete('relevant_content_blocks_vocabs')->condition('id', $block_id)->execute();
+
+  // Tidy up the blocks table...
+  foreach (array('block', 'block_node_type', 'block_role') as $table) {
+    db_delete($table)
+      ->condition('module', 'relevant_content')
+      ->condition('delta', $block_id)
+      ->execute();
+  }
+
+  // We may want to delete without flushing - for example when saving.
+  if ($flush_cache) {
+    // Reset the settings cache
+    relevant_content_get_settings(NULL, TRUE);
+    block_flush_caches();
+  }
+}
+
+
+/**
+ * Disable Block Handler
+ */
+function relevant_content_set_block_status($block_id, $status = 1, $flush_cache = TRUE) {
+  // Load the block from cached settings
+  $block = relevant_content_get_settings($block_id);
+
+  // Set the status
+  $block['status'] = $status;
+
+  // Save the block - this also flushes all caches and rebuilds the block hash
+  relevant_content_save_block($block);
+}
+
+
+
+/**
+ * Save block handler - it essentially deletes and inserts for 'updates'.
+ */
+function relevant_content_save_block($block) {
+  // TODO: Investigate using db_merge instead of delete / insert...
+  relevant_content_delete_block($block['id'], FALSE);
+
+  // TODO - this feels like a hack...
+  if (isset($block['header']) && is_array($block['header'])) {
+    $block['header_text'] = $block['header']['value'];
+    $block['header_format'] = $block['header']['format'];
+  }
+
+  // Define the fields to insert
+  $fields = array(
+    'id'             => $block['id'],
+    'max_items'      => $block['max_items'],
+    'header_text'    => $block['header_text'],
+    'header_format'  => $block['header_format'],
+    'token_settings' => $block['token_settings'],
+    'absolute_links' => $block['absolute_links'],
+    'status'         => $block['status'],
+  );
+
+  // Run an INSERT query
+  db_insert('relevant_content_blocks')->fields($fields)->execute();
+
+  // Add one row for each assigned type
+  if (is_array($block['types'])) {
+    $query = db_insert('relevant_content_blocks_types')->fields(array('id', 'type'));
+    foreach ($block['types'] as $type) {
+      $query->values(array($block['id'], $type));
+    }
+    $query->execute();
+  }
+
+  // Add one row for each assigned vocab
+  if (is_array($block['vocabs'])) {
+    $query = db_insert('relevant_content_blocks_vocabs')->fields(array('id', 'vid'));
+    foreach ($block['vocabs'] as $vid) {
+      $query->values(array($block['id'], $vid));
+    }
+    $query->execute();
+  }
+
+  // Reset the settings cache
+  relevant_content_get_settings(NULL, TRUE);
+
+  // Rehash all the blocks for all themes
+  module_invoke('block', 'flush_caches');
+  _block_rehash();
+}
+
+
+/**
+ * Implementation of hoko_features_api().
+ */
+function relevant_content_features_api() {
+  return array(
+    'relevant_content_block' => array(
+      'name' => t('Relevant Content Block'),
+      'default_hook' => 'relevant_content_default_blocks',
+      'default_file' => FEATURES_DEFAULTS_INCLUDED_COMMON,
+      'features_source' => TRUE,
+      'file' => drupal_get_path('module', 'relevant_content') . '/relevant_content.features.inc',
+    ),
+  );
+}
+
+
+function relevant_content_relevant_content_default_blocks() {
+  return array(
+    'test' => array(
+      'id' => 'test',
+      'max_items' => 10,
+      'vocabs' => array(1 => 1),
+      'types' => array('page' => 'page'),
+      'header_text' => t('TESTING TEXT!!'),
+      'header_format' => 0,
+    ),
+  );
+}
+
+
+/**
+ * Module specific XSS Filtering.
+ */
+function relevant_content_filter_xss($string) {
+  return filter_xss($string, _relevant_content_filter_xss_allowed_tags());
+}
+
+/**
+ * List of allowed tags for the relevant content token field.
+ * This is more permissive than normal filter_xss() but less permissive than
+ * filter_xss_admin(). Also gives us more control.
+ */
+function _relevant_content_filter_xss_allowed_tags() {
+  return array('a', 'b', 'big',  'code', 'del', 'em', 'i', 'ins',  'pre', 'q', 'small', 'span', 'strong', 'sub', 'sup', 'tt', 'ol', 'ul', 'li', 'p', 'br', 'img');
+}
+
+
+/**
+ * Human readable list of allowed tags, handy for help text.
+ */
+function _relevant_content_filter_xss_display_allowed_tags() {
+  return '<' . implode('> <', _relevant_content_filter_xss_allowed_tags()) . '>';
 }

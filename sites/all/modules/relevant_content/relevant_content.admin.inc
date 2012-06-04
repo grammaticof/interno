@@ -1,89 +1,134 @@
 <?php
 
 /**
+ * @file relevant_content.admin.inc
+ * This include contains all the admin-only functionality
+ */
+
+/**
  * Settings page form
  *
  * This function provides the module settings page form which is used for enabling content type blocks.
  */
 function relevant_content_admin() {
-  $settings = variable_get('relevant_content', array());
-
   $content_types = node_type_get_names();
   $vocabularies = taxonomy_get_vocabularies();
 
-  $variables = array(
-    'header' => array(t('Block ID'), t('Enabled Types'), t('Enabled Vocabularies'), t('Max Results'), t('Actions')),
-    'rows' => array(),
-  );
-  if (empty($settings)) {
-    $variables['rows'][] = array(array('colspan' => 5, 'data' => t('There are no configured blocks yet - add one using the form below.')));
-  }
-  else {
-    foreach ($settings as $delta => $info) {
-      array_walk($info['types'],  '_relevant_content_array_map_key_to_values', $content_types);
-      array_walk($info['vocabs'], '_relevant_content_array_map_key_to_values', $vocabularies);
+  $rows = array();
+  foreach (relevant_content_get_settings() as $block) {
+    array_walk($block['types'],  '_relevant_content_array_map_key_to_values', $content_types);
+    array_walk($block['vocabs'], '_relevant_content_array_map_key_to_values', $vocabularies);
 
-      $ops = array(
-        l(t('Edit'), 'admin/config/relevant_content/blocks/'. $delta),
-        l(t('Delete'), 'admin/config/relevant_content/blocks/'. $delta .'/delete'),
-      );
+    // Set the operations based on status and storage
+    $ops = array();
+    switch ($block['status']) {
+      // Default / Disabled
+      default :
+      case RELEVANT_CONTENT_STATUS_DISABLED :
+        // Only show Enable op
+        $ops[] = l(t('Enable'), RELEVANT_CONTENT_ADMIN_BASE_PATH . '/' . $block['id'] . '/enable');
+        break;
 
-      $variables['rows'][] = array(
-        check_plain($delta),
-        theme('item_list', array('items' => $info['types'])),
-        theme('item_list', array('items' => $info['vocabs'])),
-        check_plain($info['limit']),
-        theme('item_list', array('items' => $ops)),
-      );
+      case RELEVANT_CONTENT_STATUS_ENABLED :
+        // If enabled, show Edit + either Delete, Disable or Revert -depending on storage
+        $ops[] = l(t('Edit'), RELEVANT_CONTENT_ADMIN_BASE_PATH . '/' . $block['id'] . '/edit');
+
+        switch ($block['storage']) {
+          // NORMAL == Database - therefore delete
+          case RELEVANT_CONTENT_STORAGE_NORMAL :
+            $ops[] = l(t('Delete'), RELEVANT_CONTENT_ADMIN_BASE_PATH . '/' . $block['id'] . '/delete');
+            break;
+
+          // DEFAULT == In Coder - therefore disable
+          case RELEVANT_CONTENT_STORAGE_DEFAULT :
+            $ops[] = l(t('Disable'), RELEVANT_CONTENT_ADMIN_BASE_PATH . '/' . $block['id'] . '/disable');
+            break;
+
+          // OVERRIDDEN == In Code AND in DB - therefore, revert
+          case RELEVANT_CONTENT_STORAGE_OVERRIDDEN :
+            $ops[] = l(t('Revert'), RELEVANT_CONTENT_ADMIN_BASE_PATH . '/' . $block['id'] . '/revert');
+            break;
+        }
+        break;
     }
+
+    $rows[$block['id']] = array(
+      'block' => $block,
+      'ops' => $ops,
+    );
   }
 
-  // Render the output into an array and return.
-  $output['blocks'] = array('#type' => 'markup', '#markup' => theme('table', $variables));
-  $output['new_block'] = drupal_get_form('relevant_content_admin_block_form');
-
-  return $output;
+  return theme('relevant_content_admin_overview', array('rows' => $rows));
 }
 
 
 /**
- * Form API based function which generates the add AND edit forms. The form is an 'edit' form if a delta is passed in for editing.
+ * Private function used as a callback for array_map which sets the item to the value of $value using $key as either an array offset or an object property.
  *
- * @param $delta
- *   mixed - The 'delta' (or ID) of the block being editted. Will effectively be the array key in the $settings array.
+ * @param $item
+ *   This is a variable reference to the item being mapped to. Chaning this value will change the value in the array being mapped using array_map
+ * @param $key
+ *   They key of $item in the array being mapped
+ * @param $values
+ *   A user defined array passed in. In this case, it us used for reference purposes
  */
-function relevant_content_admin_block_form($form, &$form_state, $delta = NULL) {
-  $settings = variable_get('relevant_content', array());
+function _relevant_content_array_map_key_to_values(&$item, $key, $values) {
+  if (isset($values[$key])) {
+    if (is_object($values[$key])) {
+      $item = $values[$key]->name;
+    }
+    else {
+      $item = $values[$key];
+    }
+  }
+  else {
+    $item = t('Error: Item missing.');
+  }
+}
+
+
+
+/**
+ * Form API based function which generates the add AND edit forms. The form is an 'edit' form if a block id is passed in for editing.
+ *
+ * @param $block_id
+ *   mixed - The Block ID of the block being editted. Will effectively be the array key in the $settings array.
+ */
+function relevant_content_admin_block_form($form, &$form_state, $block = NULL) {
+  // If $block is NULL, define an empty array instead of FALSE
+  if (!$block) {
+    $block = array();
+  }
+
+  // Sanitize the block to defaults
+  $block = _relevant_content_santize_block($block);
+
   $form = array();
 
   $form['settings'] = array(
-    '#type' => 'fieldset',
-    '#title' => isset($delta) ? t('Edit Block') : t('Add Block'),
     '#tree' => TRUE,
-    '#collapsible' => !isset($delta),
-    '#collapsed' => !isset($delta),
   );
 
-  if (!isset($delta)) {
-    $form['settings']['delta'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Block <em>Delta</em>'),
-      '#description' => t('The <em>Delta</em> is used to uniquely identify a block. Please user uppercase & lowercase characters, numbers and underscores only'),
-      '#required' => TRUE,
-      '#maxlength' => 12,
-      '#size' => 12,
+  if ($block['id']) {
+    $form['settings']['id'] = array(
+      '#type' => 'value',
+      '#value' => $block['id'],
+    );
+    $form['settings']['id_field'] = array(
+      '#type' => 'item',
+      '#title' => t('Block <em>ID</em>'),
+      '#description' => t('The <em>ID</em> is used to uniquely identify a block.'),
+      '#markup' => check_plain($block['id']),
     );
   }
   else {
-    $form['settings']['delta'] = array(
-      '#type' => 'value',
-      '#value' => $delta,
-    );
-    $form['settings']['delta_field'] = array(
-      '#type' => 'item',
-      '#title' => t('Block <em>Delta</em>'),
-      '#description' => t('The <em>Delta</em> is used to uniquely identify a block'),
-      '#markup' => check_plain($delta),
+    $form['settings']['id'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Block <em>ID</em>'),
+      '#description' => t('The <em>ID</em> is used to uniquely identify a block. Please user uppercase & lowercase characters, numbers and underscores only'),
+      '#required' => TRUE,
+      '#maxlength' => 255,
+      '#size' => 12,
     );
   }
 
@@ -92,7 +137,7 @@ function relevant_content_admin_block_form($form, &$form_state, $delta = NULL) {
     '#title' =>  t('Enabled Content Types'),
     '#description' => t('Check the content types you would like to search for.'),
     '#options' => node_type_get_names(),
-    '#default_value' => isset($delta) ? $settings[$delta]['types'] : array(),
+    '#default_value' => $block['types'],
   );
 
 
@@ -106,49 +151,71 @@ function relevant_content_admin_block_form($form, &$form_state, $delta = NULL) {
     '#title' => t('Enabled Vocabularies'),
     '#description' => t('Check the vocabularies you would like to search for'),
     '#options' => $vocabs,
-    '#default_value' => isset($delta) ? $settings[$delta]['vocabs'] : array(),
+    '#default_value' => $block['vocabs'],
   );
 
-  $form['settings']['limit'] = array(
+  $form['settings']['max_items'] = array(
     '#type' => 'textfield',
-    '#title' => t('Limit'),
+    '#title' => t('Max Items'),
     '#description' => t('What is the maximum number of results would you like returned?'),
-    '#size' => 2,
-    '#maxlength' => 2,
+    '#size' => 3,
+    '#maxlength' => 3,
     '#required' => TRUE,
-    '#default_value' => isset($delta) ? $settings[$delta]['limit'] : 5,
+    '#default_value' => $block['max_items'],
   );
 
-  $form['settings']['header_text'] = array(
-    '#type' => 'textarea',
+  $form['settings']['header'] = array(
+    '#type' => 'text_format',
     '#title' => t('Header Text'),
-    '#description' => t('Optionally provide some text to appear above the listing'),
+    '#description' => t('Optionally provide some text to appear above the listing.'),
     '#rows' => 3,
-    '#default_value' => isset($delta) ? $settings[$delta]['header_text'] : '',
+    '#default_value' => $block['header_text'],
+    '#parents' => array('settings', 'header'),
+    '#format' => $block['header_format'],
   );
 
-  $form['settings']['token_settings'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Token pattern'),
-    '#description' => t('Optionally define a token pattern here to override the default output. Please use plain text only. Leave blank to use hyper links to nodes.'),
-    '#default_value' => isset($delta) ? $settings[$delta]['token_settings'] : '',
+  if (module_exists('token')) {
+    $form['settings']['token_pattern'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Token Pattern'),
+      '#collapsible' => TRUE,
+      '#collapsed' => FALSE,
+    );
+
+    $form['settings']['token_pattern']['token_settings'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Token pattern'),
+      '#description' => t('Optionally define a token pattern here to override the default output. Leave blank to use the default hyperlink to nodes style. Allowed HTML tags: @tags.', array('@tags' => _relevant_content_filter_xss_display_allowed_tags())),
+      '#default_value' => $block['token_settings'],
+      '#element_validate' => array('token_element_validate'),
+      '#token_types' => array('node'),
+      '#parents' => array('settings', 'token_settings'),
+    );
+    $form['settings']['token_pattern']['token_help'] = array(
+      '#theme' => 'token_tree',
+      '#token_types' => array('node'),
+    );
+  }
+
+  $form['settings']['absolute_links'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Absolute Links'),
+    '#description' => t('If enabled, the generated URL will be absolute rather than relative.<br />NOTE: This has no effect on token patterns, only the default link style.'),
+    '#default_value' => $block['absolute_links'],
   );
 
-  $form['settings']['token_help'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Token Help'),
-    '#collapsible' => TRUE,
-    '#collapsed' => TRUE,
-  );
-  $form['settings']['token_help']['body'] = array(
-    '#type' => 'markup',
-    '#markup' => theme('relevant_content_token_help'),
+  $form['settings']['status'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Status'),
+    '#description' => t('If enabled, the block will appear in the lists. If disabled, the settings will be stored but the block will not appear in the block listings or anywhere on the site.'),
+    '#default_value' => $block['status'],
   );
 
   $form['settings']['op'] = array(
     '#type' => 'value',
-    '#value' => isset($delta) ? 'edit' : 'add',
+    '#value' => $block['id'] ? 'edit' : 'add',
   );
+
   $form['settings']['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Save Settings'),
@@ -163,18 +230,17 @@ function relevant_content_admin_block_form($form, &$form_state, $delta = NULL) {
  */
 function relevant_content_admin_block_form_validate($form, &$form_state) {
   if ($form_state['values']['settings']['op'] == 'add') {
-    if (preg_match('#[^a-zA-Z0-9_]#', $form_state['values']['settings']['delta'])) {
-      form_set_error('settings][delta', t('Invalid character detected. Please only use uppercase and lowercase characters, numbers and underscores'));
+    if (preg_match('#[^a-zA-Z0-9_]#', $form_state['values']['settings']['id'])) {
+      form_set_error('settings][id', t('Invalid character detected. Please only use uppercase and lowercase characters, numbers and underscores.'));
       return;
     }
 
-    $settings = variable_get('relevant_content', array());
-    if (isset($settings[$form_state['values']['settings']['delta']])) {
-      form_set_error('settings][delta', t('This <em>Delta</em> has already been used, please try another'));
+    if (relevant_content_get_settings($form_state['values']['settings']['id'])) {
+      form_set_error('settings][id', t('This <em>Block ID</em> has already been used, please try another.'));
     }
   }
 
-  if (!is_numeric($form_state['values']['settings']['limit']) || $form_state['values']['settings']['limit'] <= 0) {
+  if (!is_numeric($form_state['values']['settings']['max_items']) || $form_state['values']['settings']['max_items'] <= 0) {
     form_set_error('settings][limit', t('The limit must be a positive numeric value, eg 5.'));
   }
 
@@ -194,46 +260,35 @@ function relevant_content_admin_block_form_validate($form, &$form_state) {
  *  Submit handler for the block add/edit form.
  */
 function relevant_content_admin_block_form_submit($form, &$form_state) {
-  $settings = variable_get('relevant_content', array());
+  // Get some sanitized settings from the form state
+  $block = _relevant_content_santize_block($form_state['values']['settings']);
 
-  $settings[$form_state['values']['settings']['delta']] = array(
-    'types'          => array_filter($form_state['values']['settings']['types']),
-    'vocabs'         => array_filter($form_state['values']['settings']['vocabs']),
-    'limit'          => (int)$form_state['values']['settings']['limit'],
-    'header_text'    => $form_state['values']['settings']['header_text'],
-    'token_settings' => $form_state['values']['settings']['token_settings'],
-  );
+  // Save this block
+  relevant_content_save_block($block);
 
-  variable_set('relevant_content', $settings);
-  $form_state['redirect'] = 'admin/config/relevant_content/blocks';
+  // Redirect the form back to the content overview page
+  $form_state['redirect'] = RELEVANT_CONTENT_ADMIN_BASE_PATH;
 }
 
 
 /**
- * Menu callback for deleting a variable. Does some basic validation first before calling the Form API.
+ * Operator Page Callback - this dispatches to the appropriate confirm form
  */
-function relevant_content_admin_delete($delta) {
-  $settings = variable_get('relevant_content', array());
-
-  return drupal_get_form('relevant_content_admin_delete_confirm', $delta);
+function relevant_content_admin_block_operator_callback($block, $op) {
+  return drupal_get_form($op['callback'], $block);
 }
 
 
 /**
  * Form API based function for geneating the confirmation page for deleting a block from the settings.
  */
-function relevant_content_admin_delete_confirm($form, &$form_state, $delta) {
-  $form = array();
-
-  $form['delta'] = array(
-    '#type' => 'hidden',
-    '#value' => $delta
-  );
+function relevant_content_admin_delete_confirm($form, &$form_state, $block) {
+  $form['#rc_block'] = $block;
 
   return confirm_form(
     $form,
-    t('Are you sure you want to delete block "%delta"?', array('%delta' => $delta)),
-    'admin/config/relevant_content/blocks',
+    t('Are you sure you want to delete block "%delta"?', array('%delta' => $block['id'])),
+    RELEVANT_CONTENT_ADMIN_BASE_PATH,
     t('Note: This action cannt be undone')
   );
 }
@@ -243,22 +298,88 @@ function relevant_content_admin_delete_confirm($form, &$form_state, $delta) {
  *  Delete confirmation form submission handler. Usets the block settings from the settings array based on the hidden delta field passed in from the previous funciton.
  */
 function relevant_content_admin_delete_confirm_submit($form, &$form_state) {
-  $settings = variable_get('relevant_content', array());
+  // Delete the block
+  relevant_content_delete_block($form['#rc_block']['id']);
 
-  // Remove the settings from the array and save
-  unset($settings[$form_state['values']['delta']]);
-  variable_set('relevant_content', $settings);
-
-  // Tidy up the blocks table...
-  foreach (array('block', 'block_node_type', 'block_role') as $table) {
-    db_delete($table)
-      ->condition('module', 'relevant_content')
-      ->condition('delta', $form_state['values']['delta'])
-      ->execute();
-  }
-
-  $form_state['redirect'] = 'admin/config/relevant_content/blocks';
+  // Set th redirect
+  $form_state['redirect'] = RELEVANT_CONTENT_ADMIN_BASE_PATH;
 }
 
 
+/**
+ * Form API based function for the confirmation page for reverting a block from the settings.
+ */
+function relevant_content_admin_revert_confirm($form, &$form_state, $block) {
+  $form['#rc_block'] = $block;
+
+  return confirm_form(
+    $form,
+    t('Are you sure you want to revert block "%block"?', array('%block' => $block['id'])),
+    'admin/settings/relevant_content',
+    t('Note: This action cannot be undone. Any changes made to this block will be lost and the block will revert to the settings provided by the its module.')
+  );
+}
+
+
+/**
+ *  Revert confirmation form submission handler.
+ */
+function relevant_content_admin_revert_confirm_submit($form, &$form_state) {
+  // A revert is basically a delete...
+  relevant_content_delete_block($form['#rc_block']['id']);
+
+  $form_state['redirect'] = RELEVANT_CONTENT_ADMIN_BASE_PATH;
+}
+
+
+/**
+ * Form API based function for the confirmation page for disableing a block from the settings.
+ */
+function relevant_content_admin_disable_confirm($form, &$form_state, $block) {
+  $form['#rc_block'] = $block;
+
+  return confirm_form(
+    $form,
+    t('Are you sure you want to disable block "%block"?', array('%block' => $block['id'])),
+    'admin/settings/relevant_content',
+    t('Note: Disabled blocks are not deleted, however they do not appear on the block listing page.')
+  );
+}
+
+
+/**
+ *  Revert confirmation form submission handler.
+ */
+function relevant_content_admin_disable_confirm_submit($form, &$form_state) {
+  // A disable is basically a delete...
+  relevant_content_set_block_status($form['#rc_block']['id'], 0);
+
+  $form_state['redirect'] = RELEVANT_CONTENT_ADMIN_BASE_PATH;
+}
+
+
+/**
+ * Form API based function for the confirmation page for disableing a block from the settings.
+ */
+function relevant_content_admin_enable_confirm($form, &$form_state, $block) {
+  $form['#rc_block'] = $block;
+
+  return confirm_form(
+    $form,
+    t('Are you sure you want to enable block "%block"?', array('%block' => $block['id'])),
+    'admin/settings/relevant_content',
+    t('Note: Once enabled, this block will appear on the block listing page. You will still need to assign it to a region.')
+  );
+}
+
+
+/**
+ *  Revert confirmation form submission handler.
+ */
+function relevant_content_admin_enable_confirm_submit($form, &$form_state) {
+  // A disable is basically a delete...
+  relevant_content_set_block_status($form['#rc_block']['id'], 1);
+
+  $form_state['redirect'] = RELEVANT_CONTENT_ADMIN_BASE_PATH;
+}
 

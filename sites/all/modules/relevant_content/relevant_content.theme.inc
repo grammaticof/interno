@@ -1,155 +1,38 @@
 <?php
 
-
-function theme_relevant_content_field_formatter_general($variables) {
-  // Get the element from the variables
-  $element = $variables['element']['element'];
-
-  // If there are no items, return nothing. Anything else risks empty fields
-  if (empty($element['items']['#item'])) return;
-
-  // Get the type from the variables
-  $type = $variables['type'];
-
-  // We only need this bit for token_* formatters
-  if ($type == 'token_full' || $type == 'token_teaser') {
-    // Get the token_full settings and make sure they're plain (this is important)
-    $token_pattern = check_markup($element['#settings']['#item'][$type]['body'], $element['#settings']['#item'][$type]['format']);
-  }
-
-  // Init the output, count and num item variables
-  $output = '';
-  $count = 0;
-  $num_items = count($element['items']['#item']);
-
-  // Loop over all the items and create the field output
-  foreach ($element['items']['#item'] as $item) {
-    $attributes = array('class' => 'field-item ' . ($count % 2 ? 'even' : 'odd'));
-
-    // Append a "first" class to the row
-    if ($count == 0) {
-      $attributes['class'] .= ' first';
-    }
-
-    // Append a "last" class to the row
-    if ($count == $num_items - 1) {
-      $attributes['class'] .= ' last';
-    }
-
-    // Depending on the type, render a field
-    switch ($type) {
-      default:
-      case 'default' :
-        $result = l($item['title'], 'node/'. $item['nid']);
-        break;
-
-      case 'plain' :
-        $result = check_plain($item['title']);
-        break;
-
-      case 'teaser' :
-      case 'full' :
-        $result = drupal_render(node_build(node_load($item['nid']), $type));
-        break;
-
-      case 'token_full' :
-      case 'token_teaser' :
-        // Run a token replace on the content
-        $types = array('global' => NULL, 'node' => node_load($item['nid']));
-        $result = token_replace($token_pattern, $types);
-        break;
-    }
-
-    // Generate the field
-    $output .= theme('relevant_content_individual_field', array('attributes' => $attributes, 'result' => $result));
-    //$output .= '<div'. drupal_attributes($attributes) .'>'. $result .'</div>';
-    $count++;
-  }
-
-  // Wrap the result in a field-items wrapper to make it content-field.tpl.php consistent
-  return '<div class="field-items">'. $output .'</div>';
-}
-
-
 /**
- *  Theme wrapper for output of individual fields.
+ * @file relevant_content.theme.inc
+ * This file contains all the theme-related functionality for the module
  */
-function theme_relevant_content_individual_field($variables) {
-  return '<div'. drupal_attributes($variables['attributes']) .'>'. $variables['result'] .'</div>';
-}
-
-/**
- * Default formatter - hyperlinked nodes
- */
-function theme_field_formatter_relevant_content_default($element) {
-  return theme('relevant_content_field_formatter_general', array('element' => $element, 'type' => 'default'));
-}
 
 
 /**
- * Optional formatter - plain text nodes
- */
-function theme_field_formatter_relevant_content_plain($element) {
-  return theme('relevant_content_field_formatter_general', array('element' => $element, 'type' => 'plain'));
-}
-
-
-/**
- * Optional formatter - teaser nodes
- */
-function theme_field_formatter_relevant_content_teaser($element) {
-  return theme('relevant_content_field_formatter_general', array('element' => $element, 'type' => 'teaser'));
-}
-
-
-/**
- * Optional formatter - full nodes
- */
-function theme_field_formatter_relevant_content_full($element) {
-  return theme('relevant_content_field_formatter_general', array('element' => $element, 'type' => 'full'));
-}
-
-
-/**
- * Optional formatter - Token "teaser" field
- */
-function theme_field_formatter_relevant_content_token_teaser($element) {
-  return theme('relevant_content_field_formatter_general', array('element' => $element, 'type' => 'token_teaser'));
-}
-
-
-/**
- * Optional formatter - Token "full" field
- */
-function theme_field_formatter_relevant_content_token_full($element) {
-  return theme('relevant_content_field_formatter_general', array('element' => $element, 'type' => 'token_full'));
-}
-
-
-/**
- * Theme function for rendering the relevant nodes into a block.
+ * Theme preprocess function for rendering the relevant nodes into a block.
  *
- * This is provided as an item list by default, however a themer can
+ * This is provided so that an item list is the default, however a themer can
  * easily override this to make a teaser list or table.
  *
- * Each item will default to a hyperlink to the node unless the token pattern is set.
- *
- * @param $nodes
- *   Associative array where the key is the node id and the value is the node title
- * @param $header
- *   Optional string to display at the top of the block
+ * @param $vars
+ *   Contains the variables for the theme function, including:
+ *   $vars['nodes'] - An associative array of node information
+ *   $vars['block'] - the block being rendered
  */
-function theme_relevant_content_block($variables) {
-  $settings = variable_get('relevant_content', array());
+function template_preprocess_relevant_content_block(&$vars) {
+  // Get the definition of the block we are rendering
+  $block = &$vars['block'];
+
+  // Set an "is_empty" flag
+  $vars['is_empty'] = empty($vars['nodes']);
 
   // Default to "link" type
   $type = 'link';
 
-  // If we have a delta (we should - only 3rd party legacy code should cause us not to) then get the settings and token settings.
-  // Also check tokens is enabled. Its optional
-  if (isset($variables['delta']) && isset($settings[$variables['delta']])) {
-    // Cleanup the token pattern
-    $token_pattern = trim($settings[$variables['delta']]['token_settings']);
+  // Check tokens is enabled; it's optional. Also check we have token settings
+  if (module_exists('token') && !empty($block['token_settings'])) {
+    // Cleanup the token pattern. See @relevant_content_filter_xss($string)
+    // Unfortunately, we cannot 'clean up' the token pattern once due to the
+    // bug with filter_xss on '[node:url]' which breaks the token.
+    $token_pattern = trim($block['token_settings']);
 
     // If the token pattern is not empty, switch to tokens mode
     if (!empty($token_pattern)) {
@@ -157,48 +40,89 @@ function theme_relevant_content_block($variables) {
     }
   }
 
-  $items = array();
-  foreach ($variables['nodes'] as $node) {
+  foreach ($vars['nodes'] as $nid => $node) {
     // If we're a link, default to a hyperlink - otherwise we should use tokens.
     switch ($type) {
       default :
       case 'link' :
-        $items[] = l($node['title'], 'node/'. $node['nid']);
+        $node['output'] = l($node['title'], 'node/' . $node['nid']);
         break;
 
       case 'tokens' :
         $objects = array('global' => NULL, 'node' => node_load($node['nid']));
-        $items[] = token_replace($token_pattern, $objects);
+        $node['output'] = token_replace($token_pattern, $objects);
+        $node['output'] = relevant_content_filter_xss($node['output']);
         break;
     }
+
+    // Build some classes for the node link row
+    $node['classes'] = array(
+      'relevant-content-item',
+      'relevant-node-' . (int)$node['nid'],
+      'relevant-node-type-' . check_plain($node['type']),
+    );
+
+    // Store the updated node over the old one
+    $vars['nodes'][$nid] = $node;
   }
 
-  $output = '';
-  if ($variables['header']) {
-    $output = check_markup($variables['header']);
+  // Build the header text - defaults to empty
+  $vars['header'] = '';
+  if (!empty($block['header_text'])) {
+    $vars['header'] = check_markup($block['header_text'], $block['header_format'], FALSE);
   }
 
-  $output .= theme('item_list', array('items' => $items));
-  return $output;
+  // Add a template suggestion; relevant_content_block-{block-id}.tpl.php
+  $vars['template_files'][] = 'relevant_content_block-' . $block['id'];
 }
 
 
 /**
- * An internal theme function to render the tokens to help the user. NOTE: Why is this not a core theme function?!
+ * Preprocess handler for the overview rows
  */
-function theme_relevant_content_token_help() {
-  $token_info = token_info();
-  $output = '<p>'. t('Available tokens are:') .'</p>';
-  $output .= '<dl>';
-  foreach(array('node', 'site', 'date') as $key) {
-    $output .= "<dt><strong>{$token_info['types'][$key]['name']}</strong> - {$token_info['types'][$key]['description']}</dt>";
-    $token_pairs = array();
-    foreach ($token_info['tokens'][$key] as $token => $info) {
-      $token_pairs[] = "<code>[{$key}:{$token}]</code> - {$info['name']}";
-    }
-    $output .= '<dd>'. theme('item_list', array('items' => $token_pairs)) .'</dd>';
-  }
-  $output .= '</dl>';
+function template_preprocess_relevant_content_admin_overview(&$vars) {
+  drupal_add_css(drupal_get_path('module', 'relevant_content') . '/relevant_content.admin.css');
 
-  return $output;
+  foreach ($vars['rows'] as $block_id => $row) {
+    // Render the Types and Vocabs
+    $row['types_rendered']  = implode(', ', $row['block']['types']);
+    $row['vocabs_rendered'] = implode(', ', $row['block']['vocabs']);
+
+    // Render the "ops"
+    $row['ops_rendered'] = implode(' | ', $row['ops']);
+
+    // Render the "absolute links" boolean
+    $row['absolute_links_rendered'] = $row['block']['absolute_links'] ? t('Absolute') : t('Relative');
+
+    // Render the header
+    $row['header_rendered'] = check_markup($row['block']['header_text'], $row['block']['header_format'], FALSE);
+
+    // Define the classes
+    $row['row_classes'] = array();
+    $row['row_classes'][] = 'relevant-content-block';
+
+    switch ($row['block']['storage']) {
+      case RELEVANT_CONTENT_STORAGE_NORMAL :
+        $row['row_classes'][] = 'relevant-content-block-normal';
+        $row['status'] = t('Normal');
+        break;
+
+      case RELEVANT_CONTENT_STORAGE_DEFAULT :
+        $row['row_classes'][] = 'relevant-content-block-default';
+        $row['status'] = t('Default');
+        break;
+
+      case RELEVANT_CONTENT_STORAGE_OVERRIDDEN :
+        $row['row_classes'][] = 'relevant-content-block-overriden';
+        $row['status'] = t('Overriden');
+        break;
+    }
+
+    $row['row_classes'][] = 'relevant-content-block-' . ($row['block']['status'] ? 'enabled' : 'disabled');
+
+    // Output a 'rendered' set of classes
+    $row['row_classes_rendered'] = implode(' ', $row['row_classes']);
+
+    $vars['rows'][$block_id] = $row;
+  }
 }

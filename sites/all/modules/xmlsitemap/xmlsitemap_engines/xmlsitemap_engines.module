@@ -1,5 +1,4 @@
 <?php
-// $Id: xmlsitemap_engines.module,v 1.20 2011/02/09 22:23:32 davereid Exp $
 
 /**
  * Implements hook_hook_info().
@@ -63,7 +62,7 @@ function xmlsitemap_engines_cron() {
 function xmlsitemap_engines_can_submit() {
   // Skip if the site is offline since search engines will not be able to
   // access the site's content.
-  if (variable_get('site_offline', 0)) {
+  if (variable_get('maintenance_mode', 0) || defined('MAINTENANCE_MODE')) {
     return FALSE;
   }
 

@@ -43,32 +43,6 @@ function media_file_type_media_claim($file, $type) {
  * display.
  */
 function media_file_type_media_default_view($file, $view_mode, $langcode) {
-  // If the file is an image, attempt to display it using the File Entity
-  // module's image formatter.
-  if ($file->type == 'image') {
-    if ($view_mode == 'media_preview') {
-      $image_style = 'square_thumbnail';
-    }
-    elseif ($view_mode == 'media_large') {
-      $image_style = 'large';
-    }
-    elseif ($view_mode == 'media_original') {
-      $image_style = '';
-    }
-    if (isset($image_style)) {
-      $display = array(
-        'type' => 'file_image',
-        'settings' => array(
-          'image_style' => $image_style,
-        ),
-      );
-      $element = file_entity_file_formatter_file_image_view($file, $display, $langcode);
-      if (isset($element)) {
-        return $element;
-      }
-    }
-  }
-
   // During preview, or when custom attribute values are needed on the displayed
   // element, use a media icon.
   if ($view_mode == 'media_preview' || isset($file->override)) {
@@ -172,7 +146,7 @@ function media_type_get_types() {
  *  Create the basic class and defaults for a media entity bundle type.
  */
 function media_type_set_defaults($info) {
-  $type = new StdClass();
+  $type = new stdClass();
 
   // This is used to filter a file to the proper bundle.
   $type->type_callback = 'media_is_type';
@@ -248,12 +222,12 @@ function media_is_type($file, $args) {
 }
 
 /**
- * Implement hook_media_format_form_prepare_alter
+ * Implements hook_media_format_form_prepare_alter().
  */
 function media_media_format_form_prepare_alter(&$form, &$form_state, $file) {
-  switch($file->type) {
+  switch ($file->type) {
     case 'image':
-       $form['options']['alt'] = array(
+      $form['options']['alt'] = array(
         '#type' => 'textfield',
         '#title' => t('Description'),
         '#default_value' => $file->filename,
@@ -268,7 +242,7 @@ function media_media_format_form_prepare_alter(&$form, &$form_state, $file) {
  */
 function media_type_invalid_files_count() {
   return db_select('file_managed', 'fm')
-    ->condition('type', '')
+    ->condition('type', FILE_TYPE_NONE)
     ->countQuery()
     ->execute()
     ->fetchField();
@@ -288,12 +262,12 @@ function media_type_invalid_files_count() {
  */
 function media_type_batch_update($update_existing = FALSE, $no_to_update = NULL, $offset = 0) {
   $results = array();
-  
+
   $query = db_select('file_managed', 'fm')
     ->fields('fm', array('fid'));
 
   if (!$update_existing) {
-    $query->condition('type', '');
+    $query->condition('type', FILE_TYPE_NONE);
   }
 
   if ($no_to_update) {
@@ -314,4 +288,34 @@ function media_type_batch_update($update_existing = FALSE, $no_to_update = NULL,
   }
 
   return $results;
+}
+
+/**
+ * Implements hook_file_default_displays().
+ *
+ * Provides default display configurations for media types.
+ *
+ * @see file_entity_schema()
+ */
+function media_file_default_displays() {
+  $default_displays = array();
+
+  $default_image_styles = array(
+    'media_preview' => 'square_thumbnail',
+    'media_large' => 'large',
+    'media_original' => ''
+  );
+
+  foreach ($default_image_styles as $view_mode => $image_style) {
+    $display_name = 'image__' . $view_mode . '__file_image';
+    $default_displays[$display_name] = (object) array(
+      'api_version' => 1,
+      'name' => $display_name,
+      'status' => 1,
+      'weight' => 5,
+      'settings' => array('image_style' => $image_style),
+    );
+  }
+
+  return $default_displays;
 }

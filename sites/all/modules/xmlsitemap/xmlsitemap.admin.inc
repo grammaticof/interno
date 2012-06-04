@@ -1,5 +1,4 @@
 <?php
-// $Id: xmlsitemap.admin.inc,v 1.57 2011/02/09 22:37:54 davereid Exp $
 
 /**
  * @file
@@ -231,7 +230,7 @@ function xmlsitemap_sitemap_delete_form(array $form, array &$form_state, stdClas
 
   $count = (int) db_query("SELECT COUNT(smid) FROM {xmlsitemap_sitemap}")->fetchField();
   if ($count === 1 && empty($_POST)) {
-    drupal_set_message('It is not recommended to delete the only XML sitemap.', 'error');
+    drupal_set_message(t('It is not recommended to delete the only XML sitemap.'), 'error');
   }
 
   $form['#sitemap'] = $sitemap;
@@ -278,7 +277,7 @@ function xmlsitemap_settings_form($form, &$form_state) {
   $form['xmlsitemap_prefetch_aliases'] = array(
     '#type' => 'checkbox',
     '#title' => t('Prefetch URL aliases during sitemap generation.'),
-    '#description' => t('When enabled, this will fetch all URL alises at once instead of one at a time during sitemap generation. For medium or large sites, it is recommended to disable this feature as it uses a lot of memory.'),
+    '#description' => t('When enabled, this will fetch all URL aliases at once instead of one at a time during sitemap generation. For medium or large sites, it is recommended to disable this feature as it uses a lot of memory.'),
     '#default_value' => variable_get('xmlsitemap_prefetch_aliases', 1),
   );
 
@@ -310,18 +309,17 @@ function xmlsitemap_settings_form($form, &$form_state) {
     '#default_value' => xmlsitemap_var('batch_limit'),
     '#description' => t('If you have problems running cron or rebuilding the sitemap, you may want to lower this value.'),
   );
-  $path = variable_get('xmlsitemap_path', 'xmlsitemap');
   if (!xmlsitemap_check_directory()) {
     form_set_error('xmlsitemap_path', t('The directory %directory does not exist or is not writable.', array('%directory' => xmlsitemap_get_directory())));
   }
   $form['advanced']['xmlsitemap_path'] = array(
     '#type' => 'textfield',
     '#title' => t('Sitemap cache directory'),
-    '#default_value' => $path,
+    '#default_value' => variable_get('xmlsitemap_path', 'xmlsitemap'),
     '#size' => 30,
     '#maxlength' => 255,
     '#description' => t('Subdirectory where the sitemap data will be stored. This folder <strong>must not be shared</strong> with any other Drupal site or install using XML sitemap.'),
-    '#field_prefix' => variable_get('file_public_path', conf_path() . '/files') . '/',
+    '#field_prefix' => file_build_uri(''),
     '#required' => TRUE,
   );
   $form['advanced']['xmlsitemap_base_url'] = array(
@@ -500,7 +498,8 @@ function xmlsitemap_add_form_entity_summary(&$form, $entity, array $entity_info)
       $row[] = l($edit_link['title'], $edit_link['href'], $edit_link);
     }
     else {
-      $row[] = $bundle_info['label'];
+      // Bundle labels are assumed to be un-escaped input.
+      $row[] = check_plain($bundle_info['label']);
     }
     $row[] = $statuses[$bundle_info['xmlsitemap']['status'] ? 1 : 0];
     $row[] = $priorities[number_format($bundle_info['xmlsitemap']['priority'], 1)];
@@ -512,7 +511,7 @@ function xmlsitemap_add_form_entity_summary(&$form, $entity, array $entity_info)
 
   if ($rows) {
     $header = array(
-      $entity_info['bundle label'],
+      isset($entity_info['bundle label']) ? $entity_info['bundle label'] : '',
       t('Inclusion'),
       t('Priority'),
       t('Available'),

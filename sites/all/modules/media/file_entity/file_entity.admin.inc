@@ -42,7 +42,8 @@ function file_entity_list_types_page() {
 /**
  * Form callback; presents file display settings for a given view mode.
  */
-function file_entity_file_display_form($form, &$form_state, $file_type, $view_mode) {
+function file_entity_file_display_form($form, &$form_state, $bundle, $view_mode) {
+  $file_type = field_extract_bundle('file', $bundle);
   $form['#file_type'] = $file_type;
   $form['#view_mode'] = $view_mode;
   $form['#tree'] = TRUE;
@@ -56,8 +57,10 @@ function file_entity_file_display_form($form, &$form_state, $file_type, $view_mo
       unset ($formatters[$name]);
     }
   }
-  $current_displays = variable_get('file_displays');
-  $current_displays = isset($current_displays[$file_type][$view_mode]) ? $current_displays[$file_type][$view_mode] : array();
+  $current_displays = file_displays_load($file_type, $view_mode, TRUE);
+  foreach ($current_displays as $name => $display) {
+    $current_displays[$name] = (array) $display;
+  }
 
   // Formatter status.
   $form['displays']['status'] = array(
@@ -111,8 +114,8 @@ function file_entity_file_display_form($form, &$form_state, $file_type, $view_mo
   $i=0;
   foreach ($formatters as $name => $formatter) {
     if (isset($formatter['settings callback']) && ($function = $formatter['settings callback']) && function_exists($function)) {
-      $defaults = isset($formatter['default settings']) ? $formatter['default settings'] : array();
-      $settings = isset($current_displays[$name]['settings']) ? $current_displays[$name]['settings'] : array();
+      $defaults = !empty($formatter['default settings']) ? $formatter['default settings'] : array();
+      $settings = !empty($current_displays[$name]['settings']) ? $current_displays[$name]['settings'] : array();
       $settings += $defaults;
       $settings_form = $function($form, $form_state, $settings, $name, $file_type, $view_mode);
       if (!empty($settings_form)) {
@@ -138,10 +141,15 @@ function file_entity_file_display_form($form, &$form_state, $file_type, $view_mo
  * Process file display settings form submissions.
  */
 function file_entity_file_display_form_submit($form, &$form_state) {
+  $file_type = $form['#file_type'];
+  $view_mode = $form['#view_mode'];
   $displays = isset($form_state['values']['displays']) ? $form_state['values']['displays'] : array();
-  $file_displays = variable_get('file_displays');
-  $file_displays[$form['#file_type']][$form['#view_mode']] = $displays;
-  variable_set('file_displays', $file_displays);
+  $displays_original = file_displays_load($file_type, $view_mode, TRUE);
+  foreach ($displays as $formatter_name => $display) {
+    $display_original = isset($displays_original[$formatter_name]) ? $displays_original[$formatter_name] : file_display_new($file_type, $view_mode, $formatter_name);
+    $display += (array) $display_original;
+    file_display_save((object) $display);
+  }
   drupal_set_message(t('Your settings have been saved.'));
 }
 

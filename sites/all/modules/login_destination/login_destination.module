@@ -102,7 +102,7 @@ function login_destination_load($id) {
   if (empty($result['roles'])) {
     $result['roles'] = array();
   }
-
+  
   return $result;
 }
 
@@ -153,7 +153,7 @@ function login_destination_form_alter(&$form, &$form_state, $form_id) {
 
   switch ($form_id) {
     case 'user_register_form': // user register page
-    case 'user_login': // user login pages
+    case 'user_login': // user login page
       $form['#validate'][] = 'login_destination_validate';
       break;
   }
@@ -187,6 +187,14 @@ function login_destination_validate($form, &$form_state) {
       }
       break;
   }
+  
+  // Fix the current page in case of 403 page.
+  if ($form['#form_id'] == 'user_login') {
+    if(drupal_get_http_header('Status') == '403 Forbidden') {
+      $_GET['current'] = $_GET['destination'];
+    }
+  }
+    
 }
 
 /**
@@ -243,7 +251,7 @@ function login_destination_toolbar_pre_render($toolbar) {
  * Implements hook_user_login
  */
 function login_destination_user_login(&$edit, $account) {
-  if ($_POST['form_id'] != 'user_pass_reset' || variable_get('login_destination_immediate_redirect', FALSE)) {
+  if (!isset($_POST['form_id']) || $_POST['form_id'] != 'user_pass_reset' || variable_get('login_destination_immediate_redirect', FALSE)) {
     login_destination_perform_redirect('login');
   }
 }
@@ -390,7 +398,7 @@ function _login_destination_match_rule($rule, $trigger = '', $current = NULL) {
   global $user;
 
   $type = $rule->pages_type;
-  $pages = drupal_strtolower($rule->pages);
+  $pages = $rule->pages;
 
   $triggers = unserialize($rule->triggers);
   if (empty($triggers))
@@ -416,6 +424,7 @@ function _login_destination_match_rule($rule, $trigger = '', $current = NULL) {
   }
 
   if ($type < LOGIN_DESTINATION_REDIRECT_PHP) {
+    $pages = drupal_strtolower($pages);
     $alias = drupal_strtolower(drupal_get_path_alias($current));
 
     $page_match = drupal_match_path($alias, $pages);

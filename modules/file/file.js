@@ -1,11 +1,9 @@
-// $Id: file.js,v 1.6 2010/11/23 05:51:16 webchick Exp $
-
 /**
  * @file
  * Provides JavaScript additions to the managed file field type.
  *
  * This file provides progress bar support (if available), popup windows for
- * file previews, and disabling of other file fields during AJAX uploads (which
+ * file previews, and disabling of other file fields during Ajax uploads (which
  * prevents separate file fields from accidentally uploading files).
  */
 
@@ -78,7 +76,7 @@ Drupal.file = Drupal.file || {
           '%filename': this.value,
           '%extensions': extensionPattern.replace(/\|/g, ', ')
         });
-        $(this).parents('div.form-managed-file').prepend('<div class="messages error file-upload-js-error">' + error + '</div>');
+        $(this).closest('div.form-managed-file').prepend('<div class="messages error file-upload-js-error">' + error + '</div>');
         this.value = '';
         return false;
       }
@@ -90,22 +88,22 @@ Drupal.file = Drupal.file || {
   disableFields: function (event){
     var clickedButton = this;
 
-    // Only disable upload fields for AJAX buttons.
+    // Only disable upload fields for Ajax buttons.
     if (!$(clickedButton).hasClass('ajax-processed')) {
       return;
     }
 
     // Check if we're working with an "Upload" button.
     var $enabledFields = [];
-    if ($(this).parents('div.form-managed-file').size() > 0) {
-      $enabledFields = $(this).parents('div.form-managed-file').find('input.form-file');
+    if ($(this).closest('div.form-managed-file').length > 0) {
+      $enabledFields = $(this).closest('div.form-managed-file').find('input.form-file');
     }
 
     // Temporarily disable upload fields other than the one we're currently
     // working with. Filter out fields that are already disabled so that they
     // do not get enabled when we re-enable these fields at the end of behavior
     // processing. Re-enable in a setTimeout set to a relatively short amount
-    // of time (1 second). All the other mousedown handlers (like Drupal's AJAX
+    // of time (1 second). All the other mousedown handlers (like Drupal's Ajax
     // behaviors) are excuted before any timeout functions are called, so we
     // don't have to worry about the fields being re-enabled too soon.
     // @todo If the previous sentence is true, why not set the timeout to 0?
@@ -120,8 +118,8 @@ Drupal.file = Drupal.file || {
    */
   progressBar: function (event) {
     var clickedButton = this;
-    var $progressId = $(clickedButton).parents('div.form-managed-file').find('input.file-progress');
-    if ($progressId.size()) {
+    var $progressId = $(clickedButton).closest('div.form-managed-file').find('input.file-progress');
+    if ($progressId.length) {
       var originalName = $progressId.attr('name');
 
       // Replace the name with the required identifier.
@@ -134,7 +132,7 @@ Drupal.file = Drupal.file || {
     }
     // Show the progress bar if the upload takes longer than half a second.
     setTimeout(function () {
-      $(clickedButton).parents('div.form-managed-file').find('div.ajax-progress-bar').slideDown();
+      $(clickedButton).closest('div.form-managed-file').find('div.ajax-progress-bar').slideDown();
     }, 500);
   },
   /**

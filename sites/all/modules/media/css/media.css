@@ -55,12 +55,12 @@
   margin-bottom: 30px;
 }
 
-/* This is some stuff to just get some basic mockup done on the 
+/* This is some stuff to just get some basic mockup done on the
    content navigator. Should be removed/revised soon */
- 
+
 .result_limit {
   float: right;
-}  
+}
 .result_limit li {
    display: inline;
    list-style: none;
@@ -233,11 +233,6 @@ div#media-browser .throbber {
    */
   height: 410px;
   overflow-y: auto;
-}
-
-#media-tab-media_internet .media-provider img {
-  vertical-align: middle;
-  margin-right: 1em;
 }
 
 #media-browser-library-list .label-wrapper {

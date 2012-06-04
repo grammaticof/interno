@@ -1,5 +1,4 @@
 <?php
-// $Id: field.form.inc,v 1.54 2010/11/20 19:57:01 webchick Exp $
 
 /**
  * @file
@@ -54,6 +53,8 @@ function field_default_form($entity_type, $entity, $field, $instance, $langcode,
     // If field module handles multiple values for this form element, and we
     // are displaying an individual element, process the multiple value form.
     if (!isset($get_delta) && field_behaviors_widget('multiple values', $instance) == FIELD_BEHAVIOR_DEFAULT) {
+      // Store the entity in the form.
+      $form['#entity'] = $entity;
       $elements = field_multiple_value_form($field, $instance, $langcode, $items, $form, $form_state);
     }
     // If the widget is handling multiple values (e.g Options), or if we are
@@ -64,19 +65,31 @@ function field_default_form($entity_type, $entity, $field, $instance, $langcode,
       $function = $instance['widget']['module'] . '_field_widget_form';
       if (function_exists($function)) {
         $element = array(
+          '#entity' => $entity,
           '#entity_type' => $instance['entity_type'],
           '#bundle' => $instance['bundle'],
           '#field_name' => $field_name,
           '#language' => $langcode,
           '#field_parents' => $parents,
           '#columns' => array_keys($field['columns']),
-          '#title' => check_plain(t($instance['label'])),
+          '#title' => check_plain($instance['label']),
           '#description' => field_filter_xss($instance['description']),
           // Only the first widget should be required.
           '#required' => $delta == 0 && $instance['required'],
           '#delta' => $delta,
         );
         if ($element = $function($form, $form_state, $field, $instance, $langcode, $items, $delta, $element)) {
+          // Allow modules to alter the field widget form element.
+          $context = array(
+            'form' => $form,
+            'field' => $field,
+            'instance' => $instance,
+            'langcode' => $langcode,
+            'items' => $items,
+            'delta' => $delta,
+          );
+          drupal_alter(array('field_widget_form', 'field_widget_' . $instance['widget']['type'] . '_form'), $element, $form_state, $context);
+
           // If we're processing a specific delta value for a field where the
           // field module handles multiples, set the delta in the result.
           // For fields that handle their own processing, we can't make
@@ -152,8 +165,8 @@ function field_multiple_value_form($field, $instance, $langcode, $items, &$form,
       break;
   }
 
-  $title = check_plain(t($instance['label']));
-  $description = field_filter_xss(t($instance['description']));
+  $title = check_plain($instance['label']);
+  $description = field_filter_xss($instance['description']);
 
   $id_prefix = implode('-', array_merge($parents, array($field_name)));
   $wrapper_id = drupal_html_id($id_prefix . '-add-more-wrapper');
@@ -166,6 +179,7 @@ function field_multiple_value_form($field, $instance, $langcode, $items, &$form,
       $multiple = $field['cardinality'] > 1 || $field['cardinality'] == FIELD_CARDINALITY_UNLIMITED;
       $element = array(
         '#entity_type' => $instance['entity_type'],
+        '#entity' => $form['#entity'],
         '#bundle' => $instance['bundle'],
         '#field_name' => $field_name,
         '#language' => $langcode,
@@ -194,6 +208,18 @@ function field_multiple_value_form($field, $instance, $langcode, $items, &$form,
             '#weight' => 100,
           );
         }
+
+        // Allow modules to alter the field widget form element.
+        $context = array(
+          'form' => $form,
+          'field' => $field,
+          'instance' => $instance,
+          'langcode' => $langcode,
+          'items' => $items,
+          'delta' => $delta,
+        );
+        drupal_alter(array('field_widget_form', 'field_widget_' . $instance['widget']['type'] . '_form'), $element, $form_state, $context);
+
         $field_elements[$delta] = $element;
       }
     }
@@ -251,7 +277,7 @@ function theme_field_multiple_value_form($variables) {
   if ($element['#cardinality'] > 1 || $element['#cardinality'] == FIELD_CARDINALITY_UNLIMITED) {
     $table_id = drupal_html_id($element['#field_name'] . '_values');
     $order_class = $element['#field_name'] . '-delta-order';
-    $required = !empty($element['#required']) ? '<span class="form-required" title="' . t('This field is required. ') . '">*</span>' : '';
+    $required = !empty($element['#required']) ? theme('form_required_marker', $variables) : '';
 
     $header = array(
       array(
@@ -374,7 +400,7 @@ function field_default_form_errors($entity_type, $entity, $field, $instance, $la
  * to return just the changed part of the form.
  */
 function field_add_more_submit($form, &$form_state) {
-  $button = $form_state['clicked_button'];
+  $button = $form_state['triggering_element'];
 
   // Go one level up in the form, to the widgets container.
   $element = drupal_array_get_nested_value($form, array_slice($button['#array_parents'], 0, -1));
@@ -399,7 +425,7 @@ function field_add_more_submit($form, &$form_state) {
  * @see field_add_more_submit()
  */
 function field_add_more_js($form, $form_state) {
-  $button = $form_state['clicked_button'];
+  $button = $form_state['triggering_element'];
 
   // Go one level up in the form, to the widgets container.
   $element = drupal_array_get_nested_value($form, array_slice($button['#array_parents'], 0, -1));
@@ -414,7 +440,7 @@ function field_add_more_js($form, $form_state) {
     return;
   }
 
-  // Add a DIV around the delta receiving the AJAX effect.
+  // Add a DIV around the delta receiving the Ajax effect.
   $delta = $element['#max_delta'];
   $element[$delta]['#prefix'] = '<div class="ajax-new-content">' . (isset($element[$delta]['#prefix']) ? $element[$delta]['#prefix'] : '');
   $element[$delta]['#suffix'] = (isset($element[$delta]['#suffix']) ? $element[$delta]['#suffix'] : '') . '</div>';
