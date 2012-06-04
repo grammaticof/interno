@@ -1,5 +1,5 @@
 <div class="rss">
-	<a href="<?php print url('feed', array('absolute'=>TRUE)); ?>" title="RSS - interno18.it" target="_blank"></a>
+	<a href="http://feeds.feedburner.com/interno18" title="RSS - interno18.it" target="_blank"></a>
 </div>
 
 <div class="info">
@@ -15,5 +15,5 @@
 </div>
 
 <div class="notes">
-	<p><strong class="red">Interno18.it</strong> 2008 - 2011 / sviluppo: Francesco Grammatico<p>
+	<p><strong class="red">Interno18.it</strong> 2008 - 2012 / sviluppo: Francesco Grammatico<p>
 </div>

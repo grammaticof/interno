@@ -310,15 +310,15 @@ body.page-taxonomy .node.first .field-type-media {
 }
 
 .article.full-view .field-name-body {
-	font-size: 16px; /* 14px */
-	line-height: 22px;
+	font-size: 16px;
+	line-height: 26px;
 }
 
 .article.full-view img{
 	float: left;
 	display: block;
 	clear: left;
-	margin: 5px 10px 10px 0; 
+	margin: 0 10px 15px 0; 
 }
 
 .article.full-view .field-name-body iframe {
@@ -368,6 +368,10 @@ body.page-taxonomy .node.first .field-type-media {
 
 .article.full-view .field-type-node-reference .field-item {
 	line-height: 1.833em; /* 22px */
+}
+
+.article.full-view .adsense {
+    margin: 10px 0;
 }
 
 /** END: NODE ARTICLES FULL **/
