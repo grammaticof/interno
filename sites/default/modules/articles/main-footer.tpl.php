@@ -3,7 +3,7 @@
 </div>
 
 <div class="info">
-	Associazione ‘interno18’ - Caserta CF 93065040615 tel. 3297943224/3282656347 fax 0823847165	
+	Associazione ‘interno18’ - Caserta CF 93065040615 tel/fax 08231702118	
 </div>
 
 <div class="reg">
