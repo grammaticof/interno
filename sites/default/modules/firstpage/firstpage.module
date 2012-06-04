@@ -107,11 +107,10 @@ function firstpage_block_view($block_name = '') {
 							
 							if (!empty($node->field_media)) {
 								$style_vars = array(
-									'path' => $node->field_media[$node->language][0]->uri,
+									'path' => $node->field_media[$node->language][0]['file']->uri,
 									'style_name' => 'thumbnail_wide',
 								);
 								$image = theme('image_style', $style_vars);
-								
 								unset($build['nodes'][$node->nid]['field_media']);
 								$build['nodes'][$node->nid]['field_media'][0] = array('#markup' => $image);
 							}
