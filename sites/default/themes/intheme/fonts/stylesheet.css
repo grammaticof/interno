@@ -1,5 +1,5 @@
 @font-face {
-    font-family: 'TeXGyreHerosBold';
+    font-family: 'TeXGyreHerosRegular';
     src: url('texgyreheros-bold-webfont.eot');
     src: url('texgyreheros-bold-webfont.eot?#iefix') format('embedded-opentype'),
          url('texgyreheros-bold-webfont.woff') format('woff'),
@@ -10,7 +10,7 @@
 
 }
 @font-face {
-    font-family: 'TeXGyreHerosBoldItalic';
+    font-family: 'TeXGyreHerosRegular';
     src: url('texgyreheros-bolditalic-webfont.eot');
     src: url('texgyreheros-bolditalic-webfont.eot?#iefix') format('embedded-opentype'),
          url('texgyreheros-bolditalic-webfont.woff') format('woff'),
@@ -21,7 +21,7 @@
 
 }
 @font-face {
-    font-family: 'TeXGyreHerosItalic';
+    font-family: 'TeXGyreHerosRegular';
     src: url('texgyreheros-italic-webfont.eot');
     src: url('texgyreheros-italic-webfont.eot?#iefix') format('embedded-opentype'),
          url('texgyreheros-italic-webfont.woff') format('woff'),

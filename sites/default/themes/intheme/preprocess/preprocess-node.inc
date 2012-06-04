@@ -23,7 +23,7 @@ if ($vars['node']->type == 'article') {
 			if (!$vars['is_front']) {
 				if (arg(0) == 'taxonomy' && arg(1) == 'term' && is_numeric(arg(2))) {
 					if ($vars['id'] == 1) {
-						$vars['node_attributes']['class'][] = 'first';
+						// $vars['node_attributes']['class'][] = 'first';
 						$vars['node_attributes']['class'][] = 'grid-14';
 						$vars['node_attributes']['class'][] = 'alpha';
 						$vars['node_attributes']['class'][] = 'omega';

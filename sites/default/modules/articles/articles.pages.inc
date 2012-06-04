@@ -43,6 +43,7 @@ function articles_term_page($term) {
 		$build += node_view_multiple($nodes);
 		
 		/* only the first one big */
+		/*
 		$first = TRUE;
 		foreach ($nodes as $nid => $node) {
 			if ($first) {
@@ -53,6 +54,7 @@ function articles_term_page($term) {
 					$build['nodes'][$nid]['field_media']['#weight'] = 1;
 			}
 		}
+		//*/
 	}
 	else {
 		$build['no_content'] = array(
