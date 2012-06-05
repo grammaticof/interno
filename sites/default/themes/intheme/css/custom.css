@@ -233,12 +233,10 @@ body.page-taxonomy .node {
 
 body.page-taxonomy .node.first,
 body.page-taxonomy .node.over {
-	border-bottom: 1px solid #DDDDDD;
 }
 
 body.page-taxonomy .submitted {
-	margin-top: 10px;
-	text-align: right;
+	display:none;
 }
 
 body.page-taxonomy .node .field-name-field-short {
@@ -260,6 +258,7 @@ body.page-taxonomy .node h2.node-title {
 body.page-taxonomy .node a.field-location {
     font-size: 12px;
     line-height: 16px;
+    font-weight: bold;
 }
 
 body.page-taxonomy .node .field-type-media {
@@ -313,6 +312,12 @@ body.page-taxonomy .node.first .field-type-media {
 	font-size: 16px;
 	line-height: 26px;
 }
+
+.article.full-view .field-location {
+    font-size: 14px;
+    font-weight: bold;
+}
+
 
 .article.full-view img{
 	float: left;
@@ -581,14 +586,15 @@ div.messages {
 
 .box {
 	position: relative;
-	padding: 6px 0;
-	margin-bottom: 5px;
-	border-top : 1px dotted #DDDDDD;
-	border-bottom : 1px dotted #DDDDDD;
+	padding: 5px 0;
+	margin: 10px;
+
 }
 
 .box.social {
 	height: 25px;
+	border-bottom:1px dotted #ddd;
+	border-top:1px dotted #ddd;
 }
 
 .fb-like {
@@ -602,8 +608,8 @@ div.messages {
 }
 
 .box.tags {
-	font-weight: bold;
-	line-height: 1.25em;
+        font-size:12px;
+	line-height: 16px;
 	color: gray;
 	padding-top: 3px;
 	padding-bottom: 3px;
@@ -630,7 +636,6 @@ div.messages {
 .page-taxonomy .sidebar-second-region ul li {
 	margin-bottom: 4px;
 	padding-bottom: 5px;
-	border-bottom: 1px solid #EFEFEF;
 	line-height: 1.25em;
 }
 
@@ -684,7 +689,7 @@ div.messages {
 /** FIRSTPAGE BLOCKS **/
 
 .block-firstpage {
-	margin-bottom: 25px;
+	margin-bottom: 10px;
 }
 
 .block-firstpage .node {
@@ -701,6 +706,11 @@ div.messages {
 	font-size: 12px;
 }
 
+.block-firstpage .content .field-location {
+    font-size:11px;
+    font-weight:bold;
+}
+
 .block-firstpage ul.links li {
 	float: right;
 }
@@ -715,7 +725,7 @@ div.messages {
 
 .block-firstpage .node h2.node-title {
 	font-size: 14px;
-	line-height: 16px;
+	line-height: 17px;
 	margin-bottom: 5px;
 }
 
@@ -785,6 +795,7 @@ div.messages {
 	color: #383838;
 	font-size: 13px;
 	line-height: 16px;
+	font-weight: bold;
 }
 
 #block-firstpage-rubriche .node img {
