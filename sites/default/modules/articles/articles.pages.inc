@@ -31,7 +31,7 @@ function articles_term_page($term) {
 		);
 	}
 
-	$nids = taxonomy_select_all_nodes($term->tid, FALSE, 15);
+	$nids = taxonomy_select_all_nodes($term->tid, FALSE, 20);
 
 	if ($nids) {
 		$nodes = node_load_multiple($nids);
