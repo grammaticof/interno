@@ -1039,14 +1039,15 @@ body.page-taxonomy-type-partners article a {
     display:block;
     width: 100%;
     height: 100%;
-    background-color: #888;
     text-decoration: none;
+    background-color: #DDD;
 }
 
 body.page-taxonomy-type-partners article a h2 {
     text-align: center;
-    color: white;
-    padding: 5px;
+    color: #606060;
+    padding: 3px 5px;
+    font-size: 16px;
 }
 
 /* end partners */
