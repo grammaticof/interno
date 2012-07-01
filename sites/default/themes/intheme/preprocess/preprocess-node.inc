@@ -9,9 +9,8 @@ if ($key = array_search('full-view', $vars['node_attributes']['class']))
 	$vars['node_attributes']['class'][$key] = $vars['view_mode'].'-view';
 
 if ($vars['node']->type == 'article') {
-	
 	$vars['display_submitted'] = FALSE;
-	
+
 	switch ($vars['view_mode']) {
 		case 'firstpage':
 			$vars['display_submitted'] = FALSE;
@@ -20,7 +19,7 @@ if ($vars['node']->type == 'article') {
 		// add 'first' 'second' 'third' class
 		case 'teaser':
 			
-			if (!$vars['is_front']) {
+			if ( !$vars['is_front'] && !$vars['node']->linear_view ) {
 				if (arg(0) == 'taxonomy' && arg(1) == 'term' && is_numeric(arg(2))) {
 					if ($vars['id'] == 1) {
 						// $vars['node_attributes']['class'][] = 'first';

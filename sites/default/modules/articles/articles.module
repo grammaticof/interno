@@ -149,26 +149,55 @@ function articles_node_view_alter(&$build) {
 						$build['body'][0]['#markup'] = preg_replace('/<p>/', '<p>'.$location.$dash, $build['body'][0]['#markup'], 1);
 					}
 				}
-				
-
 			break;
 		
 			case 'teaser': // teaser view
-				if (!empty($build['field_location'])) {
-					hide($build['field_location']);
-						
-					if ($build['field_location'][0]['#type'] == 'link') {
-						$dash = '<span class="red"> - </span>';
-						$location = l($build['field_location'][0]['#title'], $build['field_location'][0]['#href'], array('attributes'=>array('class'=>array('field-location'))));
-						
-						$build['field_short'][0]['#markup'] = $location.$dash.$build['field_short'][0]['#markup'];
-					}
+				$term_name = '';
+				$build['#node']->linear_view = FALSE;
+
+				// check the taxonomy "type"
+				if (!empty($build['#node']->field_type)) {
+					$tid = $build['#node']->field_type['it'][0]['tid'];
+					$term = taxonomy_term_load($tid);
+					$term_name = strtolower($term->name);					
 				}
 
-				$date = format_date($build['#node']->created, 'medium');
-				// $name = theme('username', array('account' => $build['#node']));
-				$build['submitted']['#markup'] = '<div class="submitted">'.$date.'</div>';
-				$build['submitted']['#weight'] = 10;
+				switch ($term_name) {
+					case 'partners' :
+						hide($build['field_location']);
+						$build['#node']->linear_view = TRUE;
+
+						if (!empty($build['field_media'])) {
+							hide($build['field_media']);
+							hide($build['field_short']);
+							$title = $build['#node']->title;
+							$url = url('node/'.$build['#node']->nid);
+							$image_src = image_style_url('large', $build['field_media']['#items'][0]['file']->uri);
+
+							$output = "<a href=\"$url\" title=\"$title\">
+									<img src=\"$image_src\" alt=\"$title\"/>
+									<h2>$title</h2></a>";
+
+							$build['field_partners']['#markup'] = $output;
+						}
+
+					default :
+						if (!empty($build['field_location'])) {
+							hide($build['field_location']);
+								
+							if ($build['field_location'][0]['#type'] == 'link') {
+								$dash = '<span class="red"> - </span>';
+								$location = l($build['field_location'][0]['#title'], $build['field_location'][0]['#href'], array('attributes'=>array('class'=>array('field-location'))));
+								
+								$build['field_short'][0]['#markup'] = $location.$dash.$build['field_short'][0]['#markup'];
+							}
+						}
+
+						$date = format_date($build['#node']->created, 'medium');
+						// $name = theme('username', array('account' => $build['#node']));
+						$build['submitted']['#markup'] = '<div class="submitted">'.$date.'</div>';
+						$build['submitted']['#weight'] = 10;					
+				}
 				
 				// hide the read more button.
 				hide($build['links']['node']);

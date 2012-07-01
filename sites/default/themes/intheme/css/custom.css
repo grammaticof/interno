@@ -146,7 +146,7 @@ z-index: 99;
 #region-menu ul.main-menu a.active,
 #region-menu ul.main-menu.secondary-items li a.active,
 #region-menu ul.main-menu li.active-trail a {
-	color: #d61d00;
+	color: #D61D00;
 }
 
 #region-menu ul.main-menu.secondary-items li a {
@@ -155,6 +155,15 @@ z-index: 99;
 
 #region-menu ul.main-menu li a:hover {
 	color: #AAACAF;
+}
+
+#region-menu ul.main-menu li.partners {
+        float: right;
+        font-weight: bold;
+}
+
+#region-menu ul.main-menu li.partners a {   
+    color: #D61D00;
 }
 
 #region-menu ul.main-menu li.has-subitems {
@@ -1019,4 +1028,27 @@ ul.inline li.statistics_counter {
 .center {
 	text-align: center;
 }
+
+/* partners */
+
+body.page-taxonomy-type-partners article header {
+    display:none;
+}
+
+body.page-taxonomy-type-partners article a {
+    display:block;
+    width: 100%;
+    height: 100%;
+    background-color: #888;
+    text-decoration: none;
+}
+
+body.page-taxonomy-type-partners article a h2 {
+    text-align: center;
+    color: white;
+    padding: 5px;
+}
+
+/* end partners */
+
 
