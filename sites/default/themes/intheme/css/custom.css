@@ -1052,4 +1052,8 @@ body.page-taxonomy-type-partners article a h2 {
 
 /* end partners */
 
+/* anchor with image inside in articles */
+.article.full-view a img.media-image {
+    float: none;
+}
 

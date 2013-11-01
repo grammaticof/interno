@@ -34,27 +34,39 @@ function facebook_init() {
 	drupal_add_html_head($meta_description, 'meta_facebook_admins');
 
 	$script = "
-	(function(d, s, id) {
-	  var js, fjs = d.getElementsByTagName(s)[0];
-	  if (d.getElementById(id)) return;
-	  js = d.createElement(s); js.id = id;
-	  js.src = '//connect.facebook.net/it_IT/all.js#xfbml=1&appId=$appId';
-	  fjs.parentNode.insertBefore(js, fjs);
-	}(document, 'script', 'facebook-jssdk'));
+	// socials
+	window.fbAsyncInit = function() {
+	  FB.init({
+	    appId      : '$appId', // App ID
+	    channelURL : '//interno18.it/channel.html', // Channel File
+	    status     : true, // check login status
+	    cookie     : true, // enable cookies to allow the server to access the session
+	    oauth      : true, // enable OAuth 2.0
+	    xfbml      : true  // parse XFBML
+	  });
+	};
+
+	(function(doc, script) {
+	  var js, 
+	      fjs = doc.getElementsByTagName(script)[0],
+	      frag = doc.createDocumentFragment(),
+	      add = function(url, id) {
+		  if (doc.getElementById(id)) {return;}
+		  js = doc.createElement(script);
+		  js.src = url;
+		  id && (js.id = id);
+		  frag.appendChild( js );
+	      };
+	      
+	    // Facebook SDK
+	    // add('//connect.facebook.net/it_IT/all.js#xfbml=1&appID=$appId', 'facebook-jssdk');
+	    // Twitter SDK
+	    add('//platform.twitter.com/widgets.js');
+
+	    fjs.parentNode.insertBefore(frag, fjs);
+	}(document, 'script'));
 	";
 
-	/* $script = "
-		if (document.getElementById('fb-root')) {
-			window.fbAsyncInit = function() {
-			FB.init({appId: '$appId', status: true, cookie: true, xfbml: true});};
-			(function() {
-				var e = document.createElement('script'); e.async = true;
-				e.src = document.location.protocol + '$sdk';
-				document.getElementById('fb-root').appendChild(e);
-			}());
-		}
-	";
-	*/
 	drupal_add_js($script, array('type' => 'inline', 'scope' => 'footer', 'weight' => 5));	
 }
 

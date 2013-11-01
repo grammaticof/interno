@@ -40,6 +40,8 @@
   <?php print $styles; ?>
   <?php print $scripts; ?>
   <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <meta name="verification" content="283838e68c9915d039034b3742b31a73" />
+  <!-- TradeDoubler site verification 2288426 -->
 </head>
 <body class="<?php print $classes; ?>" <?php print $attributes;?>>
   <div id="skip-link">
@@ -48,6 +50,7 @@
   <?php print $page_top; ?>
   <?php print $page; ?>
   <div id="fb-root"></div>
+  <script src="//connect.facebook.net/it_IT/all.js"></script>
   <?php print $page_bottom; ?>
 </body>
 </html>
