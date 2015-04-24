@@ -468,7 +468,7 @@ body.page-taxonomy .node.first .field-type-media {
 #user-toolbar .social-links a.tw-page {
 	background: url('../images/twitter_16.png') no-repeat center center transparent;
 }
-#user-toolbar .social-links a.fb-page {
+#user-toolbar .social-links a.fb-main {
 	background: url('../images/facebook_16.png') no-repeat center center transparent;
 }
 #user-toolbar .social-links a.rss-page {

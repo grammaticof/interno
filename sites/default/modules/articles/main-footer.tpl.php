@@ -3,7 +3,7 @@
 </div>
 
 <div class="info">
-	Associazione ‘interno18’ - Caserta CF 93065040615 tel/fax 08231702118	
+	Associazione ‘interno18’ - Caserta CF 93065040615
 </div>
 
 <div class="reg">
@@ -15,5 +15,5 @@
 </div>
 
 <div class="notes">
-	<p><strong class="red">Interno18.it</strong> 2008 - 2012 / sviluppo: Francesco Grammatico<p>
+	<p><strong class="red">Interno18.it</strong> 2008 - 2015 / sviluppo: Francesco Grammatico<p>
 </div>

@@ -111,7 +111,7 @@ function template_preprocess_user_toolbar(&$vars) {
 	$items[] = array (
 		'data' => '<span>'.t('seguici su').'</span>'.
 			'<a class="tw-page" href="http://twitter.com/interno18" title="twitter" target="_blank"></a>'.
-			'<a class="fb-page" href="http://www.facebook.com/pages/interno18it/179744205406067" title="facebook" target="_blank"></a>'.
+			'<a class="fb-main" href="http://www.facebook.com/pages/interno18it/179744205406067" title="facebook" target="_blank"></a>'.
 			'<a class="rss-page" href="http://feeds.feedburner.com/interno18" title="RSS" target="_blank"></a>'.
 			'<a class="yt-page" href="http://www.youtube.com/user/interno18video" title="youtube" target="_blank"></a>',
 		'class' => array('social-links'),
