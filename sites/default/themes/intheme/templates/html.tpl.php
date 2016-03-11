@@ -39,10 +39,20 @@
   <title><?php print $head_title; ?></title>
   <?php print $styles; ?>
   <?php print $scripts; ?>
+<script type="text/JavaScript">
+  function killCopy(e) { return false };
+  function reEnable() { return true };
+  document.onselectstart=new Function ("return false");
+  if (window.sidebar) {
+    document.onmousedown=killCopy;
+    document.onclick=reEnable
+  };
+</script>
+
   <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
   <meta name="verification" content="283838e68c9915d039034b3742b31a73" />
 </head>
-<body class="<?php print $classes; ?>" <?php print $attributes;?>>
+<body class="<?php print $classes; ?>" <?php print $attributes;?> oncopy='return false' oncut='return false' onpaste='return false'>
   <div id="skip-link">
     <a href="#main-content" class="element-invisible element-focusable"><?php print t('Skip to main content'); ?></a>
   </div>
